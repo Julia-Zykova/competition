@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="" method="post" enctype="multipart/form-data" class="container">
+	{% csrf_token %}
+	
+	<!--- <div class="mb-3">
+
+		 <label for="exampleFormControlInput1" class="form-label">Автор</label>
+		<input type="email" name="author" class="form-control" id="exampleFormControlInput1" placeholder="Адрес электронной почты"> 
+
+	</div> !--->
+
+	<div class="mb-3">
+
+		<label for="exampleFormControlInput1" class="form-label">Название</label>
+		<input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Название фото">
+
+	</div>
+
+	<div class="mb-3">
+
+  		<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+  			<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+	</div>
+
+
+	<div class="mb-3">
+
+  		<label for="formFile" class="form-label">Загрузите фото</label>
+  			<input name="image" class="form-control" type="file" id="formFile">
+
+  	</div>
+
+	<!--- <p> Название {{form.title}} </p>
+	<p> Ваше фото {{form.image}} </p>
+	<p> Описание {{form.description}} </p> !--->
+	<div>
+		<button class="btn btn-outline-light" style="background-color: #028E9B;">Сохранить</button>
+	</div>
+	
+</form>
+{% endblock %}
