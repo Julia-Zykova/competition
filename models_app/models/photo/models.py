@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from ..user_model.models import CustomUser
+from ..user.models import CustomUser
 
 
 class Photo(models.Model):
@@ -25,4 +25,7 @@ class Photo(models.Model):
 		verbose_name = 'Фото'
 		verbose_name_plural = 'Фото'
 		ordering = ['author','pub_date', 'title']
+
+	def __str__(self):
+		return self.title
 

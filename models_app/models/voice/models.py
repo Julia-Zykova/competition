@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
-from ..user_model.models import CustomUser
-from ..photo_model.models import Photo
+from ..user.models import CustomUser
+from ..photo.models import Photo
 
 
 class Voice(models.Model):
@@ -16,3 +16,6 @@ class Voice(models.Model):
 		verbose_name = 'Голос'
 		verbose_name_plural = 'Голоса'
 		ordering = ['photo', 'user']
+
+	def __str__(self):
+		return (f'{self.user} проголосовал за - {self.photo}')
