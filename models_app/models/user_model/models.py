@@ -1,9 +1,10 @@
 from django.db import models
-from django.utils import timezone
+from django.utils import timezone  #TODO:  импорт  не нужен
 
 from django.contrib.auth.models import AbstractUser
 from .managers import CustomUserManager
 
+# TODO: при создании админа хочу чтобы спрашивало только email/password
 
 class CustomUser(AbstractUser):
 
@@ -31,3 +32,6 @@ class CustomUser(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         ordering = ['email']
+
+
+# TODO: что будет если пользователя попытаются удалить?
