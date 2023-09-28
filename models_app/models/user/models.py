@@ -12,15 +12,15 @@ class CustomUser(AbstractUser):
     groups = None
     last_login = None
 
-    first_name = models.CharField(max_length=30)
-    last_name =  models.CharField(max_length=150)
+    first_name = models.CharField(max_length=30, blank = True, null = True)
+    last_name =  models.CharField(max_length=150, blank = True, null = True)
 
     email = models.EmailField(('email address'), unique=True)
     password = models.CharField(max_length=128)
 
     USERNAME_FIELD = 'email'
 
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'password']
+    REQUIRED_FIELDS = ['password']
 
     objects = CustomUserManager()
 

@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'service_objects',
     'widget_tweaks',
     'models_app.apps.ModelsAppConfig',
-    'mysite.apps.MysiteConfig',
+    'photo_app.apps.PhotoAppConfig',
 ]
 
 AUTH_USER_MODEL = 'models_app.CustomUser'
@@ -93,13 +93,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, '/static')
 
-MEDIA_URL = 'media/'
+STATIC_URL = env('STATIC_URL')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR,env('STATIC_URL'))
 
+MEDIA_URL = env('MEDIA_URL')
+
+MEDIA_ROOT = os.path.join(BASE_DIR,env('MEDIA_URL'))
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
