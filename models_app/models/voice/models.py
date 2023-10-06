@@ -1,8 +1,8 @@
 from django.db import models
-from models_app.models import BaseModel, DataMixin
+from models_app.models import BaseModel, BaseSoftDeleteModel
 
 
-class Voice(DataMixin, BaseModel):
+class Voice(BaseSoftDeleteModel):
 
 	photo = models.ForeignKey('Photo', on_delete=models.CASCADE,
 		related_name = "voices")

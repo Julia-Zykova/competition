@@ -17,4 +17,4 @@ class Comment(BaseModel):
 		ordering = ['user', 'photo']
 
 	def __str__(self):
-		return (f'{self.user} прокомментировал фото {self.photo}')
+		return self.text

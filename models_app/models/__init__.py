@@ -1,5 +1,4 @@
-from .base import BaseModel
-from .mixins import DataMixin
+from .base import BaseModel, BaseSoftDeleteModel
 from .user.models import CustomUser
 from .photo.models import Photo
 from .comment.models import Comment
