@@ -1,0 +1,13 @@
+{% extends 'photo_app/base.html' %}
+
+{% block content %}
+
+<div>
+	<p>{{photo.title}}</p>
+	<h4>{{photo.author}}</h4>
+	<p><img src="{{photo.image.url}}" class="img-top rounded" alt="..."></p>
+	<p>{{photo.description}}</p>
+
+</div>
+
+{% endblock %}

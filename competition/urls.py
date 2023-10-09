@@ -8,7 +8,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('mysite.urls'))
+    path('', include('photo_app.urls'))
 ]
 
 #urlpatterns += [('django.views.static',(r'^media/(?P<path>.*)','serve',{'document_root':settings.MEDIA_ROOT}),)]

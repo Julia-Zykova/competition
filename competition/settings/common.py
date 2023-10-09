@@ -97,10 +97,10 @@ USE_TZ = True
 
 STATIC_URL = env('STATIC_URL')
 
-STATIC_ROOT = os.path.join(BASE_DIR,env('STATIC_URL'))
+STATIC_ROOT = os.path.join(BASE_DIR,env('STATIC_ROOT'))
 
 MEDIA_URL = env('MEDIA_URL')
 
-MEDIA_ROOT = os.path.join(BASE_DIR,env('MEDIA_URL'))
+MEDIA_ROOT = os.path.join(BASE_DIR,env('MEDIA_ROOT'))
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

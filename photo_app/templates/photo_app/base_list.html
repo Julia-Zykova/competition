@@ -1,38 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'photo_app/base.html' %}
+
 
 {% block content %}
-
-<div>
-	
-</div>
-<div class="position-relative">
-	<h1>Все фотографии</h1>
-	
-	<form action="{% url 'home' %}" method="get" id="sortByDateOld">
-   		<input type="hidden" name="orderby" value="pub_date" />
-	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByDateNew">
-    	<input type="hidden" name="orderby" value="-pub_date"/>
-	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByVoices">
-    	<input type="hidden" name="orderby" value="voices"/>
-	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByVoicesRev">
-    	<input type="hidden" name="orderby" value="-voices"/>
-	</form>
-
-		
-	  <button class="btn btn-secondary btn-sm dropdown-toggle position-absolute top-0 end-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-	    Отсортировать
-	  </button>
-	  <ul class="dropdown-menu">
-	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByDateOld').submit();">По дате (старые) </a></li>
-	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByDateNew').submit();">По дате (новые)</a></li>
-	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByVoices').submit();">По голосам (популярные)</a></li>
-	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByVoicesRev').submit();">По голосам (непопулярные)</a></li>
-	  </ul>
-	</div>
-</div>
 
 <section>
 <div class="container-fluid text-center">
