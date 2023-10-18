@@ -16,13 +16,14 @@ from models_app.models.voice.models import Voice
 class UploadPhotoView(ServiceView):
     form_class = UploadPhotoForm
     service_class = UploadPhotoService
-    template_name = 'photo_app/upload_photo.html'
+    template_name = 'photo_app/upload_photos.html'
     #success_url = reverse_lazy('home')
 
     def get(self, request, *args, **kwargs):
-        form = UploadPhotoForm()
-        context = {"form":form}
-        return render(request, self.template_name, context)
+        if request.method == 'GET':
+            form = UploadPhotoForm()
+            context = {"form":form}
+            return render(request, self.template_name, context)
 
     def post(self, request):
 
@@ -93,4 +94,4 @@ class ListPhotoView(ListView):
 class DetailPhotoView(DetailView):
     model = Photo
     template_name = 'photo_app/detail_photo.html'
-    id_url_kwarg = 'photo_id'
+    pk_url_kwarg = 'photo_id'

@@ -1,6 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+from models_app.signals import uploaded_file_path
 from models_app.models import CustomUser, BaseModel, BaseSoftDeleteModel
 
 
@@ -22,7 +21,7 @@ class Photo(BaseSoftDeleteModel):
 		related_name = 'photos',blank = True, null=True)
 
 	
-	image = models.ImageField()
+	image = models.ImageField(upload_to=uploaded_file_path)
 	description = models.CharField(max_length=220)
 	pub_date = models.DateTimeField(auto_now_add=True)
 	#mod_status = models.CharField(max_length=50,choices=STATUSES, default='на модерации')
@@ -30,7 +29,7 @@ class Photo(BaseSoftDeleteModel):
 	class Meta:
 		verbose_name = 'Фото'
 		verbose_name_plural = 'Фото'
-		ordering = ['pub_date', 'title']
+		ordering = ['-pub_date', 'title']
 
 
 	

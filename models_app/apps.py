@@ -6,5 +6,11 @@ class ModelsAppConfig(AppConfig):
     name = 'models_app'
 
     def ready(self):
-        import models_app.signals
+        from models_app.signals import skip_saving_file, save_file
+        from django.db.models.signals import pre_save, post_save
+        from models_app.models import Photo
+
+        
+        pre_save.connect(skip_saving_file, sender=Photo)
+        post_save.connect(save_file, sender=Photo)
 

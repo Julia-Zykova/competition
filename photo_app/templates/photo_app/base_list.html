@@ -12,14 +12,12 @@
 			<div class="col">
 
 				<div class="card" style="width: 18rem; border-color: #ffffff;">
-					<img src="{{p.image.url}}" class="card-img-top rounded" alt="...">
+					<img src="{{p.image.url}}" class="card-img-top rounded" alt="..." title="{{p.description|capfirst}}">
 
 					<div class="card-body">
 
-						<h5 class="card-title">{{p.title|capfirst}}</h5>
+						<h5 class="card-title"><a class="link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white" href="photo/{{p.id}}">{{p.title|capfirst}}</a></h5>
 				
-
-						<p class="card-text m-0">{{p.description|capfirst}}</p>
 
 						<ul class="list-group list-group-flush">
 
