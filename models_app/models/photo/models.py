@@ -1,4 +1,6 @@
 from django.db import models
+from imagekit.models.fields import ImageSpecField
+from imagekit.processors import ResizeToFill
 from models_app.signals import uploaded_file_path
 from models_app.models import CustomUser, BaseModel, BaseSoftDeleteModel
 
@@ -22,6 +24,8 @@ class Photo(BaseSoftDeleteModel):
 
 	
 	image = models.ImageField(upload_to=uploaded_file_path)
+	photo_small =ImageSpecField(source='image',
+		processors=[ResizeToFill(480, 480)],format='JPEG', options={'quality': 90})
 	description = models.CharField(max_length=220)
 	pub_date = models.DateTimeField(auto_now_add=True)
 	#mod_status = models.CharField(max_length=50,choices=STATUSES, default='на модерации')

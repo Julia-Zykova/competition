@@ -8,41 +8,63 @@
 <div class="position-relative">
 	<h1>Заголовок страницы со списком фото</h1>
 	
-	<form action="{% url 'home' %}" method="get" id="sortByDateOld">
+	<form action="{% url 'home' %}" method="get" id="sortByDateOld" class="formord">
    		<input type="hidden" name="orderby" value="DateOld" />
 	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByDateNew">
+	<form action="{% url 'home' %}" method="get" id="sortByDateNew" class="formord">
     	<input type="hidden" name="orderby" value="DateNew"/>
 	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByVoices">
+	<form action="{% url 'home' %}" method="get" id="sortByVoices" class="formord">
     	<input type="hidden" name="orderby" value="Voices"/>
 	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByVoicesRev">
+	<form action="{% url 'home' %}" method="get" id="sortByVoicesRev" class="formord">
     	<input type="hidden" name="orderby" value="VoicesRev"/>
 	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByComments">
+	<form action="{% url 'home' %}" method="get" id="sortByComments" class="formord">
     	<input type="hidden" name="orderby" value="Comments"/>
 	</form>
-	<form action="{% url 'home' %}" method="get" id="sortByCommentsRev">
+	<form action="{% url 'home' %}" method="get" id="sortByCommentsRev" class="formord">
     	<input type="hidden" name="orderby" value="CommentsRev"/>
 	</form>
 	
 
 		
-	  <button class="btn btn-secondary btn-sm dropdown-toggle position-absolute top-0 end-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+	<button class="btn btn-secondary btn-sm dropdown-toggle position-absolute top-0 end-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #028E9B;">
 	    Отсортировать
-	  </button>
-	  <ul class="dropdown-menu">
-	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByDateOld').submit();">По дате (старые) </a></li>
+	</button>
+	<ul class="dropdown-menu">
+		<li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByDateOld').submit();">По дате (старые) </a></li>
 	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByDateNew').submit();">По дате (новые)</a></li>
 	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByVoices').submit();">По голосам (популярные)</a></li>
 	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByVoicesRev').submit();">По голосам (непопулярные)</a></li>
 	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByComments').submit();">По комментариям (популярные)</a></li>
 	    <li><a class="dropdown-item" href="#" onclick="document.getElementById('sortByCommentsRev').submit();">По комментариям (непопулярные)</a></li>
-	  </ul>
-	</div>
+	</ul>
+	
 </div>
 
+{% block javascript %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$("a.dropdown-item").click(function() {
+			$.ajax({
+				url: '/list_of_photos.html',
+				method: 'get',
+				dataType : 'html',
+				data: {orderby: 'DateOld'},
+				success: function (data) {
+					alert(data);
+				}
+			});
+		});
+	});
+
+  	
+</script>
+
+{% endblock javascript %}
 
 {% endblock %}

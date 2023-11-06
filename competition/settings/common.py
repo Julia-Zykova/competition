@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'service_objects',
     'widget_tweaks',
+    'imagekit',
     'models_app.apps.ModelsAppConfig',
     'photo_app.apps.PhotoAppConfig',
 ]

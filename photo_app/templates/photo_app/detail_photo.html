@@ -2,12 +2,38 @@
 
 {% block content %}
 
-<div>
-	<p>{{photo.title}}</p>
-	<h4>{{photo.author}}</h4>
-	<p><img src="{{photo.image.url}}" class="img-top rounded" alt="..."></p>
-	<p>{{photo.description}}</p>
 
+<div class="container-fluid">
+	<div class="row justify-content-between clearfix">
+		<div class="col-6">
+			<h3>{{photo.title}}</h3>
+			<h6>{{photo.author}}</h6>
+			<img src="{{photo.image.url}}" class="img-top rounded img-fluid col-md-6 float-md-start" alt="...">
+			
+		</div>
+
+		<div class="col"></div>
+
+		<div class="col-4">
+			<div class="list-group list-group-flush pb-2 mb-4 border-bottom " aria-current="true">
+				<div class="list-group-item float-md-start">
+					<div class="border-bottom">{{photo.description}}</div>
+					{% for com in photo.comments.all %}	
+
+					<div class="d-flex w-100 justify-content-between">
+      					<h6 class="mb-1">{{com.user}}</h6>
+      					<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
+   					</div>
+   					<p class="mb-1">{{com.text}}</p>										
+				</div>
+					{% endfor %}
+				
+
+			</div>			
+		</div>
+	</div>
 </div>
+
+
 
 {% endblock %}

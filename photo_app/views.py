@@ -1,9 +1,12 @@
+import json
+import datetime as dt
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
-from service_objects.views import ServiceView
 from django.db.models import Count, Q
+from service_objects.views import ServiceView
+from asgiref.sync import sync_to_async
 
 from .services.upload_photo import UploadPhotoService
 from models_app.models.photo.forms import UploadPhotoForm
@@ -38,6 +41,10 @@ class UploadPhotoView(ServiceView):
             
 
 
+def datetime_to_str(self):
+    import datetime
+    str_datetime = self.strftime('%j.%m.%Y  %H:%i')
+
 
 class ListPhotoView(ListView):
     model = Photo
@@ -45,7 +52,7 @@ class ListPhotoView(ListView):
     template_name = 'photo_app/list_of_photos.html'
     paginate_by = 20
 
-    
+        
     def get_queryset(self):
         qs = Photo.objects.all()
 
@@ -53,7 +60,7 @@ class ListPhotoView(ListView):
 
         if orderby == 'DateOld':
             qs = Photo.objects.all().order_by('pub_date')
-            
+                
         if orderby == 'DateNew':
             qs = Photo.objects.all().order_by('-pub_date')
 
@@ -77,7 +84,6 @@ class ListPhotoView(ListView):
             .annotate(sum_comments=Count('comments'))\
             .order_by('sum_comments')
 
-        
         orderbysearch = self.request.GET.get('orderbysearch')
 
         if orderbysearch:
@@ -88,10 +94,28 @@ class ListPhotoView(ListView):
                 Q(author__email__icontains=orderbysearch)
                 )
 
-        return qs
+        #Получаем словарь из queryset
+        q_val = qs.values()
+        #Формируем новый словарь, состоящий из ключа "title" и всех значений      
+        q_dict = dict()
+        #Перебираем словарь queryset, чтобы получить отдельно "title" и обновляем словарь q_dict 
+        for q in q_val.values():
+            q_tmp_dict = dict()
+            q_tmp_dict[q['title']] = q
+            q_dict.update(q_tmp_dict)
+            
+
+                          
+        return JsonResponse(q_dict, safe=False)
+
+
 
 
 class DetailPhotoView(DetailView):
     model = Photo
     template_name = 'photo_app/detail_photo.html'
     pk_url_kwarg = 'photo_id'
+    context_object_name = 'photo'
+
+    
+
