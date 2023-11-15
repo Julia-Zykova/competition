@@ -31,7 +31,7 @@
 		          		<a class="nav-link text-light" href="#">Топ - 10</a>
 		        	</li>
 		        	<li class="nav-item">
-		          		<a class="nav-link text-light" href="upload">Добавить фото</a>
+		          		<a class="nav-link disabled text-light" href="upload">Добавить фото</a>
 		        	</li>
 
 <!--- Поиск по сайту !--->
@@ -62,13 +62,25 @@
 
 {% block content %}
 {% endblock %}
-<footer>
-	<div class="">
-		Подвал сайта
-	</div>
-	
-</footer>
+
+{% block pagination %}
+{% endblock %}
+
 </main>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<footer class="container-fluid my-4">
+	<nav class="navbar navbar-expand-lg " style="background-color: #028E9B;">
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			 	<li class="nav-item">
+			 		<p class="text-light">© 2023 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено. Все тексты и изображения являются собственностью сайта.</p>
+			 	</li>
+	 	
+		    </ul>
+		</div>
+	</nav>		
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>

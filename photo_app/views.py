@@ -1,12 +1,9 @@
-import json
-import datetime as dt
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 from django.db.models import Count, Q
 from service_objects.views import ServiceView
-from asgiref.sync import sync_to_async
 
 from .services.upload_photo import UploadPhotoService
 from models_app.models.photo.forms import UploadPhotoForm
@@ -40,17 +37,15 @@ class UploadPhotoView(ServiceView):
             return redirect('upload')
             
 
-
-def datetime_to_str(self):
-    import datetime
-    str_datetime = self.strftime('%j.%m.%Y  %H:%i')
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 
 class ListPhotoView(ListView):
     model = Photo
     context_object_name = 'posts'
     template_name = 'photo_app/list_of_photos.html'
-    paginate_by = 20
+    paginate_by = 12
 
         
     def get_queryset(self):
@@ -60,7 +55,6 @@ class ListPhotoView(ListView):
 
         if orderby == 'DateOld':
             qs = Photo.objects.all().order_by('pub_date')
-                
         if orderby == 'DateNew':
             qs = Photo.objects.all().order_by('-pub_date')
 
@@ -68,7 +62,6 @@ class ListPhotoView(ListView):
             qs = Photo.objects.all()\
             .annotate(sum_voices=Count('voices'))\
             .order_by('-sum_voices')
-
         if orderby == 'VoicesRev':
             qs = Photo.objects.all()\
             .annotate(sum_voices=Count('voices'))\
@@ -78,7 +71,6 @@ class ListPhotoView(ListView):
             qs = Photo.objects.all()\
             .annotate(sum_comments=Count('comments'))\
             .order_by('-sum_comments')
-
         if orderby == 'CommentsRev':
             qs = Photo.objects.all()\
             .annotate(sum_comments=Count('comments'))\
@@ -87,27 +79,34 @@ class ListPhotoView(ListView):
         orderbysearch = self.request.GET.get('orderbysearch')
 
         if orderbysearch:
-
             qs = Photo.objects.filter(
                 Q(title__icontains=orderbysearch) |
                 Q(description__icontains=orderbysearch) |
                 Q(author__email__icontains=orderbysearch)
                 )
 
-        #Получаем словарь из queryset
-        q_val = qs.values()
-        #Формируем новый словарь, состоящий из ключа "title" и всех значений      
-        q_dict = dict()
-        #Перебираем словарь queryset, чтобы получить отдельно "title" и обновляем словарь q_dict 
-        for q in q_val.values():
-            q_tmp_dict = dict()
-            q_tmp_dict[q['title']] = q
-            q_dict.update(q_tmp_dict)
+        return qs
+
+
+    def get(self, request, *args, **kwargs):
+        print("In view")
+        qs = self.get_queryset()
+        if len(qs) == 0 or qs == None:
+            print("Qs is empty")
+            context_object_name = 'text'
+            context = {"text":"Пока нет ни одного фото"}
+            return render(request,template_name=self.template_name, context = context)
             
 
-                          
-        return JsonResponse(q_dict, safe=False)
+        if request.method == 'GET' and is_ajax(request):
+            print("Ajax")
+            q_dict = {"posts": list(qs.values())}                           
+            return JsonResponse(q_dict, safe=False)
 
+        elif request.method == 'GET':
+            context = {"posts": qs}
+            
+            return render(request,template_name=self.template_name, context = context)
 
 
 
