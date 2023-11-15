@@ -1,0 +1,53 @@
+{% extends 'photo_app/base_list.html' %}
+
+{% block over_the_content %}
+
+
+
+
+<div class="container-fluid">
+	<div class="d-flex justify-content-between">
+		<div class="p-6"><h1 class="">Галерея</h1></div>
+		<div class="p-3">
+			<form action="{% url 'home' %}" method="get" id="sortBy" name="orderby">
+		   		<select required class="btn btn-secondary btn-sm dropdown-toggle align-text-top" style="background-color: #028E9B;">
+				    <option value="DateOld">По дате (старые)</option>
+				    <option selected value="DateNew">По дате (новые)</option>
+				    <option value="Voices">По голосам (популярные)</option>
+				    <option value="VoicesRev">По голосам (непопулярные)</option>
+				    <option value="Comments">По комментариям (популярные)</option>
+				    <option value="CommentsRev">По комментариям (непопулярные)</option>
+				</select>
+			</form>
+			
+	   	
+	  </div>
+	</div>	
+
+</div>
+
+
+{% block javascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$("select").change(function(){
+			$.ajax({
+				url: '',
+				method: 'get',
+			    dataType: 'json',
+			    success: function(data){
+						alert(data.text);
+				}
+			});
+		});
+	});
+
+  	
+</script>
+
+{% endblock javascript %}
+
+{% endblock %}

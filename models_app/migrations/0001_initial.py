@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import models_app.models.user_model.managers
+import models_app.models.user.managers
 
 
 class Migration(migrations.Migration):
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
             managers=[
-                ('objects', models_app.models.user_model.managers.CustomUserManager()),
+                ('objects', models_app.models.user.managers.CustomUserManager()),
             ],
         ),
         migrations.CreateModel(

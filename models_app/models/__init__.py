@@ -1,4 +1,5 @@
-from .user_model.models import CustomUser
-from .photo_model.models import Photo
-from .comment_model.models import Comment
-from .voice_model.models import Voice
+from .base import BaseModel, BaseSoftDeleteModel
+from .user.models import CustomUser
+from .photo.models import Photo
+from .comment.models import Comment
+from .voice.models import Voice
