@@ -1,72 +1,81 @@
 {% extends 'photo_app/base.html' %}
 
 {% block content %}
-<div>
-	<table class="table">
-		<thead>
-		    <tr>
-		      <th scope="col"><h3>{{photo.title}}</h3></th>
-		      
-		      <th scope="col">{{photo.description}}</th>
-		    </tr>
 
-	  	</thead>
-	  	<tbody>
-		    <tr>
-		    	<th scope="row">
-		    		{% if photo.author %}
-			      	<h6>{{photo.author}}</h6>
-					{% else %}
-					<h6>Автор неизвестен</h6>
-					{% endif %}
-		      	</th>
-		      
-		      <td>
-		      	<div class="row g-0 justify-content-between">
+<!--- Сделать как всплывающее окно? Или просто добавить кнопку "назад" или "на главную" или крестик --->
 
-					<div class="col-6 col-md-4">
+<div class="container-fluid mt-4">
+	<div class="card me-5 ms-5 overflow-auto" style="height: 70%">
+	  <div class="row g-0">
+	    <div class="col-md-4">
+	      <img src="{{photo.image.url}}" class="img-fluid rounded-start" alt="...">
+	    </div>
+
+
+	    <div class="col">
+	    	<div class="card-body">
+	    		<div class="row">
+
+	    			<div class="col ms-4">
+	    				{% if photo.author %}
+						<small class="card-text">{{photo.author}}</small>
+						{% else %}
+						<small class="card-text">Автор неизвестен</small>
+						{% endif %}
+				        <h4 class="card-title fw-bold">{{photo.title}}</h4>
+				        <p class="card-text lh-sm text-break">{{photo.description}}</p>	
+	    			</div>
+				   
+
+					<div class="col">
 						<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
 								<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
-							 	<path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-							</svg>
-							<span class="badge text-light" style="background-color: #028E9B;">{{photo.voices.all.count}}</span>
+					 			<path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+					 		</svg>
+					 		<span class="badge text-light" style="background-color: #028E9B;">{{photo.voices.all.count}}</span>
+				 		</button>
+				 		<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
+						 	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+						 		<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+						 		<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+						 	</svg>
+						 	<span class="badge text-light" style="background-color: #028E9B;">{{photo.comments.all.count}}</span>
 						</button>
+
 					</div>
 
-					<div class="col-6 col-md-4">
-						<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
-
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
-								<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-								<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
-							</svg>
-							<span class="badge text-light" style="background-color: #028E9B;">{{photo.comments.all.count}}</span>
-						</button>
+					<div class="col-2 ms-5">
+						<small>{{photo.pub_date|date:"j b"}} в {{photo.pub_date|time:"H:i"}}</small>
 					</div>
 				</div>
-		      </td>
+			</div>
 
-		      
-		    </tr>
-		    <tr>
-		    	<th scope="row">
-		      	<img src="{{photo.image.url}}" class="img-top rounded img-fluid col-md-6 float-md-start" alt="...">
-		    	</th>
-
-			    <td>
-			    	{% for com in photo.comments.all %}	
-					<div class="d-flex w-100 justify-content-between">
-			      		<h6 class="mb-1">{{com.user}}</h6>
-			      		<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
-			   		</div>
-			   		<p class="mb-1">{{com.text}}</p>										
-					{% endfor %}
-			    </td>
-		  	</tr>
-	  	</tbody>
-	</table>
+			<div class="overflow-y-auto">
+				<ul class="list-group list-group-flush ms-4">
+					<small class="text-body-secondary">
+						{% for com in photo.comments.all %}
+						<li class="list-group-item border-0">
+							<div class="d-flex w-100 justify-content-between">
+						      	<h6 class="mb-1">{{com.user}}</h6>
+						      	<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
+						   	</div>
+						   	<p class="mb-1 text-break">{{com.text}}</p>										
+							{% endfor %}
+						</li>
+					</small>
+				    
+				</ul>
+			</div>
+			
+			
+	      
+	    </div>
+	  </div>
+	</div>
 </div>
+
+
 
       
 
