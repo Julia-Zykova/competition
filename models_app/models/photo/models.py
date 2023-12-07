@@ -1,10 +1,10 @@
 from django.db import models
 from imagekit.models.fields import ImageSpecField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFill, ResizeToFit
 from models_app.signals import uploaded_file_path
 from models_app.models import CustomUser, BaseModel, BaseSoftDeleteModel
 
-
+#Не могу удалить, вылезает ошибка в миграции 0022
 def user_directory_path(self, filename):
     
     return 'images/user_{0}/{1}'.format(self.author.id, filename)
@@ -26,6 +26,9 @@ class Photo(BaseSoftDeleteModel):
 	image = models.ImageField(upload_to=uploaded_file_path)
 	photo_small =ImageSpecField(source='image',
 		processors=[ResizeToFill(480, 480)],format='JPEG', options={'quality': 90})
+	#Не выходит сделать так, чтобы на горизонтальные фото добавлялись поля сверху и снизу. Добавляются на вертикальные слева и справа.
+	photo_big = ImageSpecField(source='image',
+		processors=[ResizeToFit(391,520, False, mat_color="#A4C0BF")],format='JPEG', options={'quality': 100})
 	description = models.CharField(max_length=220)
 	pub_date = models.DateTimeField(auto_now_add=True)
 	#mod_status = models.CharField(max_length=50,choices=STATUSES, default='на модерации')

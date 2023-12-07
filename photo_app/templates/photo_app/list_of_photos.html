@@ -1,31 +1,100 @@
-{% extends 'photo_app/base_list.html' %}
-
-{% block over_the_content %}
+{% extends 'photo_app/base.html' %}
 
 
-
+{% block content %}
 
 <div class="container-fluid">
 	<div class="d-flex justify-content-between">
 		<div class="p-6"><h1 class="">Галерея</h1></div>
 		<div class="p-3">
-			<form action="{% url 'home' %}" method="get" id="sortBy" name="orderby">
-		   		<select required class="btn btn-secondary btn-sm dropdown-toggle align-text-top" style="background-color: #028E9B;">
-				    <option value="DateOld">По дате (старые)</option>
-				    <option selected value="DateNew">По дате (новые)</option>
-				    <option value="Voices">По голосам (популярные)</option>
-				    <option value="VoicesRev">По голосам (непопулярные)</option>
-				    <option value="Comments">По комментариям (популярные)</option>
-				    <option value="CommentsRev">По комментариям (непопулярные)</option>
-				</select>
-			</form>
-			
-	   	
+			<button class="btn btn-secondary btn-sm dropdown-toggle align-text-top" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #028E9B;">
+	    Отсортировать
+			</button>
+			<ul class="dropdown-menu">
+				<li><a class="dropdown-item" value="DateOld" href="#">По дате (старые) </a></li>
+			    <li><a class="dropdown-item" value="DateNew" href="#">По дате (новые)</a></li>
+			    <li><a class="dropdown-item" value="Voices" href="#">По голосам (популярные)</a></li>
+			    <li><a class="dropdown-item" value="VoicesRev" href="#">По голосам (непопулярные)</a></li>
+			    <li><a class="dropdown-item" value="Comments" href="#">По комментариям (популярные)</a></li>
+			    <li><a class="dropdown-item" value="CommentsRev" href="#">По комментариям (непопулярные)</a></li>
+			</ul>
+
 	  </div>
-	</div>	
+	</div>
 
 </div>
 
+
+
+<section>
+
+<div class="container-fluid text-center">
+	<div class="row row-cols-4 gy-4">
+		{% for p in posts %}
+
+		<div class="col-md-3">
+
+			<div class="card" style="width: 18rem; border-color: #E5E5E5;">
+				<img src="{{p.photo_small.url}}" class="card-img-top rounded" alt="..." title="{{p.description|capfirst}}" id="im">
+
+				<div class="card-body">
+
+					<h5 class="card-title"><a class="link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white" href="photo/{{p.id}}" id="tl">{{p.title|capfirst}}</a></h5>
+
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item" style="border-color: #E5E5E5;" id = "firstlist">
+							{% if p.author %}
+							<p class="card-text" id = "firstlist"><small> {{p.author}} </small></p>
+							{% else %}
+							<p class="card-text"><small> Автор неизвестен </small></p>
+							{% endif %}
+						</li>
+						<li class="list-group-item" id="secondlist">
+							<p class="card-text" id="secondlist"><small>{{p.pub_date|date:"j.m.Y"}} {{p.pub_date|time:"H:i"}}</small></p>
+						</li>
+					</ul>
+					<div class="card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+                            <div class="row g-0 justify-content-center">
+                                <div class="col-6 col-md-4">
+                                    <button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
+									<svg  id="voices" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
+										<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
+					 					<path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+					 				</svg>
+					 				<span class="badge text-light" style="background-color: #028E9B;" id="voices">{{p.voices.all.count}}</span>
+				 				</button>
+                                </div>
+                                <div class="col-6 col-md-4">
+                                    <button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
+
+						 			<svg id="comments" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+						 				<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+						 				<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+						 			</svg>
+						 			<span class="badge text-light" style="background-color: #028E9B;" id="comments">{{p.comments.all.count}}</span>
+						 		</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+				</div>
+
+				
+			</div>
+		</div>
+
+		{% empty %}
+		<h2>К сожалению не найдено ни одного фото:(</h2>
+		{% endfor %}
+
+		
+	</div>
+	
+			
+</div>
+</section>
 
 {% block javascript %}
 
@@ -33,21 +102,83 @@
 
 <script>
 	$(document).ready(function(){
-		$("select").change(function(){
+		$("a.dropdown-item").click(function(){
 			$.ajax({
 				url: '',
 				method: 'get',
 			    dataType: 'json',
+                data: {orderby: this.attributes.value.textContent},
 			    success: function(data){
-						alert(data.text);
+                    $("img.card-img-top rounded").removeAttr("src");
+                    $("img.card-img-top rounded").removeAttr("title");
+                    $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").removeAttr("href");
+                    $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").empty();
+                    $("li.list-group-item").empty();
+                    $("span#voices").empty();
+                    $("span#comments").empty();
+                    let posts = data["posts"];
+                    for (const post in posts) {
+                        var
+                            image = post["image"],
+                            desc = post["description"],
+                            titlepost = post["title"],
+                            auth = post["author_id"],
+                            id = posts[this]["id"],
+                            sumvoices = posts[this]["sum_voices"],
+                            sumcomments = posts[this]["sum_comments"],
+                            dt = new Date(Date.parse(posts[this]["pub_date"])),
+                            fulldt = dt.getHours() + ':' + dt.getMinutes() + '\n' + dt.getDate() + '.' + dt.getMonth() + '\n' + dt.getFullYear(),
+                        ;
+                        $("img.card-img-top rounded").attr({
+                            "src": image,
+                            "title": desc,
+                        });
+                        $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").attr("href","photo/"+id);
+                        $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").insertAdjacentText("afterbegin", titlepost);
+                        $("li#firstlist.list-group-item").insertAdjacentHTML("afterbegin",'<p class="card-text""><small id = "firstlist></small></p>');
+                        $("small#firstlist").insertAdjacentText("afterbegin",auth);
+                        $("li#secondlist.list-group-item").insertAdjacentHTML("afterbegin",'<p class="card-text""><small id = "secondtlist></small></p>');
+                        $("small#secondlist").insertAdjacentText("afterbegin",fulldt);
+                        $("span#voices").insertAdjacentText("afterbegin", sumvoices);
+                        $("span#comments").insertAdjacentText("afterbegin", sumcomments);
+
+                    };
+
+                    console.log(data);
+
+                    })
+
 				}
 			});
 		});
 	});
 
-  	
+
 </script>
 
 {% endblock javascript %}
+{% endblock %}
 
+{% block pagination %}
+{% if is_paginated %}
+<nav>
+  <ul class="pagination justify-content-center">
+  	{% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link text-light outline-light" href="{% url 'home' %}?page={{ page_obj.previous_page_number }}"style="background-color: #028E9B;">Предыдущая</a></li>
+    {% endif %}
+
+    {% for p in paginator.page_range %}
+    {% if page_obj.number == p %}
+    <li class="page-item disabled"><a class="page-link text-light outline-light" href="{% url 'home' %}?page={{ p }}" style="background-color: #028E9B;">{{p}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link text-light outline-light" href="{% url 'home' %}?page={{ p }}" style="background-color: #028E9B;">{{p}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link text-light outline-light" href="{% url 'home' %}?page={{ page_obj.next_page_number }}" style="background-color: #028E9B;">Следующая</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
 {% endblock %}

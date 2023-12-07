@@ -5,10 +5,10 @@
 <!--- Сделать как всплывающее окно? Или просто добавить кнопку "назад" или "на главную" или крестик --->
 
 <div class="container-fluid mt-4">
-	<div class="card me-5 ms-5 overflow-auto" style="height: 70%">
+	<div class="card me-5 ms-5 overflow-auto">
 	  <div class="row g-0">
 	    <div class="col-md-4">
-	      <img src="{{photo.image.url}}" class="img-fluid rounded-start" alt="...">
+	      <img src="{{photo.photo_big.url}}" class="img-fluid rounded-start" alt="...">
 	    </div>
 
 
@@ -54,15 +54,19 @@
 			<div class="overflow-y-auto">
 				<ul class="list-group list-group-flush ms-4">
 					<small class="text-body-secondary">
-						{% for com in photo.comments.all %}
+                        {% for com in comments %}
 						<li class="list-group-item border-0">
 							<div class="d-flex w-100 justify-content-between">
 						      	<h6 class="mb-1">{{com.user}}</h6>
 						      	<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
 						   	</div>
-						   	<p class="mb-1 text-break">{{com.text}}</p>										
-							{% endfor %}
-						</li>
+						   	<p class="mb-1 text-break">{{com.text}}</p>
+                        </li>
+{# Как отобразить вложенность? Через if (есть ответ к комменту или нет)?
+Как отделить комменатрий от ответа? Во view в get_context_data?
+У Ответа есть родительский комменатрий, а у просто комментария нет? #}
+                        {% endfor %}
+
 					</small>
 				    
 				</ul>
@@ -75,9 +79,6 @@
 	</div>
 </div>
 
-
-
-      
 
 
 {% endblock %}

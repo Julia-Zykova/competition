@@ -10,6 +10,7 @@ from models_app.models.photo.forms import UploadPhotoForm
 from models_app.models.photo.models import Photo
 from models_app.models.user.models import CustomUser
 from models_app.models.voice.models import Voice
+from models_app.models.comment.models import Comment
 
 
 
@@ -90,20 +91,16 @@ class ListPhotoView(ListView):
 
     def get(self, request, *args, **kwargs):
         print("In view")
-        qs = self.get_queryset()
-        if len(qs) == 0 or qs == None:
-            print("Qs is empty")
-            context_object_name = 'text'
-            context = {"text":"Пока нет ни одного фото"}
-            return render(request,template_name=self.template_name, context = context)
-            
+        qs = self.get_queryset()            
 
         if request.method == 'GET' and is_ajax(request):
             print("Ajax")
+            import pdb
+            pdb.set_trace()
             q_dict = {"posts": list(qs.values())}                           
             return JsonResponse(q_dict, safe=False)
 
-        elif request.method == 'GET':
+        elif request.method == 'GET'and not is_ajax(request):
             context = {"posts": qs}
             
             return render(request,template_name=self.template_name, context = context)
@@ -116,5 +113,12 @@ class DetailPhotoView(DetailView):
     pk_url_kwarg = 'photo_id'
     context_object_name = 'photo'
 
-    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(photo=self.object).order_by('-created_at')[:5]
+        #Как сделать так, чтобы при наличии более 5 комментариев скрывались все, кроме 5 новых?
+        #Остальные должны выводиться по кнопке "показать все". Асинхрон?
+        return context
+
+
 

@@ -19,7 +19,12 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend']
 
 
 INSTALLED_APPS = [
@@ -30,8 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'service_objects',
-    'widget_tweaks',
+    'widget_tweaks', #Нужно ли это?
     'imagekit',
+    'social_django',
     'models_app.apps.ModelsAppConfig',
     'photo_app.apps.PhotoAppConfig',
 ]
@@ -62,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
                 'django.contrib.messages.context_processors.messages',
             ],
         },

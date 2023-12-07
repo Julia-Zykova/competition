@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="edfc7abb-ee1d-483a-9f62-d6b8a4d76365" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/list_of_photos.html" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/templates/photo_app/list_of_photos.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env_example" beforeDir="false" afterPath="$PROJECT_DIR$/.env_example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/competition.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/competition.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/competition/settings/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition/settings/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/competition/settings/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition/settings/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/competition/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models_app/models/photo/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models_app/models/photo/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/templates/photo_app/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/base_list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/detail_photo.html" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/templates/photo_app/detail_photo.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/list_of_photos.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/photo_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -13,6 +28,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/photo_app/templates/photo_app/detail_photo.html" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -21,15 +39,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/competition/Pipfile",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/competition/photo_app/templates/photo_app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\competition\photo_app\templates\photo_app" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -39,6 +66,14 @@
       <option name="presentableId" value="Default" />
       <updated>1699431737377</updated>
       <workItem from="1699431740537" duration="187000" />
+      <workItem from="1701169670603" duration="507000" />
+      <workItem from="1701170193424" duration="12654000" />
+      <workItem from="1701264218431" duration="336000" />
+      <workItem from="1701264734341" duration="8071000" />
+      <workItem from="1701504707492" duration="719000" />
+      <workItem from="1701506140672" duration="187000" />
+      <workItem from="1701506343242" duration="10752000" />
+      <workItem from="1701686218255" duration="14870000" />
     </task>
     <servers />
   </component>
