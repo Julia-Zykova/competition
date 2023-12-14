@@ -29,28 +29,28 @@
 <section>
 
 <div class="container-fluid text-center">
-	<div class="row row-cols-4 gy-4">
+	<div class="row row-cols-4 gy-4" id="cardplace">
 		{% for p in posts %}
 
 		<div class="col-md-3">
 
 			<div class="card" style="width: 18rem; border-color: #E5E5E5;">
-				<img src="{{p.photo_small.url}}" class="card-img-top rounded" alt="..." title="{{p.description|capfirst}}" id="im">
+				<img src="{{p.photo_small.url}}" class="card-img-top rounded" alt="..." title="{{p.description|capfirst}}">
 
 				<div class="card-body">
 
-					<h5 class="card-title"><a class="link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white" href="photo/{{p.id}}" id="tl">{{p.title|capfirst}}</a></h5>
+					<h5 class="card-title"><a class="link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white" href="photo/{{p.id}}">{{p.title|capfirst}}</a></h5>
 
 					<ul class="list-group list-group-flush">
-						<li class="list-group-item" style="border-color: #E5E5E5;" id = "firstlist">
+						<li class="list-group-item" style="border-color: #E5E5E5;" id = "firstli">
 							{% if p.author %}
-							<p class="card-text" id = "firstlist"><small> {{p.author}} </small></p>
+							<p class="card-text" id = "firstpli"><small>{{p.author}}</small></p>
 							{% else %}
 							<p class="card-text"><small> Автор неизвестен </small></p>
 							{% endif %}
 						</li>
-						<li class="list-group-item" id="secondlist">
-							<p class="card-text" id="secondlist"><small>{{p.pub_date|date:"j.m.Y"}} {{p.pub_date|time:"H:i"}}</small></p>
+						<li class="list-group-item" id="secondli">
+							<p class="card-text" id="secondpli"><small>{{p.pub_date|date:"j.m.Y"}} {{p.pub_date|time:"H:i"}}</small></p>
 						</li>
 					</ul>
 					<div class="card-body">
@@ -59,7 +59,7 @@
                             <div class="row g-0 justify-content-center">
                                 <div class="col-6 col-md-4">
                                     <button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
-									<svg  id="voices" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
 										<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
 					 					<path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
 					 				</svg>
@@ -69,7 +69,7 @@
                                 <div class="col-6 col-md-4">
                                     <button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
 
-						 			<svg id="comments" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+						 			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
 						 				<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
 						 				<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
 						 			</svg>
@@ -109,49 +109,66 @@
 			    dataType: 'json',
                 data: {orderby: this.attributes.value.textContent},
 			    success: function(data){
-                    $("img.card-img-top rounded").removeAttr("src");
-                    $("img.card-img-top rounded").removeAttr("title");
-                    $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").removeAttr("href");
-                    $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").empty();
-                    $("li.list-group-item").empty();
-                    $("span#voices").empty();
-                    $("span#comments").empty();
+			    	console.log(data);
+                    
                     let posts = data["posts"];
-                    for (const post in posts) {
-                        var
-                            image = post["image"],
-                            desc = post["description"],
-                            titlepost = post["title"],
-                            auth = post["author_id"],
-                            id = posts[this]["id"],
-                            sumvoices = posts[this]["sum_voices"],
-                            sumcomments = posts[this]["sum_comments"],
-                            dt = new Date(Date.parse(posts[this]["pub_date"])),
-                            fulldt = dt.getHours() + ':' + dt.getMinutes() + '\n' + dt.getDate() + '.' + dt.getMonth() + '\n' + dt.getFullYear(),
-                        ;
-                        $("img.card-img-top rounded").attr({
-                            "src": image,
-                            "title": desc,
-                        });
-                        $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").attr("href","photo/"+id);
-                        $("a.link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white").insertAdjacentText("afterbegin", titlepost);
-                        $("li#firstlist.list-group-item").insertAdjacentHTML("afterbegin",'<p class="card-text""><small id = "firstlist></small></p>');
-                        $("small#firstlist").insertAdjacentText("afterbegin",auth);
-                        $("li#secondlist.list-group-item").insertAdjacentHTML("afterbegin",'<p class="card-text""><small id = "secondtlist></small></p>');
-                        $("small#secondlist").insertAdjacentText("afterbegin",fulldt);
-                        $("span#voices").insertAdjacentText("afterbegin", sumvoices);
-                        $("span#comments").insertAdjacentText("afterbegin", sumcomments);
+                    let ind = 0;
+                    let ar_len = posts.length;
+                    let element = document.getElementById("cardplace");
+                    let list = element.querySelectorAll(".col-md-3");
+                    while (ind <= ar_len) {
+                    	for (const l of list) {
+                    		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("src");
+                    		const newsrc = "media/CACHE/images/" + posts[ind]["image"];
+                    		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("src", newsrc);
 
-                    };
+                    		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("title");
+                    		const desc = posts[ind]["description"];
+                    		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("title", desc);
 
-                    console.log(data);
+                    		l.getElementsByClassName(
+                    			"link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0].removeAttribute("href");
+                    		const newhref = "photo/" + posts[ind]["id"];
+                    		l.getElementsByClassName(
+                    			"link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0].setAttribute("href", newhref);
 
-                    })
+                    		const title_element = l.getElementsByClassName("link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0];
+                    		title_element.innerText="";
+                    		title_element.insertAdjacentText("afterbegin", posts[ind]["title"]);
 
-				}
+                    		l.getElementsByClassName("list-group-item")[0].remove();
+                    		l.getElementsByClassName("list-group-item")[0].remove();
+                    		const ul_element = l.getElementsByClassName("list-group list-group-flush")[0];
+                    		const html1 = '<li class="list-group-item" style="border-color: #E5E5E5;" id = "firstli"><p class="card-text"><small class = "first_sm"></small></p></li>';
+                    		ul_element.insertAdjacentHTML("afterbegin", html1);
+                    		ul_element.querySelector(".first_sm").insertAdjacentText("afterbegin", posts[ind]["author_id"]);
+                    		const html2 = '<li class="list-group-item" id="secondli"><p class="card-text"><small class = "second_sm"></small></p></li>';
+                    		ul_element.insertAdjacentHTML("beforeend", html2);
+                    		
+                    		
+                    		const span_voices = l.getElementsByClassName("badge text-light")[0];
+                    		span_voices.innerText = "";
+                    		span_voices.insertAdjacentText("afterbegin", posts[ind]["sum_voices"]);
+                    		const span_comments = l.getElementsByClassName("badge text-light")[1];
+                    		span_comments.innerText = "";
+                    		span_comments.insertAdjacentText("afterbegin", posts[ind]["sum_comments"]);
+                    		
+
+                    		
+
+							++ind;
+
+
+                    		}
+                    	}
+                   
+
+                    }
+
+				});
 			});
 		});
-	});
+
 
 
 </script>

@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 django-imagekit = "*"
 social-auth-app-django = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

@@ -95,8 +95,8 @@ class ListPhotoView(ListView):
 
         if request.method == 'GET' and is_ajax(request):
             print("Ajax")
-            import pdb
-            pdb.set_trace()
+            #import pdb
+            #pdb.set_trace()
             q_dict = {"posts": list(qs.values())}                           
             return JsonResponse(q_dict, safe=False)
 

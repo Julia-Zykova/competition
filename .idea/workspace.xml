@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edfc7abb-ee1d-483a-9f62-d6b8a4d76365" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env_example" beforeDir="false" afterPath="$PROJECT_DIR$/.env_example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/competition.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/competition.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/competition/settings/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition/settings/common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/competition/settings/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition/settings/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/competition/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/competition/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models_app/models/photo/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/models_app/models/photo/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/templates/photo_app/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/base_list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/detail_photo.html" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/templates/photo_app/detail_photo.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/list_of_photos.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/photo_app/templates/photo_app/list_of_photos.html" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/templates/photo_app/list_of_photos.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/photo_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/photo_app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +62,8 @@
       <workItem from="1701504707492" duration="719000" />
       <workItem from="1701506140672" duration="187000" />
       <workItem from="1701506343242" duration="10752000" />
-      <workItem from="1701686218255" duration="14870000" />
+      <workItem from="1701686218255" duration="20040000" />
+      <workItem from="1702313481390" duration="46000" />
     </task>
     <servers />
   </component>
