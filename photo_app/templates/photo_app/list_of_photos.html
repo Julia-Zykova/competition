@@ -106,7 +106,7 @@
 			$.ajax({
 				url: '',
 				method: 'get',
-			    dataType: 'json',
+				dataType:'json',
                 data: {orderby: this.attributes.value.textContent},
 			    success: function(data){
 			    	console.log(data);
@@ -119,10 +119,14 @@
                     while (ind <= ar_len) {
                     	for (const l of list) {
                     		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("src");
-                    		const newsrc = "media/CACHE/images/" + posts[ind]["image"];
+                    		const newsrc = posts[ind]["small_image"];
                     		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("src", newsrc);
 
                     		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("title");
+                    		const title_element = l.getElementsByClassName("link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0];
+                    		title_element.innerText="";
+                    		title_element.insertAdjacentText("afterbegin", posts[ind]["title"]);
+
                     		const desc = posts[ind]["description"];
                     		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("title", desc);
 
@@ -132,19 +136,23 @@
                     		l.getElementsByClassName(
                     			"link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0].setAttribute("href", newhref);
 
-                    		const title_element = l.getElementsByClassName("link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0];
-                    		title_element.innerText="";
-                    		title_element.insertAdjacentText("afterbegin", posts[ind]["title"]);
 
                     		l.getElementsByClassName("list-group-item")[0].remove();
                     		l.getElementsByClassName("list-group-item")[0].remove();
                     		const ul_element = l.getElementsByClassName("list-group list-group-flush")[0];
                     		const html1 = '<li class="list-group-item" style="border-color: #E5E5E5;" id = "firstli"><p class="card-text"><small class = "first_sm"></small></p></li>';
                     		ul_element.insertAdjacentHTML("afterbegin", html1);
-                    		ul_element.querySelector(".first_sm").insertAdjacentText("afterbegin", posts[ind]["author_id"]);
+                    		ul_element.querySelector(".first_sm").insertAdjacentText("afterbegin", posts[ind]["author"]["email"]);
+
                     		const html2 = '<li class="list-group-item" id="secondli"><p class="card-text"><small class = "second_sm"></small></p></li>';
                     		ul_element.insertAdjacentHTML("beforeend", html2);
-                    		
+                    		dt = new Date(Date.parse(posts[ind]["pub_date"]));
+                    		if ((dt.getMonth() + 1).length == 1) { 
+                    			dt_month = "0" + (dt.getMonth() + 1);} else {
+                    				dt_month = dt.getMonth() + 1 ;
+                    			}
+                            fulldt = dt.getHours() + ':' + dt.getMinutes() + '\n' + dt.getDate() + '.' + dt_month + '\n' + dt.getFullYear();
+                            ul_element.querySelector(".second_sm").insertAdjacentText("afterbegin", fulldt);
                     		
                     		const span_voices = l.getElementsByClassName("badge text-light")[0];
                     		span_voices.innerText = "";
@@ -159,16 +167,16 @@
 							++ind;
 
 
-                    		}
+                    		
                     	}
                    
 
                     }
 
-				});
+				}
 			});
 		});
-
+	});
 
 
 </script>
