@@ -106,7 +106,7 @@
 			$.ajax({
 				url: '',
 				method: 'get',
-				dataType:'json',
+				dataType: 'json',
                 data: {orderby: this.attributes.value.textContent},
 			    success: function(data){
 			    	console.log(data);
@@ -119,7 +119,7 @@
                     while (ind <= ar_len) {
                     	for (const l of list) {
                     		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("src");
-                    		const newsrc = posts[ind]["small_image"];
+                    		const newsrc = posts[ind]["photo_small"];
                     		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("src", newsrc);
 
                     		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("title");
@@ -156,14 +156,11 @@
                     		
                     		const span_voices = l.getElementsByClassName("badge text-light")[0];
                     		span_voices.innerText = "";
-                    		span_voices.insertAdjacentText("afterbegin", posts[ind]["sum_voices"]);
+                    		span_voices.insertAdjacentText("afterbegin", posts[ind]["voices"]);
                     		const span_comments = l.getElementsByClassName("badge text-light")[1];
                     		span_comments.innerText = "";
-                    		span_comments.insertAdjacentText("afterbegin", posts[ind]["sum_comments"]);
+                    		span_comments.insertAdjacentText("afterbegin", posts[ind]["comments"]);
                     		
-
-                    		
-
 							++ind;
 
 

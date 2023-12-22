@@ -98,9 +98,8 @@ class ListPhotoView(ListView):
 
         if request.method == 'GET' and is_ajax(request):
             print("Ajax")
-            serialized_data = PhotoSerializer(qs).data
-            import pdb
-            pdb.set_trace() 
+            serialized_data = PhotoSerializer(qs, many = True).data
+            
             
             q_dict = {"posts": serialized_data}              
             return JsonResponse(q_dict, safe=False)
