@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.urls import reverse_lazy
 from django.db.models import Count, Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from service_objects.views import ServiceView
 from rest_framework.renderers import JSONRenderer
 
@@ -48,7 +49,6 @@ class ListPhotoView(ListView):
     model = Photo
     context_object_name = 'posts'
     template_name = 'photo_app/list_of_photos.html'
-    paginate_by = 12
 
         
     def get_queryset(self):
@@ -94,19 +94,26 @@ class ListPhotoView(ListView):
     def get(self, request, *args, **kwargs):
         print("In view")
         qs = self.get_queryset()
-
+        p = Paginator(qs, 4)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)  # returns the desired page object
+        except PageNotAnInteger:
+            # if page_number is not an integer then assign the first page
+            page_obj = p.page(1)
+        except EmptyPage:
+            # if page is empty then return last page
+            page_obj = p.page(p.num_pages)
 
         if request.method == 'GET' and is_ajax(request):
             print("Ajax")
-            serialized_data = PhotoSerializer(qs, many = True).data
-            
-            
+            serialized_data = PhotoSerializer(page_obj.object_list, many = True).data
+           
             q_dict = {"posts": serialized_data}              
             return JsonResponse(q_dict, safe=False)
 
         elif request.method == 'GET'and not is_ajax(request):
-            context = {"posts": qs}
-            
+            context = {"posts": qs, 'page_obj': page_obj}
             return render(request,template_name=self.template_name, context = context)
 
 
