@@ -108,12 +108,13 @@ class ListPhotoView(ListView):
         if request.method == 'GET' and is_ajax(request):
             print("Ajax")
             serialized_data = PhotoSerializer(page_obj.object_list, many = True).data
-           
-            q_dict = {"posts": serialized_data}              
+            #import pdb
+            #pdb.set_trace()
+            q_dict = {"posts": serialized_data, "page_num": page_number}              
             return JsonResponse(q_dict, safe=False)
 
         elif request.method == 'GET'and not is_ajax(request):
-            context = {"posts": qs, 'page_obj': page_obj}
+            context = {"page_obj": page_obj, "posts": qs}
             return render(request,template_name=self.template_name, context = context)
 
 

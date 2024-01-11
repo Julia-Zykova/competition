@@ -102,13 +102,11 @@
 			{% endif %}
 
 			{% for p in page_obj.paginator.page_range %}
-			{% if page_obj.number == p %}
-			<li class="page-item disabled"><a class="page-link" href="#">{{ p }}</a></li>
-			{% else %}
+			
 			<li class="page-item">
-			    <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+			    <a class="page-link" id = "pagenum" href="#">{{ p }}</a>
 			</li>
-			{% endif %}
+			
 			{% endfor %}
 
 			{% if page_obj.has_next %}
@@ -138,7 +136,6 @@
 				dataType: 'json',
                 data: {orderby: this.attributes.value.textContent},
 			    success: function(data){
-			    	console.log(data);
                     let posts = data["posts"];
                     let ind = 0;
                     let ar_len = posts.length;
@@ -197,8 +194,79 @@
 		});
 	});
 
+</script>
 
-	
+<script>
+	$(document).ready(function(){
+		$("a.page-link").click(function(){
+			$.ajax({
+				url: '',
+				method: 'get',
+				dataType: 'json',
+				data: {page: this.textContent},
+			    success: function(data){
+					console.log(data["page_num"]);
+			    	let posts = data["posts"];
+                    let ind = 0;
+                    let ar_len = posts.length;
+                    let element = document.getElementById("cardplace");
+                    let list = element.querySelectorAll(".col-md-3");
+
+                    while (ind <= ar_len) {
+                    	for (const l of list) {
+                    		const newsrc = posts[ind]["photo_small"];
+                    		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("src");
+                    		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("src", newsrc);
+
+                    		l.getElementsByClassName("card-img-top rounded")[0].removeAttribute("title");
+                    		const title_element = l.getElementsByClassName("link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0];
+                    		title_element.innerText="";
+                    		title_element.insertAdjacentText("afterbegin", posts[ind]["title"]);
+
+                    		const desc = posts[ind]["description"];
+                    		l.getElementsByClassName("card-img-top rounded")[0].setAttribute("title", desc);
+
+                    		l.getElementsByClassName(
+                    			"link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0].removeAttribute("href");
+                    		const newhref = "photo/" + posts[ind]["id"];
+                    		l.getElementsByClassName(
+                    			"link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white")[0].setAttribute("href", newhref);
+
+
+                    		l.getElementsByClassName("list-group-item")[0].remove();
+                    		l.getElementsByClassName("list-group-item")[0].remove();
+                    		const ul_element = l.getElementsByClassName("list-group list-group-flush")[0];
+                    		const html1 = '<li class="list-group-item" style="border-color: #E5E5E5;" id = "firstli"><p class="card-text"><small class = "first_sm"></small></p></li>';
+                    		ul_element.insertAdjacentHTML("afterbegin", html1);
+                    		ul_element.querySelector(".first_sm").insertAdjacentText("afterbegin", posts[ind]["author"]["email"]);
+
+                    		const html2 = '<li class="list-group-item" id="secondli"><p class="card-text"><small class = "second_sm"></small></p></li>';
+                    		ul_element.insertAdjacentHTML("beforeend", html2);
+                    		dt = new Date(Date.parse(posts[ind]["pub_date"]));
+                    		if ((dt.getMonth() + 1).length == 1) { 
+                    			dt_month = "0" + (dt.getMonth() + 1);} else {
+                    				dt_month = dt.getMonth() + 1 ;
+                    			}
+                            fulldt = dt.getHours() + ':' + dt.getMinutes() + '\n' + dt.getDate() + '.' + dt_month + '\n' + dt.getFullYear();
+                            ul_element.querySelector(".second_sm").insertAdjacentText("afterbegin", fulldt);
+                    		
+                    		const span_voices = l.getElementsByClassName("badge text-light")[0];
+                    		span_voices.innerText = "";
+                    		span_voices.insertAdjacentText("afterbegin", posts[ind]["voices"]);
+                    		const span_comments = l.getElementsByClassName("badge text-light")[1];
+                    		span_comments.innerText = "";
+                    		span_comments.insertAdjacentText("afterbegin", posts[ind]["comments"]);
+                    		
+							++ind;
+						}
+					}
+
+
+			    }
+			});
+		});
+	});
+
 
 </script>
 
