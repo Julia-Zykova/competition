@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Заголовок 1</title>
+	<title id="page-title"> Страница {{page_num}} </title>
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
@@ -36,11 +36,11 @@
 
 <!--- Поиск по сайту !--->
 		        	<li class="nav-item">
-		        		<form class="d-flex" action="{% url 'home' %}" method="get" id="sortBySearch">
-		        		 	<input class="form-control me-2 " type="search" name="orderbysearch" placeholder="Поиск по фото" aria-label="Поиск"/>
-		        		 	<button class="btn btn-outline-light" type="submit"><a href="#" onclick="document.getElementById('sortByBySearch').submit();"></a>Поиск</button>
-		        		</form>
-
+		        		<div class="d-flex">
+		        			<input class="form-control me-2 " type="search" id="orderbysearch" placeholder="Поиск по фото" aria-label="Поиск"/>
+		        			<button class="btn btn-outline-light" id="search">Поиск</button>
+		        		</div>
+		        		
 		        	</li>
 		        </ul>
 

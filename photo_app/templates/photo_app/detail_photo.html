@@ -22,8 +22,7 @@
 						{% else %}
 						<small class="card-text">Автор неизвестен</small>
 						{% endif %}
-				        <h4 class="card-title fw-bold">{{photo.title}}</h4>
-				        <p class="card-text lh-sm text-break">{{photo.description}}</p>	
+						<h4 class="card-title fw-bold">{{photo.title}}</h4>
 	    			</div>
 				   
 
@@ -49,27 +48,37 @@
 						<small>{{photo.pub_date|date:"j b"}} в {{photo.pub_date|time:"H:i"}}</small>
 					</div>
 				</div>
-			</div>
+			
+				<div class="row mb-2">
+					<div class="col ms-4">
+						<p class="card-text text-break">{{photo.description}}</p>
+					</div>
+				</div>
+				<hr class="ms-4">
+				{% for com in comments|dictsort:"created_at" %}
+				<div class="row">
+					<div class="col ms-4">
+						<small class="text-body-secondary text-dark">
+		                	<div class="d-flex w-100 justify-content-between">
+								<h6 class="mb-1 text-dark">{{com.user}}</h6>
+								<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
+							</div>
+							<p class="mb-1 text-break text-dark">{{com.text}}</p>
+		                        
+	<!--- Как отобразить вложенность? Через if (есть ответ к комменту или нет)?
+	Как отделить комменатрий от ответа? Во view в get_context_data?
+	У Ответа есть родительский комменатрий, а у просто комментария нет? !--->
+	                       
 
-			<div class="overflow-y-auto">
-				<ul class="list-group list-group-flush ms-4">
-					<small class="text-body-secondary">
-                        {% for com in comments %}
-						<li class="list-group-item border-0">
-							<div class="d-flex w-100 justify-content-between">
-						      	<h6 class="mb-1">{{com.user}}</h6>
-						      	<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
-						   	</div>
-						   	<p class="mb-1 text-break">{{com.text}}</p>
-                        </li>
-{# Как отобразить вложенность? Через if (есть ответ к комменту или нет)?
-Как отделить комменатрий от ответа? Во view в get_context_data?
-У Ответа есть родительский комменатрий, а у просто комментария нет? #}
-                        {% endfor %}
+							</small>
+					    
+						
+					</div>
 
-					</small>
-				    
-				</ul>
+				</div>
+				<hr class="ms-4">
+
+				{% endfor %}
 			</div>
 			
 			
