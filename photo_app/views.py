@@ -56,28 +56,18 @@ class ListPhotoView(ListView):
 
         orderby = self.request.GET.get('orderby')
 
-        if orderby == 'DateOld':
-            qs = Photo.objects.all().order_by('pub_date')
-        if orderby == 'DateNew':
-            qs = Photo.objects.all().order_by('-pub_date')
-
-        if orderby == 'Voices':
-            qs = Photo.objects.all()\
-            .annotate(sum_voices=Count('voices'))\
-            .order_by('-sum_voices')
-        if orderby == 'VoicesRev':
-            qs = Photo.objects.all()\
-            .annotate(sum_voices=Count('voices'))\
-            .order_by('sum_voices')
-
-        if orderby == 'Comments':
-            qs = Photo.objects.all()\
-            .annotate(sum_comments=Count('comments'))\
-            .order_by('-sum_comments')
-        if orderby == 'CommentsRev':
-            qs = Photo.objects.all()\
-            .annotate(sum_comments=Count('comments'))\
-            .order_by('sum_comments')
+        if orderby:
+            if orderby in ['voices', 'comments']: 
+                qs = Photo.objects.all()\
+                .annotate(sum=Count(orderby))\
+                .order_by('sum')
+            elif orderby in ['-voices', '-comments']:
+                qs = Photo.objects.all()\
+                .annotate(sum=Count(orderby[1:]))\
+                .order_by('-sum')
+            else:
+               qs = Photo.objects.all().order_by(orderby)
+        
 
         orderbysearch = self.request.GET.get('orderbysearch')
 
@@ -93,8 +83,9 @@ class ListPhotoView(ListView):
 
     def get(self, request, *args, **kwargs):
         print("In view")
+        
         qs = self.get_queryset()
-        p = Paginator(qs, 4)
+        p = Paginator(qs, 8)
         page_number = request.GET.get('page')
         try:
             page_obj = p.get_page(page_number)  # returns the desired page object
@@ -107,14 +98,15 @@ class ListPhotoView(ListView):
 
         if request.method == 'GET' and is_ajax(request):
             print("Ajax")
-            serialized_data = PhotoSerializer(page_obj.object_list, many = True).data
             #import pdb
             #pdb.set_trace()
+            serialized_data = PhotoSerializer(page_obj.object_list, many = True).data
+            
             q_dict = {"posts": serialized_data, "page_num": page_number}              
             return JsonResponse(q_dict, safe=False)
 
         elif request.method == 'GET'and not is_ajax(request):
-            context = {"page_obj": page_obj, "posts": qs}
+            context = {"page_obj": page_obj, "posts": qs, "page_num": page_number}
             return render(request,template_name=self.template_name, context = context)
 
 

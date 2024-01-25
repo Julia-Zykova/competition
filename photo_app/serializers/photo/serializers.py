@@ -10,9 +10,7 @@ class PhotoSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
 
     def get_photo_small(self, obj):
-        path = obj.photo_small.path.split("mnt/d/competition")
-        new_path = path[1]
-        return new_path
+        return obj.photo_small.url
 
     def get_voices(self, obj):
         sum_voices = len(obj.voices.values())
