@@ -44,6 +44,27 @@ class UploadPhotoView(ServiceView):
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
+from django.core.paginator import Page
+
+from conf.settings import django as settings
+
+
+class CustomPagination:
+    def __init__(self, page: Page, current_page: int, per_page: int):
+        self._current_page = current_page
+        self._per_page = per_page
+        self._page = page
+
+    def to_json(self):
+        page = self._page
+        return {
+            "current_page": self._current_page or 1,
+            "per_page": self._per_page or settings.REST_FRAMEWORK["PAGE_SIZE"],
+            "next_page": None if page.number == page.paginator.num_pages else page.next_page_number(),
+            "prev_page": None if page.number == 1 else page.previous_page_number(),
+            "total_pages": page.paginator.num_pages,
+            "total_count": page.paginator.count,
+        }
 
 class ListPhotoView(ListView):
     model = Photo
@@ -81,14 +102,15 @@ class ListPhotoView(ListView):
         return qs
 
 
+
     def get(self, request, *args, **kwargs):
         print("In view")
         
         qs = self.get_queryset()
         p = Paginator(qs, 8)
         page_number = request.GET.get('page')
-        orderby = self.request.GET.get('orderby')
-        orderbysearch = self.request.GET.get('orderbysearch')
+
+        
         try:
             page_obj = p.get_page(page_number)  # returns the desired page object
         except PageNotAnInteger:
@@ -99,16 +121,17 @@ class ListPhotoView(ListView):
             page_obj = p.page(p.num_pages)
 
         if request.method == 'GET' and is_ajax(request):
-            print("Ajax")
-            #import pdb
-            #pdb.set_trace()
+            print("Ajax")        
+
             serialized_data = PhotoSerializer(page_obj.object_list, many = True).data
             
-            q_dict = {"posts": serialized_data, "page_num": page_number}              
-            return JsonResponse(q_dict, safe=False)
+            q_dict = {"posts": serialized_data, "page_number": page_number}              
+            return JsonResponse(q_dict)
 
         elif request.method == 'GET'and not is_ajax(request):
-            context = {"page_obj": page_obj, "posts": qs, "page_num": page_number}
+            #import pdb
+            #pdb.set_trace()
+            context = {"page_obj": page_obj, "page_number": page_number}
             return render(request,template_name=self.template_name, context = context)
 
 
