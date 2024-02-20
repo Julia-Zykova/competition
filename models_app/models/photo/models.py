@@ -26,7 +26,7 @@ class Photo(BaseSoftDeleteModel):
 	image = models.ImageField(upload_to=uploaded_file_path)
 	photo_small =ImageSpecField(source='image',
 		processors=[ResizeToFill(480, 480)],format='JPEG', options={'quality': 90})
-	#Не выходит сделать так, чтобы на горизонтальные фото добавлялись поля сверху и снизу. Добавляются на вертикальные слева и справа.
+	
 	photo_big = ImageSpecField(source='image',
 		processors=[ResizeToFit(391,520, False, mat_color="#A4C0BF")],format='JPEG', options={'quality': 100})
 	description = models.CharField(max_length=220)
