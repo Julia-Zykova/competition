@@ -5,19 +5,22 @@
 
 <div class="container-fluid">
 	<div class="d-flex justify-content-between">
-		<div class="p-6"><h1 class="">Галерея</h1></div>
+
+		{% if page_obj.number %}
+		<div class="p-6"><h1 id="page-title" value="{{page_obj.number}}"> Галерея страница {{page_obj.number}}</h1></div>
+		{% endif %}
+		
 		<div class="p-3">
-			<button class="btn btn-secondary btn-sm dropdown-toggle align-text-top" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #028E9B;">
-	    Отсортировать
-			</button>
-			<ul class="dropdown-menu">
-				<li><a class="dropdown-item" value="pub_date" href="#">По дате (старые) </a></li>
-			    <li><a class="dropdown-item" value="-pub_date" href="#">По дате (новые)</a></li>
-			    <li><a class="dropdown-item" value="-voices" href="#">По голосам (популярные)</a></li>
-			    <li><a class="dropdown-item" value="voices" href="#">По голосам (непопулярные)</a></li>
-			    <li><a class="dropdown-item" value="-comments" href="#">По комментариям (популярные)</a></li>
-			    <li><a class="dropdown-item" value="comments" href="#">По комментариям (непопулярные)</a></li>
-			</ul>
+			
+			<select class="current_sorting" style="background-color: #028E9B;">
+				<option class="dropdown-item" value="pub_date" href="#">По дате (старые) </option>
+			    <option selected class="dropdown-item" value="-pub_date" href="#">По дате (новые)</option>
+			    <option class="dropdown-item" value="-voices" href="#">По голосам (популярные)</option>
+			    <option class="dropdown-item" value="voices" href="#">По голосам (непопулярные)</option>
+			    <option class="dropdown-item" value="-comments" href="#">По комментариям (популярные)</option>
+			    <option class="dropdown-item" value="comments" href="#">По комментариям (непопулярные)</option>
+			</select>
+			
 	  </div>
 	</div>
 </div>
@@ -115,12 +118,13 @@
 <script src="{% static 'photo_app/js/content_replace.js' %}"></script>
 <script>
 	$(document).ready(function(){
-		$("a.dropdown-item").click(function(){
+		$("select.current_sorting").change(function(){
 			$.ajax({
 				url: '',
 				method: 'get',
 				dataType: 'json',
-                data: {orderby: this.attributes.value.textContent},
+                data: {orderby: document.querySelector('select.current_sorting').value, orderbysearch: orderbysearch.value,
+                page: document.querySelector('h1#page-title').value},
 			    success: content_replace,
 			});
 		});
@@ -135,7 +139,10 @@
 				url: '',
 				method: 'get',
 				dataType: 'json',
-				data: {page: this.textContent}, 
+				data: {
+					page: this.textContent, orderby: document.querySelector('select.current_sorting').value,
+					orderbysearch: orderbysearch.value,
+				}, 
 			    success: content_replace,
 			});
 		});
@@ -143,6 +150,9 @@
 
 
 </script>
+
+
+
 <script>
 	$(document).ready(function(){
 		$("button#search").click(function(){
@@ -150,7 +160,10 @@
 				url: '',
 				method: 'get',
 				dataType: 'json',
-				data: {orderbysearch: orderbysearch.value},
+				data: {
+					orderbysearch: orderbysearch.value,  orderby: document.querySelector('select.current_sorting').value,
+					page: document.querySelector('h1#page-title').value},
+
 			    success: content_replace,
 			});
 		});
