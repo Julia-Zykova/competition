@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 env = environ.Env()
 
-# read th .env file
+# read the .env file
 environ.Env.read_env(env_file=str(BASE_DIR) + '/.env')    
 
 SECRET_KEY = env('SECRET_KEY')
@@ -19,15 +19,12 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 
-
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.sites',
     'django.contrib.staticfiles',
     'rest_framework',
     'widget_tweaks', #Нужно ли это?
@@ -40,7 +37,6 @@ INSTALLED_APPS = [
     'photo_app.apps.PhotoAppConfig',
 ]
 
-SITE_ID = 1
 
 AUTH_USER_MODEL = 'models_app.CustomUser'
 
@@ -61,7 +57,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-        BASE_DIR , 'templates',
+        BASE_DIR, 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -120,7 +116,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR,env('MEDIA_ROOT'))
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ACCOUNT_EMAIL_REQUIRED = True  
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_UNIQUE = True 
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-LOGIN_REDIRECT_URL = '/'
+
+#LOGIN_REDIRECT_URL = "/" 

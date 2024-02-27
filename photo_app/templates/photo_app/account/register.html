@@ -1,0 +1,26 @@
+{% extends 'photo_app/base.html' %}
+
+{% block content %}
+
+
+<form class="row g-3" action="" method="post" enctype="multipart/form-data" class="container">
+	{% csrf_token %}
+  <div class="col-md-6">
+    <label for="inputEmail" class="form-label">Эл. адрес</label>
+    <input type="email" class="form-control" id="inputEmail">
+  </div>
+  <div class="col-md-6">
+    <label for="inputPassword" class="form-label">Пароль</label>
+    <input type="password" class="form-control" id="inputPassword4">
+  </div>
+  <div class="col-md-6">
+    <label for="input_first_name" class="form-label">Имя</label>
+    <input name="first_name" class="form-control" id="input_first_name">
+  </div>
+  <div class="col-md-6">
+    <label for="input_last_name" class="form-label">Фамилия</label>
+    <input name="last_name" class="form-control" id="input_last_name">
+  </div>
+</form>
+
+{% endblock %}
