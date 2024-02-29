@@ -121,13 +121,13 @@
 <script>
 	$(document).ready(function(){
 		$("select.current_sorting").change(function(){
-			let val = document.querySelector('h1#page-title').getAttribute("value");
+			
 			$.ajax({
 				url: '',
 				method: 'get',
 				dataType: 'json',
-                data: {orderby: document.querySelector('select.current_sorting').value, orderbysearch: orderbysearch.value,
-                page: val},
+                data: {orderby: document.querySelector('select.current_sorting').value,
+                orderbysearch: orderbysearch.value, page: document.querySelector('h1#page-title').value},
 			    success: content_replace,
 			});
 		});
@@ -165,7 +165,8 @@
 				method: 'get',
 				dataType: 'json',
 				data: {
-					orderbysearch: orderbysearch.value,  orderby: document.querySelector('select.current_sorting').value,
+					orderbysearch: orderbysearch.value,
+					orderby: document.querySelector('select.current_sorting').value,
 					page: val},
 
 			    success: content_replace,
