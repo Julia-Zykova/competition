@@ -1,8 +1,6 @@
 function content_replace(data) {
 	console.log(data);
 	let posts = data["posts"];
-	console.log(posts);
-	
     let ind_post = 0;
     let element = document.getElementById("cardplace");
     let list = element.querySelectorAll(".col-md-3");
@@ -14,8 +12,13 @@ function content_replace(data) {
 	    document.getElementById("page-title").insertAdjacentText("afterbegin", text);
 	    document.getElementById("page-title").removeAttribute("value");
 	    document.getElementById("page-title").setAttribute("value", page);
+    } else {
+        text = "Галерея страница" + "\n" + 1;
+        document.getElementById("page-title").innerHTML="";
+        document.getElementById("page-title").insertAdjacentText("afterbegin", text);
+        document.getElementById("page-title").removeAttribute("value");
+        document.getElementById("page-title").setAttribute("value", page);
     }
-    
     
 
     for (const l of list) {
