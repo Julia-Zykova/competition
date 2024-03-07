@@ -4,13 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+toolz = "*"
 django = "*"
 django-imagekit = "*"
 djangorestframework = "*"
 django-service-objects = {git = "https://git.snpdev.ru/saltpepper/django-service-objects"}
+django-split-settings = "*"
+django-environ = "*"
+django-widget-tweaks = "*"
+psycopg2 = "*"
 django-allauth = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.10"
+python_full_version = "3.10.12"

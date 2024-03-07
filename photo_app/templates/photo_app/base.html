@@ -4,16 +4,7 @@
 {% load account socialaccount %}
 
 <head>
-	<!-- Put this script tag to the <head> of your page -->
-	<script
-	  type="text/javascript"
-	  src="https://vk.com/js/api/openapi.js?168"
-	  charset="windows-1251"
-	></script>
-	<script type="text/javascript">
-	  VK.init({ apiId: 51860571 });
-	</script>
-	
+		
 	<title>Фотоконкурс</title>
 	
 
@@ -40,7 +31,7 @@
 		          		<a class="nav-link text-light" href="#">Топ - 10</a>
 		        	</li>
 		        	<li class="nav-item">
-		          		<a class="nav-link disabled text-light" href="upload">Добавить фото</a>
+		          		<a class="nav-link disabled text-light" href="#">Мои фотографии</a>
 		        	</li>
 
 <!--- Поиск по сайту !--->
@@ -51,17 +42,45 @@
 		        		</div>
 		        		
 		        	</li>
-		        </ul>
+		        </ul>   
+
 
 <!--- Авторизация/регистрация !--->
 
-		        <a class="icon-link link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% provider_login_url 'vk' method='oauth2' %}">
-  					<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-  						<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-						<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/><use xlink:href="#box-seam"></use></svg>
-						Зарегистрироваться/войти
-  				</a>
+				
+				<div class="d-flex ">
+					{% if user.is_authenticated %}
+					<ul class="navbar-nav">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Добро пожаловать, {{ user.first_name }}  {{ user.last_name }}!
+								<img src="{{ user.photo_small.url }}" class="rounded-circle">
+						    </a>
+						    
+						    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+						        <li><a class="dropdown-item" href="user/{{user.id}}">Профиль</a></li>
+						        <li><a class="dropdown-item" href="upload">Добавить фото</a></li>
+						        <li><hr class="dropdown-divider"></li>
+						        <li><a class="dropdown-item" href="#">
+						        	<form method="post" action="{% url 'account_logout' %}">
+						        		{% csrf_token %}
+						        		<button class="btn btn-outline-light" type="submit" style="background-color: #028E9B;">Выйти</button>
+						        	</form></a></li>
+						    </ul>
+						    
+						</li>
+					{% else %}
+						<form method="post" action="{% provider_login_url 'vk' %}">
+						{% csrf_token %}	            	
+							<button class="btn btn-outline-light" type="submit">Войти через VK</button>	    
+						</form>
+					{% endif %}
+					</ul>
+				</div>
 
+					
+
+		        
     		</div>
 		</nav>
 	
@@ -69,18 +88,11 @@
 {% block content %}
 {% endblock %}
 
-<!-- Put this script tag to the place, where the Login block will be -->
-	<div id="vk_auth"></div>
-	<script type="text/javascript">
-	  VK.Widgets.Auth("vk_auth", {authUrl: "/ru/widgets/auth"});
-	</script>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 </main>
 
-<footer>
-	<nav class="navbar navbar-expand-lg " style="background-color: #028E9B;">
+<footer class="align-self-end">
+	<nav class="navbar navbar-expand-lg" style="background-color: #028E9B;">
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 			 	<li class="nav-item">

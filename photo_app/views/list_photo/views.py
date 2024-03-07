@@ -1,70 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.urls import reverse_lazy
 from django.db.models import Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from service_objects.views import ServiceView
 from rest_framework.renderers import JSONRenderer
 
-from .services.upload_photo import UploadPhotoService
-from models_app.models.photo.forms import UploadPhotoForm
+
 from models_app.models.photo.models import Photo
 from models_app.models.user.models import CustomUser
 from models_app.models.voice.models import Voice
 from models_app.models.comment.models import Comment
 from photo_app.serializers import PhotoSerializer
-
-
-
-class UploadPhotoView(ServiceView):
-    form_class = UploadPhotoForm
-    service_class = UploadPhotoService
-    template_name = 'photo_app/upload_photos.html'
-    #success_url = reverse_lazy('home')
-
-    def get(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            form = UploadPhotoForm()
-            context = {"form":form}
-            return render(request, self.template_name, context)
-
-    def post(self, request):
-
-        if request.method == 'POST':
-            form = UploadPhotoForm(request.POST,request.FILES)
-            if form.is_valid():
-
-                post = form.save(commit=False)
-                form.save()
-            
-            return redirect('upload')
-            
-
-def is_ajax(request):
-    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
-
-from django.core.paginator import Page
-
-from conf.settings import django as settings
-
-
-class CustomPagination:
-    def __init__(self, page: Page, current_page: int, per_page: int):
-        self._current_page = current_page
-        self._per_page = per_page
-        self._page = page
-
-    def to_json(self):
-        page = self._page
-        return {
-            "current_page": self._current_page or 1,
-            "per_page": self._per_page or settings.REST_FRAMEWORK["PAGE_SIZE"],
-            "next_page": None if page.number == page.paginator.num_pages else page.next_page_number(),
-            "prev_page": None if page.number == 1 else page.previous_page_number(),
-            "total_pages": page.paginator.num_pages,
-            "total_count": page.paginator.count,
-        }
+from photo_app.utils import is_ajax
 
 class ListPhotoView(ListView):
     model = Photo
@@ -133,21 +81,4 @@ class ListPhotoView(ListView):
             #pdb.set_trace()
             context = {"page_obj": page_obj, "page_number": page_number}
             return render(request,template_name=self.template_name, context = context)
-
-
-
-class DetailPhotoView(DetailView):
-    model = Photo
-    template_name = 'photo_app/detail_photo.html'
-    pk_url_kwarg = 'photo_id'
-    context_object_name = 'photo'
-
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(photo=self.object).order_by('-created_at')[:5]
-        #Как сделать так, чтобы при наличии более 5 комментариев скрывались все, кроме 5 новых?
-        #Остальные должны выводиться по кнопке "показать все". Асинхрон?
-        return context
-
-
 

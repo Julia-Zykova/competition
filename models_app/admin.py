@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
-	list_display = ('email', 'last_name', 'first_name')
+	list_display = ('email', 'last_name', 'first_name', 'user_photo')
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):

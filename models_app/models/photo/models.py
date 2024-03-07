@@ -1,6 +1,7 @@
 from django.db import models
 from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
+
 from models_app.signals import uploaded_file_path
 from models_app.models import CustomUser, BaseModel, BaseSoftDeleteModel
 
