@@ -2,9 +2,38 @@
 
 {% block content %}
 
-<!--- Сделать как всплывающее окно? Или просто добавить кнопку "назад" или "на главную" или крестик --->
+{% if user.is_authenticated %}
+	{% if user.id == photo.author.id %}
+<div class="container-fluid mt-2">
+	<div class="d-flex justify-content-end">
+		<div class="dropdown mb-2">
+			<a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"  style="background-color: #028E9B;">
+				    Изменить
+			</a>
+			<form method="post" action="" enctype="multipart/form-data">
+				{% csrf_token %}
+				<ul class="dropdown-menu">
+					
+					<li><a class="dropdown-item" href="#">Изменить название</a></li>
+					<li><a class="dropdown-item" href="#">Изменить описание</a></li>
+					{% if photo.is_deleted == False %}
+					<li>
+						<input type="hidden" name="deleted" value="False">
+						<input type="hidden" name="photo" value="{{ photo.id }}">
+	                    <input type="hidden" name="user" value="{{ user.id }}">
+	                    <button type="submit">Удалить фото</button>
+	                </li>
+					{% endif %}
+				</ul>
+			</form>
+		</div>
+	</div>
+	{% else %}
+<div class="container-fluid mt-4">	
+	{% endif %}
+{% endif %}
 
-<div class="container-fluid mt-4">
+
 	<div class="card me-5 ms-5 overflow-auto">
 	  <div class="row g-0">
 	    <div class="col-md-4">

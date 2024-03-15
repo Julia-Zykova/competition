@@ -8,7 +8,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-	list_display = ('title', 'author', 'pub_date', 'id')
+	list_display = ('title', 'author', 'pub_date', 'id', 'is_deleted')
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):

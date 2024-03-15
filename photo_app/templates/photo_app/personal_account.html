@@ -6,8 +6,8 @@
 <div class="container-fluid mt-4">
   <div class="row align-items-start">
     <div class="col">
-    	{% if user.photo_medium.url %}
-    	<img src="{{user.photo_medium.url}}" class="rounded float-start">
+    	{% if user.socialaccount_set.all.0.get_avatar_url %}
+    	<img src="{{user.socialaccount_set.all.0.get_avatar_url}}" class="rounded float-start">
     	{% else %}
     	<img src="{% static 'photo_app/images/user_848081.png' %}">
     	{% endif %}

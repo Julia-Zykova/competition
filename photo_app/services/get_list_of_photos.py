@@ -25,12 +25,3 @@ class ListOfPhotoService(ServiceWithResult):
 		search = self.cleaned_data['search']
 		page = self.cleaned_data['page']
 		
-
-		photo = Photo.objects.create(
-			title=title,
-			image = image,
-			description = description,
-			#author = author,
-			)
-
-		return photo

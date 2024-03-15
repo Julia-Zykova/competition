@@ -16,7 +16,3 @@ class PersonalAccountView(DetailView):
     pk_url_kwarg = 'user_id'
     context_object_name = 'user'
    
-    
-    
-
-

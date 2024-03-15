@@ -3,7 +3,7 @@ from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 
 from models_app.signals import uploaded_file_path
-from models_app.models import CustomUser, BaseModel, BaseSoftDeleteModel
+from models_app.models import CustomUser, BaseSoftDeleteModel
 
 #Не могу удалить, вылезает ошибка в миграции 0022
 def user_directory_path(self, filename):
@@ -22,7 +22,6 @@ class Photo(BaseSoftDeleteModel):
 	title = models.CharField(max_length=50)
 	author = models.ForeignKey('CustomUser', on_delete=models.CASCADE,
 		related_name = 'photos',blank = True, null=True)
-
 	
 	image = models.ImageField(upload_to=uploaded_file_path)
 	photo_small =ImageSpecField(source='image',
@@ -38,7 +37,6 @@ class Photo(BaseSoftDeleteModel):
 		verbose_name = 'Фото'
 		verbose_name_plural = 'Фото'
 		ordering = ['-pub_date', 'title']
-
 
 	
 	def __str__(self):

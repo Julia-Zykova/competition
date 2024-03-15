@@ -2,10 +2,22 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
+
 <div class="container-fluid my-4">
 	<div class="card mx-5 overflow-auto border-white mb-3">
 		<form action="" method="post" enctype="multipart/form-data" class="container">
 			{% csrf_token %}
+			<div class="row mb-3">
+				<div class="col-sm-4 ">
+
+					<label for="exampleFormControlInput1" class="form-label">Автор</label>
+					<input type="hidden" name="author" class="form-control" value="{{ user }}">
+					
+
+				</div>
+			</div>
+
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
 
@@ -45,4 +57,7 @@
 		
 	</div>
 </div>
+{% else %}
+<h4>Только авторизованные пользователи могут добавлять фото. Пожалуйста, авторизуйтесь! :)</h4>
+{% endif %}
 {% endblock %}

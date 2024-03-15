@@ -1,3 +1,5 @@
+from datetime import datetime
+from datetime import timedelta
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
@@ -33,26 +35,26 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    @property
-    def token(self):
-        return self._generate_jwt_token()
+    #@property
+    #def token(self):
+    #    return self._generate_jwt_token()
 
-    def get_full_name(self):
-        return (self.first_name + " " + self.last_name)
+    #def get_full_name(self):
+    #    return (self.first_name + " " + self.last_name)
 
 
-    def _generate_jwt_token(self):
-        dt = datetime.now() + timedelta(days=1)
+    #def _generate_jwt_token(self):
+    #    dt = datetime.now() + timedelta(days=1)
 
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
+    #    token = jwt.encode({
+    #        'id': self.pk,
+    #        'exp': int(dt.strftime('%s'))
+    #    }, settings.SECRET_KEY, algorithm='HS256')
 
-        return token.decode('utf-8')
+    #    return token.decode('utf-8')
 
-    def __str__(self):
-        return self.email
+    #def __str__(self):
+    #    return self.email
 
     class Meta:
         verbose_name = 'Пользователь'
