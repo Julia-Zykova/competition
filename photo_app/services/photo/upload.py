@@ -11,25 +11,20 @@ class UploadPhotoService(ServiceWithResult):
     title = forms.CharField(max_length=50)
     image = forms.ImageField()
     description = forms.CharField(max_length=220)
-
+    
     
     def process(self):
         if self.is_valid():
-            title = self.cleaned_data['title']
-            image = self.cleaned_data['image']
-            description = self.cleaned_data['description']
-            author = self.cleaned_data['author']
-        
-            photo = Photo.objects.create(
-                title=title,
-                image = image,
-                description = description,
-                author = author,
-                ) 
-           
-            
+            self.result = self._create_photo
+            return self
+
+    @property
+    def _create_photo(self):
+        photo = Photo.objects.create(
+            title = self.cleaned_data['title'],
+            image = self.cleaned_data['image'],
+            description = self.cleaned_data['description'],
+            author = self.cleaned_data['author'],
+            ) 
         return self
-
-
-   
-
+    

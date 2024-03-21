@@ -29,14 +29,14 @@
 			 		</li>
 		        	{% if user.is_authenticated %}
 		        	<li class="nav-item">
-		        		<a class="nav-link text-light" href="{% url 'upload' %}">
+		        		<a class="nav-link text-light" href="{% url 'photo_app:upload' %}">
 		        		Добавить фото</a>
 		        	</li>
 
 		        	<li class="nav-item">
-		        		<form method="get" action="{% url 'personal_photo' user.id %}">
+		        		<form method="get" action="">
 							<button type="submit" class="nav-link text-light" style="background-color: #028E9B;">
-								<input type="hidden" name="user" value="{{ user.id }}">
+								<input type="hidden" name="personal_list" value="True">
 								Мои фотографии
 							</button>
 						</form>
@@ -73,8 +73,8 @@
 						    </a>
 						    
 						    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-						        <li><a class="dropdown-item" href="{% url 'personal_account' user.id %}">Профиль</a></li>
-						        <li><a class="dropdown-item" href="upload">Добавить фото</a></li>
+						        <li><a class="dropdown-item" href="{% url 'photo_app:personal_account' user.id %}">Профиль</a></li>
+						        <li><a class="dropdown-item" href="{% url 'photo_app:upload' %}">Добавить фото</a></li>
 						        <li><hr class="dropdown-divider"></li>
 						        <li><a class="dropdown-item" href="#">
 						        	<form method="post" action="{% url 'account_logout' %}">

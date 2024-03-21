@@ -12,7 +12,6 @@ class VoteForPhotoService(ServiceWithResult):
     def process(self):
         if self.is_valid():
             self.result = self._voice
-                
         return self
 
     @property
@@ -21,10 +20,12 @@ class VoteForPhotoService(ServiceWithResult):
 
     @property
     def _voice(self):
-        obj, created = Voice.objects.update_or_create(
-            photo=self._photo,
-            user=self.cleaned_data['user'],          
-            )
-        return obj
-        
+        try:
+            obj = Voice.objects.get(photo=self._photo)
+            obj.delete()
+        except Voice.DoesNotExist:
+            obj = Voice.objects.create(
+                photo=self._photo,
+                user=self.cleaned_data['user'],
+                )        
     

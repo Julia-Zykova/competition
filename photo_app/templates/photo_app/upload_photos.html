@@ -10,11 +10,9 @@
 			{% csrf_token %}
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
-
 					<label for="exampleFormControlInput1" class="form-label">Автор</label>
 					<input type="hidden" name="author" class="form-control" value="{{ user }}">
-					
-
+					<input disabled class="form-control" placeholder="{{ user }}">
 				</div>
 			</div>
 

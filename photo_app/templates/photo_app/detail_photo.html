@@ -10,22 +10,19 @@
 			<a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"  style="background-color: #028E9B;">
 				    Изменить
 			</a>
-			<form method="post" action="" enctype="multipart/form-data">
-				{% csrf_token %}
-				<ul class="dropdown-menu">
-					
-					<li><a class="dropdown-item" href="#">Изменить название</a></li>
-					<li><a class="dropdown-item" href="#">Изменить описание</a></li>
-					{% if photo.is_deleted == False %}
-					<li>
-						<input type="hidden" name="deleted" value="False">
-						<input type="hidden" name="photo" value="{{ photo.id }}">
-	                    <input type="hidden" name="user" value="{{ user.id }}">
-	                    <button type="submit">Удалить фото</button>
-	                </li>
-					{% endif %}
+			<ul class="dropdown-menu">
+				
+				<li><a class="dropdown-item" href="{% url 'photo_app:edit' photo.id %}">Изменить название/описание</a></li>
+				{% if photo.is_deleted == False %}
+				<li><a class="dropdown-item" href="#">
+					<form method="post" action="{% url 'photo_app:delete' photo.id %}" enctype="multipart/form-data">
+					{% csrf_token %}
+	                    <button type="submit" class="btn btn-outline-light me-4" style="background-color: #028E9B;">Удалить фото</button>
+	                </form>
+	            </a></li>
+				{% endif %}
 				</ul>
-			</form>
+			
 		</div>
 	</div>
 	{% else %}
@@ -84,13 +81,18 @@
 					</div>
 				</div>
 				<hr class="ms-4">
+				<h6 class="mt-2 ms-4 mb-1 text-dark"> Комментарии</h6>
+				<hr class="ms-4">
 				{% for com in comments|dictsort:"created_at" %}
 				<div class="row">
 					<div class="col ms-4">
 						<small class="text-body-secondary text-dark">
-		                	<div class="d-flex w-100 justify-content-between">
-								<h6 class="mb-1 text-dark">{{com.user}}</h6>
+							
+		                	<div class="d-flex w-100">
+								<h6 class="mb-1 text-dark">{{com.user.first_name}} {{com.user.last_name}}</h6>
+								
 								<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
+								<button type="button" class="btn-close" aria-label="Закрыть"></button>
 							</div>
 							<p class="mb-1 text-break text-dark">{{com.text}}</p>
 		                        
@@ -99,15 +101,21 @@
 	У Ответа есть родительский комменатрий, а у просто комментария нет? !--->
 	                       
 
-							</small>
-					    
-						
+						</small>
 					</div>
-
 				</div>
 				<hr class="ms-4">
-
 				{% endfor %}
+				
+				<div class="row">
+					<div class="col ms-4">
+						<form method="post" action="" enctype="multipart/form-data">
+							{% csrf_token %}
+				  			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий"></textarea>
+	                    	<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Отправить</button>
+	                	</form>
+					</div>
+				</div>
 			</div>
 			
 			

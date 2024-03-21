@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 
@@ -13,33 +14,33 @@ def user_directory_path(self, filename):
 
 class Photo(BaseSoftDeleteModel):
 
-	STATUSES = (
-		('in_moderation', 'на модерации'),
-		('approve', 'одобрено'),
-		('on_deleted', 'на удалении'),
-	)
+    STATUSES = (
+        ('in_moderation', 'на модерации'),
+        ('approve', 'одобрено'),
+        ('on_deleted', 'на удалении'),
+    )
 
-	title = models.CharField(max_length=50)
-	author = models.ForeignKey('CustomUser', on_delete=models.CASCADE,
-		related_name = 'photos',blank = True, null=True)
-	
-	image = models.ImageField(upload_to=uploaded_file_path)
-	photo_small =ImageSpecField(source='image',
-		processors=[ResizeToFill(480, 480)],format='JPEG', options={'quality': 90})
-	
-	photo_big = ImageSpecField(source='image',
-		processors=[ResizeToFit(391,520, False, mat_color="#A4C0BF")],format='JPEG', options={'quality': 100})
-	description = models.CharField(max_length=220)
-	pub_date = models.DateTimeField(auto_now_add=True)
-	#mod_status = models.CharField(max_length=50,choices=STATUSES, default='на модерации')
-	
-	class Meta:
-		verbose_name = 'Фото'
-		verbose_name_plural = 'Фото'
-		ordering = ['-pub_date', 'title']
+    title = models.CharField(max_length=50)
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE,
+        related_name = 'photos',blank = True, null=True)
+    
+    image = models.ImageField(upload_to=uploaded_file_path)
+    photo_small =ImageSpecField(source='image',
+        processors=[ResizeToFill(480, 480)],format='JPEG', options={'quality': 90})
+    
+    photo_big = ImageSpecField(source='image',
+        processors=[ResizeToFit(391,520, False, mat_color="#A4C0BF")],format='JPEG', options={'quality': 100})
+    description = models.CharField(max_length=220)
+    pub_date = models.DateTimeField(auto_now_add=True)
+    #mod_status = models.CharField(max_length=50,choices=STATUSES, default='на модерации')
+    
+    def __str__(self):
+        return self.title
 
-	
-	def __str__(self):
-		return self.title
+    def get_absolute_url(self):
+        return reverse('photo_app:detail', kwargs={'pk': self.id})
 
-
+    class Meta:
+        verbose_name = 'Фото'
+        verbose_name_plural = 'Фото'
+        ordering = ['-pub_date', 'title']

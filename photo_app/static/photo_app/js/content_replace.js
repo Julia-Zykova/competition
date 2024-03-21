@@ -8,16 +8,24 @@ function content_replace(data) {
     let list = element.querySelectorAll(".col-md-3");
 
     let page = data["page_number"];
+    
     if (page != null) {
-    	text = "Галерея страница" + "\n" + page;
-	    document.getElementById("page-title").innerHTML="";
-	    document.getElementById("page-title").insertAdjacentText("afterbegin", text);
-	    document.getElementById("page-title").removeAttribute("value");
-	    document.getElementById("page-title").setAttribute("value", page);
+        if (data["personal_list"]){
+            text = "Мои фото страница" + "\n" + page;
+            document.getElementById("page-title").innerHTML="";
+            document.getElementById("page-title").insertAdjacentText("afterbegin", text);
+            document.getElementById("page-title").removeAttribute("value");
+            document.getElementById("page-title").setAttribute("value", page);
+        } else {
+            text = "Галерея страница" + "\n" + page;
+            document.getElementById("page-title").innerHTML="";
+            document.getElementById("page-title").insertAdjacentText("afterbegin", text);
+            document.getElementById("page-title").removeAttribute("value");
+            document.getElementById("page-title").setAttribute("value", page);
+        }	
     }
     
     
-
     for (const l of list) {
     	l.remove();
     }

@@ -6,11 +6,18 @@ from service_objects.fields import ModelField
 
 
 class SoftDeletePhotoService(ServiceWithResult):
-    photo = ModelField(Photo)
+    photo = forms.IntegerField()
     
     def process(self):
         if self.is_valid():
-            Photo.objects.get(id=photo.id).soft_delete()
-
+            self.result = self._soft_delete
         return self
+        
 
+    @property
+    def _photo(self):
+       return Photo.objects.get(id=self.cleaned_data['photo'])
+
+    @property
+    def _soft_delete(self):
+        self._photo.soft_delete()

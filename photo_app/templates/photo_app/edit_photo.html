@@ -1,0 +1,46 @@
+{% extends 'photo_app/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="container-fluid mt-4">	
+	
+	<div class="card me-5 ms-5 overflow-auto">
+	  <div class="row g-0">
+	    <div class="col-md-4">
+	      <img src="{{photo.photo_big.url}}" class="img-fluid rounded-start" alt="...">
+	    </div>
+
+
+	    <div class="col">
+	    	<div class="card-body">
+	    		<form action="" method="post" enctype="multipart/form-data" class="container">
+						{% csrf_token %}
+		    		
+		    		<div class="col ms-4">
+						<label for="exampleFormControlInput1" class="form-label">Название</label>
+						<input type="text" name="title" class="form-control" id="exampleFormControlInput1" value="{{photo.title}}">
+		    		</div>
+					   
+					<div class="col ms-4">
+						<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+						 <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{photo.description}}</textarea>
+						
+					</div>
+					
+					<div class="col ms-4 mt-2 mb-2">
+						<button class="btn btn-outline-light" type="submit" style="background-color: #028E9B;">Сохранить изменения
+						</button>
+					</div>
+				</form>
+			</div>
+				
+	      
+	    </div>
+	  </div>
+	</div>
+</div>
+
+{% endif %}
+{% endblock %}
