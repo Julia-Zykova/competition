@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from service_objects.services import ServiceOutcome
 
-from photo_app.services.comment.comment_for_photo import CommentForPhotoService
+from photo_app.services.comment.answer import AnswerCommentService
 
 
-class AddCommentPhotoView(View):
+class AnswerCommentPhotoView(View):
     #permission_classes = (IsAuthenticated)
     
     def post(self, request, *args, **kwargs):
@@ -18,6 +18,5 @@ class AddCommentPhotoView(View):
             user = user._wrapped
             
         outcome = ServiceOutcome(
-            CommentForPhotoService, request.POST.dict() |
-            {'user': request.user, 'photo':self.kwargs['id']})
+            AnswerCommentService, request.POST.dict() | {'user': request.user})
         

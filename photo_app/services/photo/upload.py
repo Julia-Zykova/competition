@@ -15,6 +15,8 @@ class UploadPhotoService(ServiceWithResult):
     
     def process(self):
         if self.is_valid():
+            import pdb
+            pdb.set_trace()
             self.result = self._create_photo
             return self
 

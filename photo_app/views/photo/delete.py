@@ -7,6 +7,7 @@ from photo_app.services.photo.soft_delete import SoftDeletePhotoService
 
 
 class DeletePhotoView(View):
+    #permission_classes = (IsAuthenticated)
     
     def post(self, request, *args, **kwargs):
         outcome = ServiceOutcome(

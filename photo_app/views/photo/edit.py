@@ -11,6 +11,8 @@ from photo_app.services.photo.edit import EditPhotoService
 
 class EditPhotoView(View):
     template_name = 'photo_app/edit_photo.html'
+    #permission_classes = (IsAuthenticated)
+    
     def get(self, request, *args, **kwargs):
         #import pdb
         #pdb.set_trace()

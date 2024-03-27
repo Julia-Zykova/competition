@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'widget_tweaks', #Нужно ли это?
+    'rest_framework.authtoken',
+    'widget_tweaks',
     'imagekit',
     'allauth',
     'allauth.account',

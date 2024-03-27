@@ -1,5 +1,7 @@
 from django.urls import path
 
+from photo_app.views.comment.answer import AnswerCommentPhotoView
+from photo_app.views.comment.edit import EditCommentView
 from photo_app.views.comment.delete import DeleteCommentView
 from photo_app.views.photo.list import ListPhotoView
 from photo_app.views.photo.upload import UploadPhotoView
@@ -16,6 +18,8 @@ urlpatterns = [
 	path('photo/<int:id>', DetailPhotoView.as_view(), name ='detail'),
 	path('photo/<int:id>/delete/', DeletePhotoView.as_view(), name = 'delete'),
 	path('photo/<int:id>/edit/', EditPhotoView.as_view(), name = 'edit'),
-	path('user/<int:user_id>', PersonalAccountView.as_view(), name ='personal_account'),
+	path('user/<int:id>', PersonalAccountView.as_view(), name ='personal_account'),
+	path('photo/<int:id>/comment_answer/', AnswerCommentPhotoView.as_view(), name = 'comment_answer'),
 	path('photo/<int:id>/comment_delete/', DeleteCommentView.as_view(), name = 'comment_delete'),
+	path('photo/<int:id>/comment_edit/', EditCommentView.as_view(), name = 'comment_edit'),
 ]

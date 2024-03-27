@@ -13,19 +13,82 @@
     	{% endif %}
     </div>
     
-    <div class="col">
-      <h4>{{user.first_name}}  {{user.last_name}}</h4>
-      <small>{{user.email}}</small>
-      <form action="" method="post">
-        <label for="post-name">
-          Пользовательский токен
-          <input id="post-name" type="text" name="token">
-        </label>
-        <button type="submit">Обновить</button>
-      </form>
+    <div class="col-9">
+      <div class="row">
+        <h4>{{user.first_name}}  {{user.last_name}}</h4>
+      </div>
+      <div class="row">
+        <small>{{user.email}}</small>
+      </div>
+      <div class="row">
+        <form action="" method="post">
+          <label for="post-name" class="form-label">Пользовательский токен</label>
+          <input disabled type="text" name="token" class="form-control" id="post-name" value="{{user.token}}">
+          <button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;"> Обновить токен
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+      
     </div>
+  </div>
+  <div class="row align-items-start text-center">
+    <div class="row row-cols-4 gy-4" id="cardplace">
+      {% for p in photo %}
+      <div class="col-md-3">
 
+      <div class="card" style="width: 18rem; border-color: #E5E5E5;">
+        <img src="{{p.photo_small.url}}" class="card-img-top rounded" alt="..." title="{{p.description}}">
 
+        <div class="card-body">
+
+          <h5 class="card-title">
+            <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark bg-white" href="{% url 'photo_app:detail' p.id %}">{{p.title}}</a>
+          </h5>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" style="border-color: #E5E5E5;" id = "firstli">
+              <p class="card-text" id = "firstpli"><small>{{p.author}}</small></p>
+            </li>
+            <li class="list-group-item" id="secondli">
+              <p class="card-text" id="secondpli"><small>{{p.pub_date|date:"j.m.Y"}} {{p.pub_date|time:"H:i"}}</small></p>
+            </li>
+          </ul>
+          <div class="card-body">
+            <form method="post" action="" enctype="multipart/form-data">
+              <div class="row g-0 justify-content-center">
+                <div class="col-6 col-md-4">
+                  <input type="hidden" name="photo" value="{{ p.id }}">
+                  <button disabled type="submit" class="btn btn-outline-light" style="background-color: #028E9B;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
+                      <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
+                      <path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+                    </svg>
+                    <span class="badge text-light" style="background-color: #028E9B;" id="voices">{{p.voices.all.count}}</span>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4">
+                  <button disabled type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                      <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                      <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                    <span class="badge text-light" style="background-color: #028E9B;" id="comments">{{p.comments.all.count}}</span>
+                  </button>
+                </div>                  
+              </div>
+            </form>                 
+          </div>
+        </div>
+      </div>
+    </div>
+      {% empty %}
+      <h2>К сожалению не найдено ни одного фото:(</h2>
+      {% endfor %}
+    
   </div>
 </div>
 {% endblock %}

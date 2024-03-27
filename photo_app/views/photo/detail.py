@@ -10,6 +10,7 @@ from models_app.models.comment.models import Comment
 
 
 class DetailPhotoView(View):
+    #permission_classes = (IsAuthenticatedOrReadOnly) 
 
     def get_queryset(self):
         return Photo.objects.get(id = self.kwargs['id'])

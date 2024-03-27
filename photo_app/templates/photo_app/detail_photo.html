@@ -84,23 +84,65 @@
 				<h6 class="mt-2 ms-4 mb-1 text-dark"> Комментарии</h6>
 				<hr class="ms-4">
 				{% for com in comments|dictsort:"created_at" %}
-				<div class="row">
+				<div class="row g-0">
 					<div class="col ms-4">
 						<small class="text-body-secondary text-dark">
 							
-		                	<div class="d-flex w-100">
-								<h6 class="mb-1 text-dark">{{com.user.first_name}} {{com.user.last_name}}</h6>
-								
-								<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
-								<button type="button" class="btn-close" aria-label="Закрыть"></button>
+		                	<div class="d-flex w-100 justify-content-between">
+		                		<div class="col-8">
+		                			<h6 class="mb-1 text-dark">{{com.user.first_name}} {{com.user.last_name}}</h6>
+		                		</div>
+								<div class="col-2 p-0 d-flex justify-content-end">
+									<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>	
+								</div>
+								{% if user.id == com.user.id %}
+
+	                			<button class="btn p-0" type="button" data-bs-toggle="collapse" data-bs-target="#Edit" aria-expanded="false" aria-controls="Edit">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+									</svg>
+								</button>
+								<form method="post" action="{% url 'photo_app:comment_delete' com.id %}" enctype="multipart/form-data">
+								{% csrf_token %}
+									<input type="hidden" name="comment" value="{{ com.id }}">
+									<button type="submit" class="btn-close" aria-label="Удалить"></button>
+								</form>
+									
+								{% endif %}
 							</div>
+
+							{% if com.comment %}
+							<p class="mb-1 text-break text-dark">{{com.comment.user.first_name}} {{com.comment.user.last_name}}, {{com.text}}</p>
+							{% else %}
 							<p class="mb-1 text-break text-dark">{{com.text}}</p>
+							{% endif %}
+
+							<small><a class="" data-bs-toggle="collapse" href="#answer" role="button" aria-expanded="false" aria-controls="answer">Ответить</a></small>
+
+							<div class="collapse multi-collapse" id="answer">
+								<form method="post" action="{% url 'photo_app:comment_answer' com.id %}" enctype="multipart/form-data">
+								{% csrf_token %}
+									<input type="hidden" name="parent_comment" value="{{ com.id }}">
+									<input type="hidden" name="photi" value="{{ com.photo.id }}">
+									<textarea class="form-control" name="text"rows="3">{{com.text}}</textarea>
+									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+								</form>
+						    </div>
+
+							<div class="collapse multi-collapse" id="Edit">
+								<form method="post" action="{% url 'photo_app:comment_edit' com.id %}" enctype="multipart/form-data">
+								{% csrf_token %}
+									<input type="hidden" name="comment" value="{{ com.id }}">
+									<textarea class="form-control" name="text"rows="3">{{com.text}}</textarea>
+									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+								</form>
+    						</div>
+
 		                        
 	<!--- Как отобразить вложенность? Через if (есть ответ к комменту или нет)?
 	Как отделить комменатрий от ответа? Во view в get_context_data?
 	У Ответа есть родительский комменатрий, а у просто комментария нет? !--->
 	                       
-
 						</small>
 					</div>
 				</div>
@@ -125,6 +167,29 @@
 	</div>
 </div>
 
+{% block javascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$("").click(function(){
+			const val = document.querySelector("").getAttribute("");
+			$.ajax({
+				url: '',
+				method: 'get',
+				dataType: 'json',
+				data: {orderby: document.querySelector('select.current_sorting').value,},
+			    success: function(data){
+
+			    },
+			});
+		});
+	});
 
 
+</script>
+
+
+
+{% endblock javascript %}
 {% endblock %}

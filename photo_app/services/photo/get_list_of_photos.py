@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.db.models import Count, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ValidationError
 
 from models_app.models.photo.models import Photo
 from models_app.models.user.models import CustomUser
@@ -30,6 +31,7 @@ class ListOfPhotoService(ServiceWithResult):
     page = forms.IntegerField(min_value = 1, initial = 1, required = False)
     personal_list = forms.BooleanField(initial=False, required = False)
     user = ModelField(CustomUser,required = False)
+    
     
     def process(self):
         if self.is_valid():

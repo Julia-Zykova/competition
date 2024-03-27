@@ -8,6 +8,7 @@ from models_app.models.photo.forms import UploadPhotoForm
 
 class UploadPhotoView(View):   
     template_name = 'photo_app/upload_photos.html'
+    #permission_classes = (IsAuthenticated)
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, context = {"form":UploadPhotoForm()})
@@ -23,5 +24,6 @@ class UploadPhotoView(View):
         outcome = ServiceOutcome(
             UploadPhotoService, request.POST.dict() | {'author': request.user}, request.FILES.dict()
             )
-
+        #import pdb
+        #pdb.set_trace()
         return redirect('photo_app:home')

@@ -2,11 +2,10 @@ from django import forms
 
 from models_app.models import Comment
 from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
 
 
 class DeleteCommentService(ServiceWithResult):
-    photo = forms.IntegerField()
+    comment = forms.IntegerField()
     
     def process(self):
         if self.is_valid():
@@ -15,7 +14,7 @@ class DeleteCommentService(ServiceWithResult):
         
     @property
     def _comment(self):
-       return Comment.objects.get(photo=self.cleaned_data['photo'])
+       return Comment.objects.get(id=self.cleaned_data['comment'])
 
     @property
     def _delete(self):

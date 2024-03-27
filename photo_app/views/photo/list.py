@@ -21,12 +21,14 @@ from photo_app.utils import is_ajax
 
 class ListPhotoView(View):
     context_object_name = 'posts'
-    template_name = 'photo_app/list_of_photos.html'    
+    template_name = 'photo_app/list_of_photos.html'
+    #permission_classes = (IsAuthenticatedOrReadOnly) 
    
-    #Для авториз.польз. голосовал/нет с помощью annotate
-    #Для автор. польз. свои фото
+    #Для авториз.польз. голосовал/нет с помощью annotate(?)
 
     def get(self, request,**kwargs):
+        #import pdb
+        #pdb.set_trace()
 
         outcome = ServiceOutcome(
             ListOfPhotoService, request.GET.dict() | {'user': request.user })
