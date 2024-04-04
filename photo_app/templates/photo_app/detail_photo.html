@@ -84,15 +84,12 @@
 				</div>
 				<hr class="ms-4">
 				<div class="container-fluid p-0 mb-0">
-					<div class="row d-flex w-100 justify-content-start">
-						<div class="col-7">
+					<div class="row d-flex w-100 justify-content-between">
+						<div class="col-8">
 							<h6 class="ms-4 text-dark"> Комментарии</h6>
 						</div>
-						<div class="col-4 text-end">
-							{% if page_obj.paginator.num_pages > 1 %}
-							<small class=" ms-4 mb-1" id="page-com" value="{{page_obj.number}}">страница {{page_obj.number}}</small>
-						</div>
-						<div class="col-1 p-0">
+						
+						<div class="col-2 p-0">
 							<div class="d-flex w-100 justify-content-end">
 								<ul class="pagination pagination-sm">
 								{% for p in page_obj.paginator.page_range %}
@@ -112,7 +109,6 @@
 					
 					</div>
 					
-							{% endif %}
 					
 				</div>
 				
@@ -138,7 +134,7 @@
 									</svg>
 								</button>
 								{% if user.is_authenticated %}
-								<form method="post" action="{% url 'photo_app:comment' photo.id %}" enctype="multipart/form-data">
+								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
 								{% csrf_token %}
 									<input type="hidden" name="_method" value="DELETE">
 									<input type="hidden" name="comment" value="{{ com.id }}">
@@ -162,7 +158,7 @@
 								{% endif %}
 								{% endfor %}
 								{% if com.comments.all.count > 2 %}
-								<a href="{% url 'photo_app:comment' com.id %}"><small>Просмотреть ветку комментариев</small></a>
+								<a href="{% url 'photo_app:comment' photo=photo.id comment=com.id %}"><small>Просмотреть ветку комментариев</small></a>
 								{% endif %}
 
 							{% else %}
@@ -173,7 +169,7 @@
 							
 							{% if user.is_authenticated %}
 							<div class="collapse multi-collapse" id="answer_{{com.id}}">
-								<form method="post" action="{% url 'photo_app:comment' photo.id %}" enctype="multipart/form-data">
+								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
 								{% csrf_token %}
 									<input type="hidden" name="_method" value="POST">
 									<input type="hidden" name="comment" value="{{ com.id }}">
@@ -185,7 +181,7 @@
 
 
 							<div class="collapse multi-collapse" id="edit_{{com.id}}">
-								<form method="post" action="{% url 'photo_app:comment' photo.id %}" enctype="multipart/form-data">
+								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
 								{% csrf_token %}
 									<input type="hidden" name="_method" value="PATCH">
 									<input type="hidden" name="comment" value="{{ com.id }}">
@@ -206,7 +202,7 @@
 				{% if user.is_authenticated %}
 				<div class="row">
 					<div class="col ms-4">
-						<form method="post" action="{% url 'photo_app:comment' photo.id %}" enctype="multipart/form-data">
+						<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment='0' %}" enctype="multipart/form-data">
 							{% csrf_token %}
 							<input type="hidden" name="_method" value="POST">
 				  			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий"></textarea>

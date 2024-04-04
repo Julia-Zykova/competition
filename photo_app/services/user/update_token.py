@@ -12,18 +12,17 @@ class UpdateTokenService(ServiceWithResult):
     
     def process(self):
         if self.is_valid():
-            self.result = self._new_token
+            self.result = self._regenerated_token
             return self
 
-    @property
+    
     def _token_delete(self):
         user = self.cleaned_data['user']
-        return user.auth_token.delete()
+        user.auth_token.delete()
         
           
     @property
-    def _new_token(self):
-        self._token_delete
+    def _regenerated_token(self):
+        self._token_delete()
         return Token.objects.create(user = self.cleaned_data['user'])
-        
         

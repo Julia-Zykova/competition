@@ -13,4 +13,3 @@ class ModelsAppConfig(AppConfig):
         
         pre_save.connect(skip_saving_file, sender=Photo)
         post_save.connect(save_file, sender=Photo)
-

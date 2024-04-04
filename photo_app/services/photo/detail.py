@@ -19,15 +19,20 @@ class DetailPhotoService(ServiceWithResult):
 
     def process(self):
         if self.is_valid():
-            outcome_comments = ServiceOutcome(
-            ShowCommentsService, {
-            'photo': self.cleaned_data['photo'], 'page': self.cleaned_data['page'], "detail_photo": True
-            })
             self.result = {
-            'outcome_comments': outcome_comments, 'photo': self._photo
+            'outcome_comments': self._comments
             }   
         return self     
 
     @property
     def _photo(self):
         return Photo.objects.get(id = self.cleaned_data['photo'])
+
+    @property
+    def _comments(self):
+        outcome = ServiceOutcome(
+            ShowCommentsService, {
+            'photo': self.cleaned_data['photo'], 'page': self.cleaned_data['page'], "detail_photo": True
+            })
+        return outcome.result
+

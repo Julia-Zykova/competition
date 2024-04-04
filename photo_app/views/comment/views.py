@@ -14,10 +14,11 @@ class CommentView(View):
     template_name = 'photo_app/detail_comment.html'
 
     def get(self, request, **kwargs):
-        outcome = ServiceOutcome(ShowCommentsService, request.GET.dict() | {'photo':self.kwargs['id']})
+        outcome = ServiceOutcome(ShowCommentsService, request.GET.dict() | {'photo':self.kwargs['photo']})
         context = {
             "page_obj": outcome.result['page_obj'],
             "page_number": outcome.result['page_number'],
+            "photo": outcome.result['photo']
             }
         return render(request, template_name=self.template_name, context = context)
 
@@ -27,7 +28,7 @@ class CommentView(View):
                 CommentForPhotoService, request.POST.dict() |
                 {
                 'user': request.user if self.request.user.is_authenticated else None,
-                'photo':self.kwargs['id']
+                'photo':self.kwargs['photo']
                 })
 
         if request.POST['_method'] == 'PATCH':
@@ -39,5 +40,5 @@ class CommentView(View):
             outcome = ServiceOutcome(
                 DeleteCommentService, request.POST.dict())
         
-        return redirect('photo_app:detail', id = self.kwargs['id']) 
+        return redirect('photo_app:detail', photo = self.kwargs['photo']) 
     

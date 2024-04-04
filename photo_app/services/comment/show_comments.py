@@ -18,13 +18,7 @@ class ShowCommentsService(ServiceWithResult):
 
     @property
     def _photo(self):
-        #import pdb
-        #pdb.set_trace()
-        try:
-            photo = Photo.objects.get(id=self.cleaned_data['photo'])
-        except:
-            comment = Comment.objects.get(id = self.cleaned_data['photo'])
-            photo = Photo.objects.get(comments=comment)
+        photo = Photo.objects.get(id=self.cleaned_data['photo'])
         return photo
 
     @property
@@ -49,4 +43,4 @@ class ShowCommentsService(ServiceWithResult):
             # if page is empty then return last page
             page_obj = p.page(p.num_pages)
 
-        return {"page_number": page_number, "page_obj": page_obj}
+        return {"page_number": page_number, "page_obj": page_obj, "photo":self._photo}

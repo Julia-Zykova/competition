@@ -7,11 +7,6 @@ from models_app.signals import uploaded_file_path
 from models_app.models import CustomUser, BaseSoftDeleteModel
 from models_app.models.comment.models import Comment
 
-#Не могу удалить, вылезает ошибка в миграции 0022
-def user_directory_path(self, filename):
-    
-    return 'images/user_{0}/{1}'.format(self.author.id, filename)
-
 
 class Photo(BaseSoftDeleteModel):
 

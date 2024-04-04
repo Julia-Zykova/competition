@@ -49,12 +49,12 @@ class DetailPhotoView(View):
     def get(self, request, **kwargs):
 
         outcome = ServiceOutcome(
-            DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["id"], "detail_photo": True})
+            DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["photo"], "detail_photo": True})
         
         context = {
-            "photo":outcome.result['photo'],
-            "page_obj": outcome.result['outcome_comments'].result['page_obj'],
-            "page_number": outcome.result['outcome_comments'].result['page_number'],
+            "photo":outcome.result['outcome_comments']['photo'],
+            "page_obj": outcome.result['outcome_comments']['page_obj'],
+            "page_number": outcome.result['outcome_comments']['page_number'],
             }
         
         return render(
@@ -87,12 +87,12 @@ class EditPhotoView(View):
     def get(self, request, *args, **kwargs):
         return render(
             request, self.template_name,
-            context = {'photo': Photo.objects.get(id=self.kwargs['id'])})
+            context = {'photo': Photo.objects.get(id=self.kwargs['photo'])})
     
     def post(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
-            EditPhotoService, request.POST.dict() | {'photo':self.kwargs['id']})
-        return redirect('photo_app:detail', id = self.kwargs['id'])
+            EditPhotoService, request.POST.dict() | {'photo':self.kwargs['photo']})
+        return redirect('photo_app:detail', id = self.kwargs['photo'])
 
 
 class DeletePhotoView(View):
@@ -100,5 +100,5 @@ class DeletePhotoView(View):
     
     def post(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
-            SoftDeletePhotoService, request.POST.dict() | {'photo':self.kwargs['id']})
+            SoftDeletePhotoService, request.POST.dict() | {'photo':self.kwargs['photo']})
         return redirect('photo_app:home')

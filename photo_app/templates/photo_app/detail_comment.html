@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container-fluid p-0 mb-0">
-	<div class="row d-flex w-100 justify-content-start">
+	<div class="row mt-4 d-flex w-100 justify-content-start">
 		<div class="col-7">
 			<h6 class="ms-4 text-dark"> Комментарии</h6>
 		</div>
@@ -53,7 +53,7 @@
 					</svg>
 				</button>
 					{% if user.is_authenticated %}
-				<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+				<form method="post" action="{% url 'photo_app:comment' photo=com.photo.id comment=com.id %}" enctype="multipart/form-data">
 					{% csrf_token %}
 					<input type="hidden" name="_method" value="DELETE">
 					<input type="hidden" name="comment" value="{{ com.id }}">
@@ -82,7 +82,7 @@
 							
 			{% if user.is_authenticated %}
 			<div class="collapse multi-collapse" id="answer_{{com.id}}">
-				<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+				<form method="post" action="{% url 'photo_app:comment' photo=com.photo.id comment=com.id %}" enctype="multipart/form-data">
 				{% csrf_token %}
 					<input type="hidden" name="_method" value="POST">
 					<input type="hidden" name="comment" value="{{ com.id }}">
@@ -94,7 +94,7 @@
 
 
 			<div class="collapse multi-collapse" id="edit_{{com.id}}">
-				<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+				<form method="post" action="{% url 'photo_app:comment' photo=com.photo.id comment=com.id %}" enctype="multipart/form-data">
 				{% csrf_token %}
 					<input type="hidden" name="_method" value="PATCH">
 					<input type="hidden" name="comment" value="{{ com.id }}">
@@ -113,7 +113,7 @@
 {% if user.is_authenticated %}
 <div class="row">
 	<div class="col ms-4">
-		<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+		<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment='0' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 			<input type="hidden" name="_method" value="POST">
 			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий"></textarea>
