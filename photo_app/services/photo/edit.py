@@ -19,8 +19,8 @@ class EditPhotoService(ServiceWithResult):
 
     @property
     def _update_photo(self):
-        self._photo.update(
+        return self._photo.update(
             title = self.cleaned_data['title'],
             description = self.cleaned_data['description'],
             ) 
-        return self
+        

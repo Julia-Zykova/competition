@@ -12,7 +12,7 @@ class PhotoAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-	list_display = ('user', 'photo', 'text')
+	list_display = ('user', 'text')
 
 @admin.register(Voice)
 class VoiceAdmin(admin.ModelAdmin):

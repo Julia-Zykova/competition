@@ -10,6 +10,7 @@ from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFill
 
 from models_app.signals import uploaded_file_path
+
 from .managers import CustomUserManager
 
 
@@ -33,23 +34,11 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-    @property
-    def token(self):
-        return self._generate_jwt_token()
 
     def get_full_name(self):
         return (self.first_name + " " + self.last_name)
 
-    def _generate_jwt_token(self):
-        dt = datetime.now() + timedelta(days=1)
-
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%s'))
-        }, settings.SECRET_KEY, algorithm='HS256')
-
-        return token
-
+   
     def get_absolute_url(self):
         return reverse('photo_app:personal_account', kwargs={'pk': self.id})
 

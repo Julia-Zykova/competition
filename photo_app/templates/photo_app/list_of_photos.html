@@ -68,7 +68,7 @@
 					</ul>
 					<div class="card-body">
 						{% if user.is_authenticated %}
-                        <form method="post" action="" enctype="multipart/form-data">
+                        <form method="post" action="{% url 'photo_app:vote' %}" enctype="multipart/form-data">
 						{% csrf_token %}
                             <div class="row g-0 justify-content-center">
                                 <div class="col-6 col-md-4">
@@ -170,6 +170,12 @@
 <script>
 	$(document).ready(function(){
 		$("a.page-link").click(function(){
+			if ("{{personal_list}}" == "True"){
+				var p_list = "True";
+				var node = "h1#personal-title";
+			} else {
+				var node = "h1#page-title";
+			}
 			$.ajax({
 				url: '',
 				method: 'get',
@@ -177,7 +183,7 @@
 				data: {page: this.textContent,
 					orderby: document.querySelector('select.current_sorting').value,
 					orderbysearch: orderbysearch.value,
-					personal_list: document.querySelector('h1#personal-title').value,
+					personal_list: p_list,
 				}, 
 			    success: content_replace,
 			});
@@ -192,14 +198,20 @@
 <script>
 	$(document).ready(function(){
 		$("button#search").click(function(){
-			let val = document.querySelector('h1#page-title').getAttribute("value");
+			if ("{{personal_list}}" == "True"){
+				var p_list = "True";
+				var node = "h1#personal-title";
+			} else {
+				var node = "h1#page-title";
+			}
 			$.ajax({
 				url: '',
 				method: 'get',
 				dataType: 'json',
 				data: {	orderbysearch: orderbysearch.value,
 					orderby: document.querySelector('select.current_sorting').value,
-					page: val},
+					page: document.querySelector(node).getAttribute("value"),
+					personal_list: p_list,},
 
 			    success: content_replace,
 			});

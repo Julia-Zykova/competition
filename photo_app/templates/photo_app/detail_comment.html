@@ -1,0 +1,126 @@
+{% extends 'photo_app/base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-0 mb-0">
+	<div class="row d-flex w-100 justify-content-start">
+		<div class="col-7">
+			<h6 class="ms-4 text-dark"> Комментарии</h6>
+		</div>
+		<div class="col-4 text-end">
+		{% if page_obj.paginator.num_pages > 1 %}
+			<small class=" ms-4 mb-1" id="page-com" value="{{page_obj.number}}">страница {{page_obj.number}}</small>
+		</div>
+		<div class="col-1 p-0">
+			<div class="d-flex w-100 justify-content-end">
+				<ul class="pagination pagination-sm">
+				{% for p in page_obj.paginator.page_range %}
+					{% if page_obj.number == p %}			
+					<li class="page-item active">
+						<span class="page-link" id = "pagenum_{{p}}" style="background-color: #028E9B;">{{ p }}</span>
+					</li>
+					{% else %}
+					<li class="page-item">
+						<a class="page-link" id = "pagenum_{{p}}" href="?page={{ p }}">{{ p }}</a>
+					</li>
+					{% endif %}
+				{% endfor %}
+				</ul>
+			</div>
+		</div>					
+	</div>
+		{% endif %}
+</div>
+				
+<hr class="ms-4 mt-0">
+{% for com in page_obj %}
+<div class="row g-0">
+	<div class="col ms-4">
+		<small class="text-body-secondary text-dark" id ="element">							
+			<div class="d-flex w-100 justify-content-between">
+		    	<div class="col-8">
+		            <h6 class="mb-1 text-dark">{{com.user.first_name}} {{com.user.last_name}}</h6>
+		        </div>
+				<div class="col-2 p-0 d-flex justify-content-end">
+					<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>	
+				</div>
+
+				{% if user.id == com.user.id %}
+
+	            <button class="btn p-0" type="button" data-bs-toggle="collapse" data-bs-target="#edit_{{com.id}}" aria-expanded="false" aria-controls="edit_{{com.id}}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+						<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+					</svg>
+				</button>
+					{% if user.is_authenticated %}
+				<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+					{% csrf_token %}
+					<input type="hidden" name="_method" value="DELETE">
+					<input type="hidden" name="comment" value="{{ com.id }}">
+					<button type="submit" class="btn-close" id="{{com.id}}" aria-label="Удалить"></button>
+				</form>
+					{% endif %}	
+				{% endif %}
+			</div>
+			{% if com.comments.get_queryset %}								
+			<p class="mb-1 text-break text-dark">{{com.text}}</p>
+			<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
+			<hr class="ms-4 m-0">
+
+			{% for answer in com.comments.get_queryset %}
+				{% if forloop.counter <= 5 %}
+			<p class="ms-4 mb-1 text-break text-dark">{{answer.user.get_full_name}}</p>
+			<p class="ms-4 mb-1 text-break">{{com.user.get_full_name}}, {{answer.text}}</p>
+			<hr class="ms-4 m-0">
+				{% endif %}
+			{% endfor %}
+
+			{% else %}
+			<p class="mb-1 text-break text-dark">{{com.text}}</p>
+			<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
+			{% endif %}
+							
+			{% if user.is_authenticated %}
+			<div class="collapse multi-collapse" id="answer_{{com.id}}">
+				<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+				{% csrf_token %}
+					<input type="hidden" name="_method" value="POST">
+					<input type="hidden" name="comment" value="{{ com.id }}">
+					<input type="hidden" name="photo" value="{{ com.photo.id }}">
+					<textarea class="form-control" name="text"rows="3"></textarea>
+					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+				</form>
+			</div>
+
+
+			<div class="collapse multi-collapse" id="edit_{{com.id}}">
+				<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+				{% csrf_token %}
+					<input type="hidden" name="_method" value="PATCH">
+					<input type="hidden" name="comment" value="{{ com.id }}">
+					<textarea class="form-control" name="text"rows="3">{{com.text}}</textarea>
+					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+				</form>
+    		</div>
+    		{% endif %}
+     
+		</small>
+	</div>
+</div>
+<hr class="ms-4">
+{% endfor %}
+				
+{% if user.is_authenticated %}
+<div class="row">
+	<div class="col ms-4">
+		<form method="post" action="{% url 'photo_app:comment' com.id %}" enctype="multipart/form-data">
+		{% csrf_token %}
+			<input type="hidden" name="_method" value="POST">
+			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий"></textarea>
+	        <button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Отправить</button>
+	    </form>
+	</div>
+</div>
+{% endif %}
+
+{% endblock %}

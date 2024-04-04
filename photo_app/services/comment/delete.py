@@ -18,4 +18,7 @@ class DeleteCommentService(ServiceWithResult):
 
     @property
     def _delete(self):
-        self._comment.delete()
+        if not self._comment.comments.get_queryset():
+            self._comment.delete()
+        else:
+            pass

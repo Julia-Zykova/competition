@@ -5,6 +5,7 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 
 from models_app.signals import uploaded_file_path
 from models_app.models import CustomUser, BaseSoftDeleteModel
+from models_app.models.comment.models import Comment
 
 #Не могу удалить, вылезает ошибка в миграции 0022
 def user_directory_path(self, filename):
@@ -16,7 +17,8 @@ class Photo(BaseSoftDeleteModel):
 
     STATUSES = (
         ('in_moderation', 'на модерации'),
-        ('approve', 'одобрено'),
+        ('approved', 'одобрено'),
+        ('rejected','отклонено'),
         ('on_deleted', 'на удалении'),
     )
 
@@ -34,6 +36,7 @@ class Photo(BaseSoftDeleteModel):
     pub_date = models.DateTimeField(auto_now_add=True)
     #mod_status = models.CharField(max_length=50,choices=STATUSES, default='на модерации')
     
+
     def __str__(self):
         return self.title
 

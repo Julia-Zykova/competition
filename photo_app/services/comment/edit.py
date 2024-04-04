@@ -20,7 +20,7 @@ class EditCommentService(ServiceWithResult):
 
     @property
     def _update_comment(self):
-        self._comment.update(
+        return self._comment.update(
             text = self.cleaned_data['text'],
             ) 
-        return self
+        

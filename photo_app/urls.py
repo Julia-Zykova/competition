@@ -1,25 +1,20 @@
 from django.urls import path
 
-from photo_app.views.comment.answer import AnswerCommentPhotoView
-from photo_app.views.comment.edit import EditCommentView
-from photo_app.views.comment.delete import DeleteCommentView
-from photo_app.views.photo.list import ListPhotoView
-from photo_app.views.photo.upload import UploadPhotoView
-from photo_app.views.photo.delete import DeletePhotoView
-from photo_app.views.photo.detail import DetailPhotoView
-from photo_app.views.photo.edit import EditPhotoView
-from photo_app.views.personal_account.views import PersonalAccountView
+from photo_app.views.comment.views import CommentView
+from photo_app.views.photo.views import ListPhotoView, UploadPhotoView, DeletePhotoView, DetailPhotoView, EditPhotoView
+from photo_app.views.user.views import PersonalAccountView, UpdateTokenView
+from photo_app.views.voice.views import VoiceView
 
 app_name = 'photo_app'
 
 urlpatterns = [
 	path('', ListPhotoView.as_view(), name ='home'),
+	path('vote/', VoiceView.as_view(), name = 'vote'),
 	path('upload/', UploadPhotoView.as_view(), name ='upload'),
-	path('photo/<int:id>', DetailPhotoView.as_view(), name ='detail'),
+	path('photo/<int:id>/', DetailPhotoView.as_view(), name ='detail'),
 	path('photo/<int:id>/delete/', DeletePhotoView.as_view(), name = 'delete'),
 	path('photo/<int:id>/edit/', EditPhotoView.as_view(), name = 'edit'),
 	path('user/<int:id>', PersonalAccountView.as_view(), name ='personal_account'),
-	path('photo/<int:id>/comment_answer/', AnswerCommentPhotoView.as_view(), name = 'comment_answer'),
-	path('photo/<int:id>/comment_delete/', DeleteCommentView.as_view(), name = 'comment_delete'),
-	path('photo/<int:id>/comment_edit/', EditCommentView.as_view(), name = 'comment_edit'),
+	path('user/<int:id>/update_token/', UpdateTokenView.as_view(), name = 'update_token'),
+	path('photo/<int:id>/comment/', CommentView.as_view(), name = 'comment'),
 ]
