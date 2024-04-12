@@ -20,12 +20,12 @@ class BaseSoftDeleteModel(BaseModel):
 	objects = SoftDeleteManager()
 
 	def soft_delete(self):
-		if is_deleted == False:
-			is_deleted = True
+		if self.is_deleted == False:
+			self.is_deleted = True
 			self.save(update_fields=["is_deleted"])
 
 	def restore(self):
-		if is_deleted:
+		if self.is_deleted:
 			self.is_deleted = False
 			self.save(update_fields=["is_deleted"])
 

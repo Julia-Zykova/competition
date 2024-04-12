@@ -2,9 +2,35 @@
 
 {% block content %}
 
-<!--- Сделать как всплывающее окно? Или просто добавить кнопку "назад" или "на главную" или крестик --->
+{% if user.is_authenticated %}
+	{% if user.id == photo.author.id %}
+<div class="container-fluid mt-2">
+	<div class="d-flex justify-content-end">
+		<div class="dropdown mb-2">
+			<a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"  style="background-color: #028E9B;">
+				    Изменить
+			</a>
+			<ul class="dropdown-menu">
+				
+				<li><a class="dropdown-item" href="{% url 'photo_app:edit' photo.id %}">Изменить название/описание</a></li>
+				{% if photo.is_deleted == False %}
+				<li><a class="dropdown-item" href="#">
+					<form method="post" action="{% url 'photo_app:delete' photo.id %}" enctype="multipart/form-data">
+					{% csrf_token %}
+	                    <button type="submit" class="btn btn-outline-light me-4" style="background-color: #028E9B;">Удалить фото</button>
+	                </form>
+	            </a></li>
+				{% endif %}
+				</ul>
+			
+		</div>
+	</div>
+	{% else %}
+<div class="container-fluid mt-4">	
+	{% endif %}
+{% endif %}
 
-<div class="container-fluid mt-4">
+
 	<div class="card me-5 ms-5 overflow-auto">
 	  <div class="row g-0">
 	    <div class="col-md-4">
@@ -17,31 +43,33 @@
 	    		<div class="row">
 
 	    			<div class="col ms-4">
-	    				{% if photo.author %}
 						<small class="card-text">{{photo.author}}</small>
-						{% else %}
-						<small class="card-text">Автор неизвестен</small>
-						{% endif %}
 						<h4 class="card-title fw-bold">{{photo.title}}</h4>
 	    			</div>
 				   
 
 					<div class="col">
-						<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
-								<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
-					 			<path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-					 		</svg>
-					 		<span class="badge text-light" style="background-color: #028E9B;">{{photo.voices.all.count}}</span>
-				 		</button>
-				 		<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
-						 	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
-						 		<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-						 		<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
-						 	</svg>
-						 	<span class="badge text-light" style="background-color: #028E9B;">{{photo.comments.all.count}}</span>
-						</button>
-
+						<div class="d-flex w-100 justify-content-start">
+							{% if user.is_authenticated %}
+                        	<form method="post" action="{% url 'photo_app:vote' %}" enctype="multipart/form-data" class="">
+								{% csrf_token %}
+								<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-heart" viewBox="0 0 16 16">
+										<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12ZM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2Z"/>
+					 					<path d="M8 3.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+					 				</svg>
+					 				<span class="badge text-light" style="background-color: #028E9B;">{{photo.voices.all.count}}</span>
+				 				</button>
+				 			</form>
+				 			{% endif %}
+				 			<button type="button" class="btn btn-outline-light" style="background-color: #028E9B;">
+						 		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+						 			<path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+						 			<path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+						 		</svg>
+						 		<span class="badge text-light" style="background-color: #028E9B;">{{photo.comments.all.count}}</span>
+							</button>
+						</div>
 					</div>
 
 					<div class="col-2 ms-5">
@@ -55,39 +83,140 @@
 					</div>
 				</div>
 				<hr class="ms-4">
-				{% for com in comments|dictsort:"created_at" %}
-				<div class="row">
-					<div class="col ms-4">
-						<small class="text-body-secondary text-dark">
-		                	<div class="d-flex w-100 justify-content-between">
-								<h6 class="mb-1 text-dark">{{com.user}}</h6>
-								<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
-							</div>
-							<p class="mb-1 text-break text-dark">{{com.text}}</p>
-		                        
-	<!--- Как отобразить вложенность? Через if (есть ответ к комменту или нет)?
-	Как отделить комменатрий от ответа? Во view в get_context_data?
-	У Ответа есть родительский комменатрий, а у просто комментария нет? !--->
-	                       
-
-							</small>
-					    
+				<div class="container-fluid p-0 mb-0">
+					<div class="row d-flex w-100 justify-content-between">
+						<div class="col-8">
+							<h6 class="ms-4 text-dark"> Комментарии</h6>
+						</div>
 						
+						<div class="col-2 p-0">
+							<div class="d-flex w-100 justify-content-end">
+								<ul class="pagination pagination-sm">
+								{% for p in page_obj.paginator.page_range %}
+								{% if page_obj.number == p %}			
+									<li class="page-item active">
+						    			<span class="page-link" id = "pagenum_{{p}}" style="background-color: #028E9B;">{{ p }}</span>
+									</li>
+								{% else %}
+									<li class="page-item">
+						    			<a class="page-link" id = "pagenum_{{p}}" href="?page={{ p }}">{{ p }}</a>
+									</li>
+								{% endif %}
+								{% endfor %}
+								</ul>
+							</div>
+						</div>
+					
 					</div>
+					
+					
+				</div>
+				
+				<hr class="ms-4 mt-0">
+				{% for com in page_obj %}
+				<div class="row g-0">
+					<div class="col ms-4">
+						<small class="text-body-secondary text-dark" id ="element">
+							
+		                	<div class="d-flex w-100 justify-content-between">
+		                		<div class="col-8">
+		                			<h6 class="mb-1 text-dark">{{com.user.first_name}} {{com.user.last_name}}</h6>
+		                		</div>
+								<div class="col-2 p-0 d-flex justify-content-end">
+									<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>	
+								</div>
 
+								{% if user.id == com.user.id %}
+
+	                			<button class="btn p-0" type="button" data-bs-toggle="collapse" data-bs-target="#edit_{{com.id}}" aria-expanded="false" aria-controls="edit_{{com.id}}">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+									</svg>
+								</button>
+								{% if user.is_authenticated %}
+								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
+								{% csrf_token %}
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="comment" value="{{ com.id }}">
+									<button type="submit" class="btn-close" id="{{com.id}}" aria-label="Удалить"></button>
+								</form>
+								{% endif %}	
+								{% endif %}
+							</div>
+
+							{% if com.comments.get_queryset %}
+								
+								<p class="mb-1 text-break text-dark">{{com.text}}</p>
+								<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
+								<hr class="ms-4 m-0">
+
+								{% for answer in com.comments.get_queryset %}
+								{% if forloop.counter <= 2 %}
+								<p class="ms-4 mb-1 text-break text-dark">{{answer.user.get_full_name}}</p>
+								<p class="ms-4 mb-1 text-break">{{com.user.get_full_name}}, {{answer.text}}</p>
+								<hr class="ms-4 m-0">
+								{% endif %}
+								{% endfor %}
+								{% if com.comments.all.count > 2 %}
+								<a href="{% url 'photo_app:comment' photo=photo.id comment=com.id %}"><small>Просмотреть ветку комментариев</small></a>
+								{% endif %}
+
+							{% else %}
+							<p class="mb-1 text-break text-dark">{{com.text}}</p>
+							<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
+							{% endif %}
+
+							
+							{% if user.is_authenticated %}
+							<div class="collapse multi-collapse" id="answer_{{com.id}}">
+								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
+								{% csrf_token %}
+									<input type="hidden" name="_method" value="POST">
+									<input type="hidden" name="comment" value="{{ com.id }}">
+									<input type="hidden" name="photo" value="{{ com.photo.id }}">
+									<textarea class="form-control" name="text"rows="3"></textarea>
+									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+								</form>
+						    </div>
+
+
+							<div class="collapse multi-collapse" id="edit_{{com.id}}">
+								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
+								{% csrf_token %}
+									<input type="hidden" name="_method" value="PATCH">
+									<input type="hidden" name="comment" value="{{ com.id }}">
+									<textarea class="form-control" name="text"rows="3">{{com.text}}</textarea>
+									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+								</form>
+    						</div>
+    						{% endif %}
+
+		                       
+	                       
+						</small>
+					</div>
 				</div>
 				<hr class="ms-4">
-
 				{% endfor %}
-			</div>
-			
-			
+				
+				{% if user.is_authenticated %}
+				<div class="row">
+					<div class="col ms-4">
+						<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment='0' %}" enctype="multipart/form-data">
+							{% csrf_token %}
+							<input type="hidden" name="_method" value="POST">
+				  			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий"></textarea>
+	                    	<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Отправить</button>
+	                	</form>
+					</div>
+				</div>
+				{% endif %}
+			</div>		
 	      
 	    </div>
 	  </div>
 	</div>
 </div>
-
 
 
 {% endblock %}

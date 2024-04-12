@@ -1,12 +1,12 @@
 import inspect
 import re
-
+from conf import settings
 
 from django.core.files import File
 from django.db.models.fields.files import FieldFile
-
 from django.db import models
 
+from rest_framework.authtoken.models import Token
 
 #Create new upload_to path
 def uploaded_file_path(instance: models.Model, filename: str, **kwargs) -> str:
@@ -46,6 +46,3 @@ def save_file(sender: models.Model, instance: models.Model, created: bool, **kwa
                 setattr(instance, field, getattr(instance, f"tmp_{field}_field"))
 
             instance.save()
-
-
-            
