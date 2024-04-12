@@ -8,9 +8,12 @@ from service_objects.fields import ModelField
 class UploadPhotoService(ServiceWithResult):
     author = ModelField(CustomUser)
 
-    title = forms.CharField(max_length=50)
+    title = forms.CharField(max_length=50, error_messages={
+                                'max_length': 'Слишком длинный заголовок.',
+                                'required': 'Без заголовка - никак',
+                            })
     image = forms.ImageField()
-    description = forms.CharField(max_length=220)
+    description = forms.CharField(max_length=220, widget = forms.Textarea)
     
     
     def process(self):

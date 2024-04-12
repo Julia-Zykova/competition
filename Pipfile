@@ -13,6 +13,9 @@ django-environ = "*"
 django-widget-tweaks = "*"
 psycopg2 = "*"
 django-allauth = "*"
+django-fsm = "*"
+celery = "*"
+redis = "*"
 
 [dev-packages]
 

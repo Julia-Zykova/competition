@@ -77,7 +77,7 @@ class UploadPhotoView(View):
             'author': request.user if self.request.user.is_authenticated else None
             }, request.FILES.dict()
             )
-        return redirect('photo_app:detail', id = outcome.result.id )
+        return redirect('photo_app:detail', photo = outcome.result.id )
 
 
 class EditPhotoView(View):
@@ -92,7 +92,7 @@ class EditPhotoView(View):
     def post(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
             EditPhotoService, request.POST.dict() | {'photo':self.kwargs['photo']})
-        return redirect('photo_app:detail', id = self.kwargs['photo'])
+        return redirect('photo_app:detail', photo = self.kwargs['photo'])
 
 
 class DeletePhotoView(View):

@@ -18,19 +18,15 @@
 
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
-
-					<label for="exampleFormControlInput1" class="form-label">Название</label>
-					<input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Название фото">
-
+					<label class="form-label">Название</label>
+					{{form.title}}
 				</div>
 			</div>
 
 			<div class="row mb-3">
+				<label class="form-label">Описание</label>
 				<div class="col-sm-6">
-
-				  	<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
-				  	<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="Расскажите о вашем фото"></textarea>
-
+				  	{{form.description}}
 				</div>
 			</div>
 

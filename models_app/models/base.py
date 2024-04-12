@@ -8,7 +8,6 @@ class BaseModel(models.Model):
 		abstract = True
 
 
-
 class SoftDeleteManager(models.Manager):
 	def get_queryset(self):
 		return super().get_queryset().filter(is_deleted=False)
