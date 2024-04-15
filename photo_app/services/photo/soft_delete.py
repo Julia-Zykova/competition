@@ -20,6 +20,7 @@ class SoftDeletePhotoService(ServiceWithResult):
         import environ
         env = environ.Env()
         result = delete_photo.apply_async(
-            args=[self.cleaned_data['photo']], countdown=env('TIME_BEFORE_DELETE')
+            args=[self.cleaned_data['photo']],
+            countdown=int(env('TIME_BEFORE_DELETE'))
             )
         
