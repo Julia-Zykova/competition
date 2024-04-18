@@ -17,6 +17,9 @@ class SoftDeletePhotoService(ServiceWithResult):
         
     @property
     def _soft_delete(self):
+        photo = Photo.objects.get(id=self.cleaned_data['photo'])
+        photo.remove_photo()
+        photo.save()
         import environ
         env = environ.Env()
         result = delete_photo.apply_async(

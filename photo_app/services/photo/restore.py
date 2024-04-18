@@ -2,16 +2,20 @@ from django import forms
 
 from models_app.models import Photo
 from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
+
 
 
 class RestorePhotoService(ServiceWithResult):
-    photo = ModelField(Photo)
+    photo = forms.IntegerField()
     
     def process(self):
         if self.is_valid():
-            photo = Photo.objects.filter(id=photo.id)
-            photo.restore()
-
+            self.result = self._restore_photo
         return self
 
+    @property
+    def _restore_photo(self):
+        photo = Photo.objects.get(id=self.cleaned_data['photo'])
+        if photo.state == 'on_delete': 
+            photo.recover()
+            photo.save()

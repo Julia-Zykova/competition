@@ -13,11 +13,19 @@
 			<ul class="dropdown-menu">
 				
 				<li><a class="dropdown-item" href="{% url 'photo_app:edit' photo.id %}">Изменить название/описание</a></li>
-				{% if photo.is_deleted == False %}
+				<li><a class="dropdown-item" href="{% url 'photo_app:upload' photo.id %}">Изменить фото</a></li>
+				{% if photo.state == 'approved' %}
 				<li><a class="dropdown-item" href="#">
 					<form method="post" action="{% url 'photo_app:delete' photo.id %}" enctype="multipart/form-data">
 					{% csrf_token %}
 	                    <button type="submit" class="btn btn-outline-light me-4" style="background-color: #028E9B;">Удалить фото</button>
+	                </form>
+	            </a></li>
+	            {% elif photo.state == 'on_delete' %}
+	            <li><a class="dropdown-item" href="#">
+					<form method="post" action="{% url 'photo_app:restore' photo.id %}" enctype="multipart/form-data">
+					{% csrf_token %}
+	                    <button type="submit" class="btn btn-outline-light me-4" style="background-color: #028E9B;">Восстановить фото</button>
 	                </form>
 	            </a></li>
 				{% endif %}

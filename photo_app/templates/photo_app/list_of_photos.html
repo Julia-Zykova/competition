@@ -11,7 +11,8 @@
 		{% if page_obj.number %}
 			{% if personal_list == True %}
 				<div class="p-6">
-					<h1 id="personal-title" value="{{page_obj.number}}"> Мои фото страница {{page_obj.number}}</h1>
+					<h1 id="personal-title" value="{{page_obj.number}}"> Мои фото страница {{page_obj.number}}
+					</h1>
 				</div>
 			{% else %}
 				<div class="p-6">
@@ -21,19 +22,104 @@
 		
 		{% endif %}
 		
-		<div class="p-3">
-			
-			<select class="current_sorting form-select text-light" style="background-color: #028E9B;">
+		<div class="p-6">
+			{% if personal_list == True %}
+			<form method="get" action="{% url 'photo_app:home' %}">
+				<input type="hidden" name="personal_list" value="True">
+				{% if personal_filter %}
+					{% if personal_filter == 'approved' %}
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox1" value="approved" checked>
+					<small>
+				 		<label class="form-check-label" for="inlineCheckbox1">Одобрено</label>
+				  	</small>
+				</div>
+					{% else %}
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox1" value="approved">
+					<small>
+				 		<label class="form-check-label" for="inlineCheckbox1">Одобрено</label>
+				  	</small>
+				</div>
+					{% endif %}
+
+					{% if personal_filter == 'in_moderation' %}
+				<div class="form-check form-check-inline">
+				 	<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox2" value="in_moderation" checked>
+				  	<small>
+				  		<label class="form-check-label" for="inlineCheckbox2">На модерации</label>
+				  	</small>
+				</div>
+					{% else %}
+				<div class="form-check form-check-inline">
+				 	<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox2" value="in_moderation">
+				  	<small>
+				  		<label class="form-check-label" for="inlineCheckbox2">На модерации</label>
+				  	</small>
+				</div>	
+					{% endif %}
+				
+					{% if personal_filter == 'on_delete' %}
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox3" value="on_delete" checked>
+				  	<small>
+				  		<label class="form-check-label" for="inlineCheckbox3">На удалении</label>
+				  	</small>
+				</div>
+				<button type="submit" class="btn btn-outline-light text-light sm" style="background-color: #028E9B;">
+				Применить
+				</button>
+					{% else %}
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox3" value="on_delete">
+				  	<small>
+				  		<label class="form-check-label" for="inlineCheckbox3">На удалении</label>
+				  	</small>
+				</div>
+				<button type="submit" class="btn btn-outline-light text-light sm" style="background-color: #028E9B;">
+				Применить
+				</button>	
+					{% endif %}
+				
+				{% else %}
+				
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox1" value="approved">
+					<small>
+				 		<label class="form-check-label" for="inlineCheckbox1">Одобрено</label>
+				  	</small>
+				</div>
+				<div class="form-check form-check-inline">
+				 	<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox2" value="in_moderation">
+				  	<small>
+				  		<label class="form-check-label" for="inlineCheckbox2">На модерации</label>
+				  	</small>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox3" value="on_delete">
+				  	<small>
+				  		<label class="form-check-label" for="inlineCheckbox3">На удалении</label>
+				  	</small>
+				</div>
+				<button type="submit" class="btn btn-outline-light text-light sm" style="background-color: #028E9B;">
+				Применить
+				</button>
+				{% endif %}
+			</form>			
+			{% else %}
+			<select class="current_sorting form-select text-light mb-1 mt-1" style="background-color: #028E9B;">
 				<option class="dropdown-item text-light" value="pub_date" href="#">По дате (старые) </option>
 			    <option selected class="dropdown-item text-light" value="-pub_date" href="#">По дате (новые)</option>
 			    <option class="dropdown-item text-light" value="-voices" href="#">По голосам (популярные)</option>
 			    <option class="dropdown-item text-light" value="voices" href="#">По голосам (непопулярные)</option>
 			    <option class="dropdown-item text-light" value="-comments" href="#">По комментариям (популярные)</option>
 			    <option class="dropdown-item text-light" value="comments" href="#">По комментариям (непопулярные)</option>
-
 			</select>
+			{% endif %}
 			
-	  </div>
+			
+			
+	  	</div>
 	</div>
 </div>
 

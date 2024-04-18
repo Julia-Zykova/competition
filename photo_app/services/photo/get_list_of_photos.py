@@ -30,6 +30,7 @@ class ListOfPhotoService(ServiceWithResult):
     orderbysearch = forms.CharField(min_length = 3,max_length = 30, required=False)
     page = forms.IntegerField(min_value = 1, initial = 1, required = False)
     personal_list = forms.BooleanField(initial=False, required = False)
+    personal_filter = forms.CharField(required=False)
     user = ModelField(CustomUser,required = False)
     
     
@@ -40,32 +41,42 @@ class ListOfPhotoService(ServiceWithResult):
         
     
     def get_queryset(self):
-        qs = Photo.objects.all()
+        #import pdb
+        #pdb.set_trace()
+        qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
 
         orderby = self.cleaned_data['orderby']
         if orderby:
             if orderby in ['voices', 'comments']: 
-                qs = Photo.objects.all()\
+                qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
                 .annotate(sum=Count(orderby))\
                 .order_by('sum')
             elif orderby in ['-voices', '-comments']:
-                qs = Photo.objects.all()\
+                qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
                 .annotate(sum=Count(orderby[1:]))\
                 .order_by('-sum')
             else:
-               qs = Photo.objects.all().order_by(orderby)
+               qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
+               .order_by(orderby)
 
         orderbysearch = self.cleaned_data['orderbysearch']
         if orderbysearch:
             qs = Photo.objects.filter(
                 Q(title__icontains=orderbysearch) |
                 Q(description__icontains=orderbysearch) |
-                Q(author__email__icontains=orderbysearch)
-                )
+                Q(author__email__icontains=orderbysearch) 
+                ).exclude(state__in=['rejected', 'in_moderation'])
 
         personal_list = self.cleaned_data['personal_list']
         if personal_list == True:
-            qs = Photo.objects.filter(author=self.cleaned_data['user'])
+            qs = Photo.objects.filter(
+                author=self.cleaned_data['user'],
+                state__in=['in_moderation', 'approved', 'on_delete']
+                )
+
+        personal_filter = self.cleaned_data['personal_filter']
+        if personal_filter:
+            qs = Photo.objects.filter(author=self.cleaned_data['user'], state = personal_filter)  
 
         return qs
 
@@ -87,5 +98,8 @@ class ListOfPhotoService(ServiceWithResult):
             # if page is empty then return last page
             page_obj = p.page(p.num_pages)
 
-        return {"page_number": page_number, "page_obj": page_obj,
-        "personal_list": self.cleaned_data['personal_list']}
+        return {
+        "page_number": page_number, "page_obj": page_obj,
+        "personal_list": self.cleaned_data['personal_list'],
+        "personal_filter": self.cleaned_data['personal_filter']
+        }
