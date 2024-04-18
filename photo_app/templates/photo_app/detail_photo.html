@@ -12,12 +12,34 @@
 			</a>
 			<ul class="dropdown-menu">
 				
-				<li><a class="dropdown-item" href="{% url 'photo_app:edit' photo.id %}">Изменить название/описание</a></li>
-				{% if photo.is_deleted == False %}
+				<li><a class="dropdown-item" href="#">
+				<form action="{% url 'photo_app:edit' photo.id %}" method="get">
+					<button type="submit" class="btn btn-link me-4">
+						Изменить название/описание
+					</button>
+			</form>
+			</a></li>
+				
+				<li>
+					<a class="dropdown-item" href="#">
+						<form action="{% url 'photo_app:upload' %}" method="get">
+							<input type="hidden" name="photo" value="{{photo.id}}">
+							<button type="submit" class="btn btn-link me-4">Изменить фото</button>	
+						</form>	
+					</a>		
+				</li>
+				{% if photo.state == 'approved' %}
 				<li><a class="dropdown-item" href="#">
 					<form method="post" action="{% url 'photo_app:delete' photo.id %}" enctype="multipart/form-data">
 					{% csrf_token %}
-	                    <button type="submit" class="btn btn-outline-light me-4" style="background-color: #028E9B;">Удалить фото</button>
+	                    <button type="submit" class="btn btn-link me-4 link-danger">Удалить фото</button>
+	                </form>
+	            </a></li>
+	            {% elif photo.state == 'on_delete' %}
+	            <li><a class="dropdown-item" href="#">
+					<form method="post" action="{% url 'photo_app:restore' photo.id %}" enctype="multipart/form-data">
+					{% csrf_token %}
+	                    <button type="submit" class="btn btn-link me-4 link-success">Восстановить фото</button>
 	                </form>
 	            </a></li>
 				{% endif %}

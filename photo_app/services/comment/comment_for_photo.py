@@ -15,10 +15,7 @@ class CommentForPhotoService(ServiceWithResult):
     
     def process(self):
         if self.is_valid():
-            if self.cleaned_data['comment']:
-                self.result = self._answer_comment
-            else:
-                self.result = self._comment
+            self.result = self._comment
         return self
 
     @property
@@ -30,18 +27,17 @@ class CommentForPhotoService(ServiceWithResult):
         return Comment.objects.get(id=self.cleaned_data['comment'])
 
     @property
-    def _answer_comment(self):
-        return Comment.objects.create(
-            user = self.cleaned_data['user'],
-            text = self.cleaned_data['text'],
-            comment = self._parent_comment,
-            )
-
-    @property
     def _comment(self):
-        return Comment.objects.create(
-            user = self.cleaned_data['user'],
-            text = self.cleaned_data['text'],
-            photo=self._photo,
-            )
+        if self.cleaned_data['comment']:
+            return Comment.objects.create(
+                user = self.cleaned_data['user'],
+                text = self.cleaned_data['text'],
+                comment = self._parent_comment,
+                )
+        else:
+            return Comment.objects.create(
+                user = self.cleaned_data['user'],
+                text = self.cleaned_data['text'],
+                photo=self._photo,
+                )
         

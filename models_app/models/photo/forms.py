@@ -8,10 +8,14 @@ class UploadPhotoForm(forms.ModelForm):
         error_messages={
         'max_length': 'Слишком длинный заголовок.','required': 'Без заголовка - никак'
         })
-    description = forms.CharField(max_length=220, widget = forms.Textarea(attrs={'rows':8, 'cols':70}))
+    description = forms.CharField(
+        max_length=220,
+        error_messages={
+        'max_length':'Слишком длинное описание', 'required': 'Описание обязательно'
+        })
     
     class Meta:
         model = Photo
-        fields = ['title', 'image', 'description', 'author']
+        fields = ['title', 'image', 'description', 'author', 'photo']
         
     

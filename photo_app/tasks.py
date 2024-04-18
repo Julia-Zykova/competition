@@ -5,4 +5,7 @@ from models_app.models.photo.models import Photo
 @app.task
 def delete_photo(photo_id):
 	photo = Photo.objects.get(id=photo_id)
-	photo.soft_delete()
+	if photo.state == 'on_delete':
+		photo.soft_delete()
+	else:
+		pass

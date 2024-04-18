@@ -5,28 +5,78 @@
 {% if user.is_authenticated %}
 
 <div class="container-fluid my-4">
-	<div class="card mx-5 overflow-auto border-white mb-3">
+	<div class="card mx-5 border-white mb-3">
+		{% if photo %}
+		<div class="row g-0">
+			<div class="col-md-4">
+				<p>Старое фото:</p>
+				<img src="{{photo.photo_big.url}}" class="img-fluid rounded-start" alt="...">
+		    </div>
+			<div class="col-md-8">
+			    <form action="" method="post" enctype="multipart/form-data" class="container ms-4">
+					{% csrf_token %}
+					<div class="row mb-3">
+						<div class="col-sm-6 ">
+							<label for="exampleFormControlInput1" class="form-label">Автор</label>
+							<input disabled type="text" name="author" class="form-control" value="{{ user }}">
+						</div>
+					</div>
+					<input type="hidden" name="photo" value="{{photo.id}}">
+					<div class="row mb-3">
+						<div class="col-sm-6">
+							<label for="exampleFormControlInput1" class="form-label">Название</label>
+							<input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Название фото" value="{{photo.title}}">
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<div class="col-sm-7">
+							<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+							<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="4" placeholder="Расскажите о вашем фото">{{photo.description}}</textarea>
+						</div>
+					</div>
+
+					<div class="row mb-3">
+						<div class="col-sm-6">
+
+						  	<label for="formFile" class="form-label">Загрузите фото</label>
+						  	<input name="image" class="form-control" type="file" id="formFile">
+
+						</div>
+					</div>
+
+							
+					<div class="row mb-3">
+						<div class="col-sm-2">
+							<button class="btn btn-outline-light" style="background-color: #028E9B;">
+							Сохранить</button>
+						</div>
+					</div>
+							
+				</form>
+			</div>
+		</div>
+		{% else %}
 		<form action="" method="post" enctype="multipart/form-data" class="container">
 			{% csrf_token %}
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
 					<label for="exampleFormControlInput1" class="form-label">Автор</label>
-					<input type="hidden" name="author" class="form-control" value="{{ user }}">
-					<input disabled class="form-control" placeholder="{{ user }}">
+					<input disabled type="text" name="author" class="form-control" value="{{ user }}">
 				</div>
 			</div>
 
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
-					<label class="form-label">Название</label>
-					{{form.title}}
+					<label for="exampleFormControlInput1" class="form-label">Название</label>
+					<input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Название фото">
 				</div>
 			</div>
 
 			<div class="row mb-3">
-				<label class="form-label">Описание</label>
 				<div class="col-sm-6">
-				  	{{form.description}}
+					<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
+					<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="4" placeholder="Расскажите о вашем фото"></textarea>
 				</div>
 			</div>
 
@@ -48,6 +98,7 @@
 			</div>
 					
 		</form>
+		{% endif %}
 		
 	</div>
 </div>
