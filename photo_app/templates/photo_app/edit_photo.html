@@ -20,12 +20,12 @@
 		    		
 		    		<div class="col ms-4">
 						<label for="exampleFormControlInput1" class="form-label">Название</label>
-						<input type="text" name="title" class="form-control" id="exampleFormControlInput1" value="{{photo.title}}">
+						<input type="text" name="title" class="form-control" id="exampleFormControlInput1" value="{{photo.title}}" maxlength="50" required>
 		    		</div>
 					   
 					<div class="col ms-4">
 						<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
-						 <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3">{{photo.description}}</textarea>
+						<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" maxlength="220" required>{{photo.description}}</textarea>
 						
 					</div>
 					

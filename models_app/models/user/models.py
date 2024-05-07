@@ -1,4 +1,6 @@
-import jwt 
+from audioop import reverse
+
+import jwt
 from datetime import datetime
 from datetime import timedelta
 from django.db import models
@@ -15,15 +17,14 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-
     username = None
     date_joined = None
     groups = None
     last_login = None
 
-    first_name = models.CharField(max_length=30, blank = True, null = True)
-    last_name =  models.CharField(max_length=150, blank = True, null = True)
-    user_photo = models.ImageField(upload_to=uploaded_file_path, blank = True, null = True)    
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
+    user_photo = models.ImageField(upload_to=uploaded_file_path, blank=True, null=True)
 
     email = models.EmailField(('email address'), unique=True)
     password = models.CharField(max_length=128)
@@ -34,11 +35,10 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
-
     def get_full_name(self):
-        return (self.first_name + " " + self.last_name)
+        if self.first_name and self.last_name:
+            return self.first_name + " " + self.last_name
 
-   
     def get_absolute_url(self):
         return reverse('photo_app:personal_account', kwargs={'pk': self.id})
 

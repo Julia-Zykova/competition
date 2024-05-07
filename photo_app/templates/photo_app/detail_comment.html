@@ -94,7 +94,7 @@
 				{% csrf_token %}
 						<input type="hidden" name="_method" value="PATCH">
 						<input type="hidden" name="comment" value="{{ answer.id }}">
-						<textarea class="form-control" name="text"rows="3">{{answer.text}}</textarea>
+						<textarea class="form-control" name="text"rows="3" maxlength="200" required>{{answer.text}}</textarea>
 						<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
 					</form>
     			</div>
@@ -120,7 +120,7 @@
 					<input type="hidden" name="_method" value="POST">
 					<input type="hidden" name="comment" value="{{ answer.id }}">
 					<input type="hidden" name="photo" value="{{ com.photo.id }}">
-					<textarea class="form-control" name="text"rows="3"></textarea>
+					<textarea class="form-control" name="text"rows="3" maxlength="200" required></textarea>
 					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
 				</form>
 			</div>
@@ -163,7 +163,7 @@
 					<input type="hidden" name="_method" value="POST">
 					<input type="hidden" name="comment" value="{{ com.id }}">
 					<input type="hidden" name="photo" value="{{ com.photo.id }}">
-					<textarea class="form-control" name="text"rows="3"></textarea>
+					<textarea class="form-control" name="text"rows="3" maxlength="200" required></textarea>
 					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
 				</form>
 			</div>
@@ -174,7 +174,7 @@
 				{% csrf_token %}
 					<input type="hidden" name="_method" value="PATCH">
 					<input type="hidden" name="comment" value="{{ com.id }}">
-					<textarea class="form-control" name="text"rows="3">{{com.text}}</textarea>
+					<textarea class="form-control" name="text"rows="3" maxlength="200" required>{{com.text}}</textarea>
 					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
 				</form>
     		</div>
@@ -192,7 +192,7 @@
 		<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment='0' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 			<input type="hidden" name="_method" value="POST">
-			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий"></textarea>
+			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий" maxlength="200" required></textarea>
 	        <button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Отправить</button>
 	    </form>
 	</div>

@@ -25,7 +25,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
+    'channels',
     'rest_framework',
     'rest_framework.authtoken',
     'widget_tweaks',
@@ -34,8 +36,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
+
     'models_app.apps.ModelsAppConfig',
     'photo_app.apps.PhotoAppConfig',
+    'notifications_app.apps.NotificationsAppConfig',
 ]
 
 
@@ -79,6 +83,7 @@ AUTHENTICATION_BACKENDS = [
 
 
 WSGI_APPLICATION = 'conf.wsgi.application'
+ASGI_APPLICATION = 'conf.asgi.application'
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -131,7 +136,17 @@ LOGOUT_REDIRECT_URL = '/'
 
 REDIS_HOST = env('REDIS_HOST')
 REDIS_PORT = env('REDIS_PORT')
+REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': int(env('VISIBILITY_TIMEOUT'))}
-BROKER_URL = "redis://" + REDIS_HOST + ":"+ REDIS_PORT + "/0"
-CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":"+ REDIS_PORT + "/0"
+BROKER_URL = REDIS_URL + "/0"
+CELERY_RESULT_BACKEND = REDIS_URL + "/0"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(REDIS_HOST, int(REDIS_PORT))],
+        },
+    },
+}

@@ -16,6 +16,6 @@ class UploadPhotoForm(forms.ModelForm):
     
     class Meta:
         model = Photo
-        fields = ['title', 'image', 'description', 'author', 'photo']
+        fields = ['title', 'image', 'description', 'author']
         
     
