@@ -10,15 +10,12 @@ class NotificationConsumer(WebsocketConsumer):
     def connect(self):
 
         if self.scope['user'] == AnonymousUser():
-            raise DenyConnection('Такого пользователя не существует')
+            raise DenyConnection('Пожалуйста авторизуйтесь')
         else:
-            userID = (self.scope['user']).id
-
-        async_to_sync(self.channel_layer.group_add)(
-            'user_' + str(userID), self.channel_name
-        )
-
-        self.accept()
+            async_to_sync(self.channel_layer.group_add)(
+                'user_' + str((self.scope['user']).id), self.channel_name
+            )
+            self.accept()
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -28,9 +25,8 @@ class NotificationConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        userID = (self.scope['user']).id
         async_to_sync(self.channel_layer.send)(
-            'user_' + str(userID),
+            'user_' + str((self.scope['user']).id),
             {'type': 'user.message', 'message': message}
 
         )

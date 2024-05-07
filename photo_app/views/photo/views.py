@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.shortcuts import render, redirect
 
 from django.http import JsonResponse
@@ -20,6 +22,7 @@ from models_app.models.photo.models import Photo
 
 class ListPhotoView(View):
     template_name = 'photo_app/list_of_photos.html'
+
     #permission_classes = (IsAuthenticatedOrReadOnly)
 
     def get(self, request, **kwargs):
@@ -27,6 +30,7 @@ class ListPhotoView(View):
             ListOfPhotoService, request.GET.dict() | {
                 'user': request.user if self.request.user.is_authenticated else None
             })
+        channel_layer = get_channel_layer()
 
         if request.method == 'GET' and is_ajax(request):
             serialized_data = PhotoSerializer(outcome.result['page_obj'].object_list, many=True).data
@@ -34,10 +38,12 @@ class ListPhotoView(View):
             return JsonResponse(q_dict)
 
         elif request.method == 'GET' and not is_ajax(request):
-            context = {"page_obj": outcome.result['page_obj'],
-                       "page_number": outcome.result['page_number'],
-                       "personal_list": outcome.result['personal_list'],
-                       "personal_filter": outcome.result['personal_filter']}
+            context = {
+                "page_obj": outcome.result['page_obj'],
+                "page_number": outcome.result['page_number'],
+                "personal_list": outcome.result['personal_list'],
+                "personal_filter": outcome.result['personal_filter'],
+            }
             return render(request, template_name=self.template_name, context=context)
 
 
@@ -62,6 +68,7 @@ class DetailPhotoView(View):
 
 class UploadPhotoView(View):
     template_name = 'photo_app/upload_photos.html'
+
     #permission_classes = (IsAuthenticated)
 
     def get(self, request, *args, **kwargs):
@@ -79,6 +86,7 @@ class UploadPhotoView(View):
 
 class EditPhotoView(View):
     template_name = 'photo_app/edit_photo.html'
+
     #permission_classes = (IsAuthenticated)
 
     def get(self, request, *args, **kwargs):
