@@ -311,40 +311,54 @@
 
 		socket.onmessage = function(event) {
 			var djangoData = JSON.parse(event.data);
-			console.log(djangoData);
 			console.log(djangoData.message);
-			var message = djangoData.message;
 
 			var elem = document.createElement("div");
-
-			const attr_cl = document.createAttribute("class");
-			attr_cl.value = "toast";
-			elem.setAttributeNode(attr_cl);
-
-			const attr_id = document.createAttribute("id");
-			attr_id.value = "liveToast";
-			elem.setAttributeNode(attr_id);
-
-			const attr_role = document.createAttribute("role");
-			attr_role.value = "alert";
-			elem.setAttributeNode(attr_role);
-
+			elem.className = "toast";
+			elem.id = "liveToast";
+			elem.role = "alert";
 			const attr_ar_liv = document.createAttribute("aria-live");
 			attr_ar_liv.value = "assertive";
 			elem.setAttributeNode(attr_ar_liv);
-
 			const attr_ar_at = document.createAttribute("aria-atomic");
 			attr_ar_at.value = "true";
 			elem.setAttributeNode(attr_ar_at);
 
-			elem.insertAdjacentHTML("beforeend", '<div class="toast-header"><strong class="me-auto">Уведомление</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button></div><div class="toast-body"></div>');
+			const toast = document.createElement("div");
+			toast.className = "toast-header";
+
+			const strong = document.createElement("strong");
+			strong.className =  "me-auto";
+			let textNode = document.createTextNode("Уведомление");
+			strong.appendChild(textNode);
+
+			const button = document.createElement("button");
+			button.type = "button";
+			button.className = "btn-close";
+			const button_db = document.createAttribute("data-bs-dismiss");
+			button_db.value = "toast";
+			button.setAttributeNode(button_db);
+			const button_aria = document.createAttribute("aria-label");
+			button_aria.value = "Закрыть";
+			button.setAttributeNode(button_aria);
+
+			toast.appendChild(strong);
+			toast.appendChild(button);
+
+			const toast_body = document.createElement("div");
+			toast_body.className = "toast-body";
+			const text_message = document.createTextNode(djangoData.message);
+			toast_body.appendChild(text_message);
+
+			elem.insertAdjacentElement("beforeend", toast);
+			elem.insertAdjacentElement("beforeend", toast_body);
 
 			node = document.getElementsByClassName("container-fluid text-center")[0];
-			node.insertAdjacentHTML("beforeend", elem);
+			node.insertAdjacentElement("afterend", elem);
 
-			const toastLive = document.getElementById('liveToast')[0];
+			const toastLive = document.getElementById('liveToast');
 			const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive);
-
+			toastBootstrap.show();
 		}
 
 	});
