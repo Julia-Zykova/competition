@@ -306,18 +306,51 @@
 
 
 <script>
-	let socket = new WebSocket('ws://localhost:8000/ws/notifications/')
+	$(document).ready(function(){
+		let socket = new WebSocket('ws://localhost:8000/ws/notifications/');
 
-	socket.onmessage = function(event) {
-		console.log(event.data);
-		var message = JSON.parse(event.data['message']);
+		socket.onmessage = function(event) {
+			var djangoData = JSON.parse(event.data);
+			console.log(djangoData);
+			console.log(djangoData.message);
+			var message = djangoData.message;
 
-		document.getElementsByClassName("container-fluid text-center").insertAdjacentHTML("beforeend", '<div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"><div class="toast-header"><img src="..." class="rounded me-2" alt="..."><strong class="me-auto">Уведомление</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button></div><div class="toast-body"></div></div></div>');
-		document.getElementsByClassName("toast-body").insertAdjacentText("afterbegin", message);
+			var elem = document.createElement("div");
+
+			const attr_cl = document.createAttribute("class");
+			attr_cl.value = "toast";
+			elem.setAttributeNode(attr_cl);
+
+			const attr_id = document.createAttribute("id");
+			attr_id.value = "liveToast";
+			elem.setAttributeNode(attr_id);
+
+			const attr_role = document.createAttribute("role");
+			attr_role.value = "alert";
+			elem.setAttributeNode(attr_role);
+
+			const attr_ar_liv = document.createAttribute("aria-live");
+			attr_ar_liv.value = "assertive";
+			elem.setAttributeNode(attr_ar_liv);
+
+			const attr_ar_at = document.createAttribute("aria-atomic");
+			attr_ar_at.value = "true";
+			elem.setAttributeNode(attr_ar_at);
+
+			elem.insertAdjacentHTML("beforeend", '<div class="toast-header"><strong class="me-auto">Уведомление</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button></div><div class="toast-body"></div>');
+
+			node = document.getElementsByClassName("container-fluid text-center")[0];
+			node.insertAdjacentHTML("beforeend", elem);
+
+			const toastLive = document.getElementById('liveToast')[0];
+			const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive);
+
 		}
 
+	});
 
 </script>
+
 
 
 {% endblock javascript %}

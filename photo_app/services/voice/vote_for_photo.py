@@ -27,7 +27,7 @@ class VoteForPhotoService(ServiceWithResult):
         channel_layer = get_channel_layer()
         author = self._photo.author
         try:
-            obj = Voice.objects.get(photo=self._photo)
+            obj = Voice.objects.get(user=self.cleaned_data["user"])
             obj.delete()
             message = f'Пользователь {self.cleaned_data["user"]} убрал свой голос с вашего фото "{self._photo.title}".'
 
