@@ -9,7 +9,7 @@ from photo_app.services.voice.vote_for_photo import VoteForPhotoService
 class VoiceView(View):
     #permission_classes = (IsAuthenticatedOrReadOnly)
 
-    def post(self, request,**kwargs):
+    def post(self, request):
         outcome = ServiceOutcome(
             VoteForPhotoService, request.POST.dict() |
             {'user': request.user if self.request.user.is_authenticated else None

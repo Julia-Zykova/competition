@@ -219,6 +219,8 @@
 
 		</ul>
 	</nav>
+
+	<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 			
 </div>
 
@@ -228,6 +230,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'photo_app/js/content_replace.js' %}"></script>
+<script src="{% static 'photo_app/js/messages.js' %}"></script>
 <script>
 	$(document).ready(function(){
 		$("select.current_sorting").change(function(){
@@ -311,9 +314,8 @@
 
 		socket.onmessage = function(event) {
 			var djangoData = JSON.parse(event.data);
-			console.log(djangoData.message);
 
-			var elem = document.createElement("div");
+			const elem = document.createElement("div");
 			elem.className = "toast";
 			elem.id = "liveToast";
 			elem.role = "alert";
@@ -353,13 +355,18 @@
 			elem.insertAdjacentElement("beforeend", toast);
 			elem.insertAdjacentElement("beforeend", toast_body);
 
-			node = document.getElementsByClassName("container-fluid text-center")[0];
-			node.insertAdjacentElement("afterend", elem);
+			const container = document.querySelector("div.toast-container");
+			container.insertAdjacentElement("beforeend", elem);
 
 			const toastLive = document.getElementById('liveToast');
 			const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLive);
-			toastBootstrap.show();
-		}
+
+			var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        	var toastList = toastElList.map(function(toastEl) {
+        		return new bootstrap.Toast(toastEl);
+        	});
+       		toastList.forEach(toast => toast.show());
+      	};
 
 	});
 
