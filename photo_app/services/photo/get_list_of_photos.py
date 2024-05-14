@@ -76,8 +76,10 @@ class ListOfPhotoService(ServiceWithResult):
 
         qs = self.get_queryset()
         p = Paginator(qs, 8)
+
         page_number = self.cleaned_data['page']
-        if page_number == None:
+
+        if page_number is None:
             page_number = self.fields['page'].initial
 
         try:
@@ -90,7 +92,8 @@ class ListOfPhotoService(ServiceWithResult):
             page_obj = p.page(p.num_pages)
 
         return {
-            "page_number": page_number, "page_obj": page_obj,
+            "page_obj": page_obj,
+            "page_number": page_number,
             "personal_list": self.cleaned_data['personal_list'],
             "personal_filter": self.cleaned_data['personal_filter']
         }

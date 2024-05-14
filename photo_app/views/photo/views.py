@@ -13,19 +13,22 @@ from photo_app.services.photo.soft_delete import SoftDeletePhotoService
 from photo_app.services.photo.restore import RestorePhotoService
 from photo_app.services.photo.upload import UploadPhotoService
 
-from photo_app.serializers import PhotoSerializer
+from photo_app.serializers import PhotoSerializer, CommentSerializer
 from photo_app.utils import is_ajax
 
 from models_app.models.photo.forms import UploadPhotoForm
 from models_app.models.photo.models import Photo
 
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-class ListPhotoView(View):
+
+class ListPhotoAPIView(APIView):
     template_name = 'photo_app/list_of_photos.html'
 
     #permission_classes = (IsAuthenticatedOrReadOnly)
 
-    def get(self, request, **kwargs):
+    def get(self, request):
         outcome = ServiceOutcome(
             ListOfPhotoService, request.GET.dict() | {
                 'user': request.user if self.request.user.is_authenticated else None
@@ -38,32 +41,39 @@ class ListPhotoView(View):
             return JsonResponse(q_dict)
 
         elif request.method == 'GET' and not is_ajax(request):
-            context = {
-                "page_obj": outcome.result['page_obj'],
+            return Response({
+                "page_obj": PhotoSerializer(outcome.result['page_obj'].object_list, many=True).data,
                 "page_number": outcome.result['page_number'],
                 "personal_list": outcome.result['personal_list'],
                 "personal_filter": outcome.result['personal_filter'],
-            }
-            return render(request, template_name=self.template_name, context=context)
+            }, template_name=self.template_name)
 
 
-class DetailPhotoView(View):
+class DetailPhotoAPIView(APIView):
     #permission_classes = (IsAuthenticatedOrReadOnly) 
 
-    def get(self, request, **kwargs):
+    def get(self, request):
         outcome = ServiceOutcome(
             DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["photo"], "detail_photo": True})
 
-        context = {
-            "photo": outcome.result['outcome_comments']['photo'],
-            "page_obj": outcome.result['outcome_comments']['page_obj'],
-            "page_number": outcome.result['outcome_comments']['page_number'],
-        }
-
-        return render(
-            request, template_name='photo_app/detail_photo.html',
-            context=context
-        )
+        if outcome.result['outcome_comments']['page_obj'].object_list:
+            return Response(
+                {
+                    "photo": PhotoSerializer(outcome.result['outcome_comments']['photo']).data,
+                    "page_obj": CommentSerializer(outcome.result['outcome_comments']['page_obj'].object_list).data,
+                    "page_number": outcome.result['outcome_comments']['page_number'],
+                },
+                template_name='photo_app/detail_photo.html',
+            )
+        else:
+            return Response(
+                {
+                    "photo": PhotoSerializer(outcome.result['outcome_comments']['photo']).data,
+                    "page_obj": None,
+                    "page_number": outcome.result['outcome_comments']['page_number'],
+                },
+                template_name='photo_app/detail_photo.html',
+            )
 
 
 class UploadPhotoView(View):
@@ -71,7 +81,7 @@ class UploadPhotoView(View):
 
     #permission_classes = (IsAuthenticated)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         return render(request, self.template_name, context={"form": UploadPhotoForm()})
 
     def post(self, request):
@@ -89,12 +99,12 @@ class EditPhotoView(View):
 
     #permission_classes = (IsAuthenticated)
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, **kwargs):
         return render(
             request, self.template_name,
             context={'photo': Photo.objects.get(id=self.kwargs['photo'])})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         outcome = ServiceOutcome(
             EditPhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
         return redirect('photo_app:detail', photo=self.kwargs['photo'])
@@ -103,7 +113,7 @@ class EditPhotoView(View):
 class DeletePhotoView(View):
     #permission_classes = (IsAuthenticated)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         outcome = ServiceOutcome(
             SoftDeletePhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
         return redirect('photo_app:home')
@@ -111,7 +121,7 @@ class DeletePhotoView(View):
 
 class RestorePhotoView(View):
     #permission_classes = (IsAuthenticated)
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         outcome = ServiceOutcome(
             RestorePhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
         return redirect('photo_app:detail', photo=self.kwargs['photo'])

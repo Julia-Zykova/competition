@@ -117,7 +117,7 @@
 							<div class="d-flex w-100 justify-content-end">
 								<ul class="pagination pagination-sm">
 								{% for p in page_obj.paginator.page_range %}
-								{% if page_obj.number == p %}			
+								{% if page_obj.number == p %}
 									<li class="page-item active">
 						    			<span class="page-link" id = "pagenum_{{p}}" style="background-color: #028E9B;">{{ p }}</span>
 									</li>
@@ -137,6 +137,7 @@
 				</div>
 				
 				<hr class="ms-4 mt-0">
+				{% if page_obj %}
 				{% for com in page_obj %}
 				<div class="row g-0">
 					<div class="col ms-4">
@@ -222,6 +223,7 @@
 				</div>
 				<hr class="ms-4">
 				{% endfor %}
+				{% endif %}
 				
 				{% if user.is_authenticated %}
 				<div class="row">
