@@ -1,3 +1,4 @@
+from channels.layers import get_channel_layer
 from django.views.generic import View
 from django.shortcuts import render,redirect
 
@@ -17,7 +18,7 @@ class PersonalAccountView(View):
         outcome = ServiceOutcome(PersonalAccountService, request.GET.dict()| {
             'user': self.kwargs['id'],
             })
-        
+        get_channel_layer()
         return render(
             request, template_name='photo_app/personal_account.html',
             context = {'user': outcome.result,

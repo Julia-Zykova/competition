@@ -1,3 +1,4 @@
+from channels.layers import get_channel_layer
 from django.shortcuts import render, redirect
 
 from django.views.generic import View
@@ -15,6 +16,7 @@ class CommentView(View):
 
     def get(self, request, **kwargs):
         outcome = ServiceOutcome(ShowCommentsService, request.GET.dict() | {'photo':self.kwargs['photo']})
+        get_channel_layer()
         context = {
             "page_obj": outcome.result['page_obj'],
             "page_number": outcome.result['page_number'],

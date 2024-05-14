@@ -1,4 +1,5 @@
 from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 
@@ -37,7 +38,7 @@ class CommentForPhotoService(ServiceWithResult):
     def _comment(self):
         channel_layer = get_channel_layer()
         author = self._photo.author
-        sum_сomments = self._photo.comments.count()
+
         if self.cleaned_data['comment']:
             return Comment.objects.create(
                 user=self.cleaned_data['user'],
@@ -50,6 +51,7 @@ class CommentForPhotoService(ServiceWithResult):
                 text=self.cleaned_data['text'],
                 photo=self._photo,
             )
+            sum_сomments = self._photo.comments.count()
             message = (f'Пользователь {self.cleaned_data["user"]} оставил свой комментарий к вашему фото "{self._photo.title}". '
                    f'Всего комментариев: {sum_сomments}.')
             async_to_sync(channel_layer.group_send)(
