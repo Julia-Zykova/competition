@@ -1,9 +1,9 @@
 function view_messages(event){
     var djangoData = JSON.parse(event.data);
 
-	const elem = document.createElement("div");
+    const elem = document.createElement("div");
     elem.className = "toast";
-	elem.id = "liveToast";
+    elem.id = "liveToast";
     elem.role = "alert";
     const attr_ar_liv = document.createAttribute("aria-live");
     attr_ar_liv.value = "assertive";
@@ -52,6 +52,4 @@ function view_messages(event){
         return new bootstrap.Toast(toastEl);
     });
     toastList.forEach(toast => toast.show());
-    };
-
-}
+    }

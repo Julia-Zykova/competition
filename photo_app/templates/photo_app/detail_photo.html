@@ -1,5 +1,5 @@
 {% extends 'photo_app/base.html' %}
-
+{% load static %}
 {% block content %}
 
 {% if user.is_authenticated %}
@@ -11,8 +11,6 @@
 				    Изменить
 			</a>
 			<ul class="dropdown-menu">
-				
-				<li><a class="dropdown-item" href="{% url 'photo_app:edit' photo.id %}">Изменить название/описание</a></li>
 				{% if photo.state == 'approved' %}
 				<li><a class="dropdown-item" href="#">
 				<form action="{% url 'photo_app:edit' photo.id %}" method="get">
@@ -231,6 +229,20 @@
 	    </div>
 	  </div>
 	</div>
+	<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div>
+
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'photo_app/js/messages.js' %}"></script>
+<script>
+	$(document).ready(function(){
+		let socket = new WebSocket('ws://localhost:8000/ws/notifications/');
+		socket.onmessage = function(event) {
+			view_messages(event);
+			}
+	});
+</script>
+{% endblock javascript %}
 
 {% endblock %}

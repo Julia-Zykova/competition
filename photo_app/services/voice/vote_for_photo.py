@@ -5,6 +5,7 @@ from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
 from channels.layers import get_channel_layer
 
+
 class VoteForPhotoService(ServiceWithResult):
     photo = forms.IntegerField()
     user = ModelField(CustomUser)
@@ -26,18 +27,21 @@ class VoteForPhotoService(ServiceWithResult):
     def _voice(self):
         channel_layer = get_channel_layer()
         author = self._photo.author
-        sum_voices = self._photo.voices.count()
+
         try:
-            obj = Voice.objects.get(user=self.cleaned_data["user"])
+            obj = Voice.objects.get(user=self.cleaned_data["user"], photo=self._photo)
             obj.delete()
-            message = (f'Пользователь {self.cleaned_data["user"]} убрал свой голос с вашего фото "{self._photo.title}". '
-                       f'Всего голосов: {sum_voices}.')
+            sum_voices = self._photo.voices.count()
+            message = (
+                f'Пользователь {self.cleaned_data["user"]} убрал свой голос с вашего фото "{self._photo.title}". '
+                f'Всего голосов: {sum_voices}.')
 
         except Voice.DoesNotExist:
             obj = Voice.objects.create(
                 photo=self._photo,
                 user=self.cleaned_data['user'],
             )
+            sum_voices = self._photo.voices.count()
             message = (f'Пользователь {self.cleaned_data["user"]} проголосовал за ваше фото "{self._photo.title}". '
                        f'Всего голосов: {sum_voices}.')
 
