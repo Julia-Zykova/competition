@@ -19,18 +19,8 @@
 					<button type="submit" class="btn btn-link me-4">
 						Изменить название/описание
 					</button>
-			</form>
-			</a></li>
-				
-				<li>
-					<a class="dropdown-item" href="#">
-						<form action="{% url 'photo_app:upload' %}" method="get">
-							<input type="hidden" name="photo" value="{{photo.id}}">
-							<button type="submit" class="btn btn-link me-4">Изменить фото</button>	
-						</form>	
-					</a>		
-				</li>
-				{% if photo.state == 'approved' %}
+			</form></a></li>
+
 				<li><a class="dropdown-item" href="#">
 					<form method="post" action="{% url 'photo_app:delete' photo.id %}" enctype="multipart/form-data">
 					{% csrf_token %}
@@ -67,7 +57,7 @@
 	    		<div class="row">
 
 	    			<div class="col ms-4">
-						<small class="card-text">{{photo.author}}</small>
+						<small class="card-text">{{photo.author.email}}</small>
 						<h4 class="card-title fw-bold">{{photo.title}}</h4>
 	    			</div>
 				   
@@ -97,7 +87,7 @@
 					</div>
 
 					<div class="col-2 ms-5">
-						<small>{{photo.pub_date|date:"j b"}} в {{photo.pub_date|time:"H:i"}}</small>
+						<small>{{photo.pub_date|date:"j.m.Y"}} {{photo.pub_date|time:"H:i"}}</small>
 					</div>
 				</div>
 			

@@ -6,7 +6,6 @@ from models_app.models import Photo
 from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
 
-
 class SoftDeletePhotoService(ServiceWithResult):
     photo = forms.IntegerField()
     

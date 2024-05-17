@@ -1,6 +1,3 @@
-from django.core.paginator import Page
-from conf.settings import django as settings
-
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'

@@ -19,11 +19,8 @@ from photo_app.utils import is_ajax
 from models_app.models.photo.forms import UploadPhotoForm
 from models_app.models.photo.models import Photo
 
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
-
-class ListPhotoAPIView(APIView):
+class ListPhotoView(View):
     template_name = 'photo_app/list_of_photos.html'
 
     #permission_classes = (IsAuthenticatedOrReadOnly)
@@ -41,39 +38,34 @@ class ListPhotoAPIView(APIView):
             return JsonResponse(q_dict)
 
         elif request.method == 'GET' and not is_ajax(request):
-            return Response({
-                "page_obj": PhotoSerializer(outcome.result['page_obj'].object_list, many=True).data,
+            return render(request, context={
+                "page_obj": outcome.result['page_obj'].object_list,
                 "page_number": outcome.result['page_number'],
                 "personal_list": outcome.result['personal_list'],
                 "personal_filter": outcome.result['personal_filter'],
             }, template_name=self.template_name)
 
 
-class DetailPhotoAPIView(APIView):
+class DetailPhotoView(View):
     #permission_classes = (IsAuthenticatedOrReadOnly) 
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         outcome = ServiceOutcome(
             DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["photo"], "detail_photo": True})
 
         if outcome.result['outcome_comments']['page_obj'].object_list:
-            return Response(
-                {
-                    "photo": PhotoSerializer(outcome.result['outcome_comments']['photo']).data,
-                    "page_obj": CommentSerializer(outcome.result['outcome_comments']['page_obj'].object_list).data,
-                    "page_number": outcome.result['outcome_comments']['page_number'],
-                },
-                template_name='photo_app/detail_photo.html',
-            )
+            return render(request, context={
+                "photo": outcome.result['outcome_comments']['photo'],
+                "page_obj": outcome.result['outcome_comments']['page_obj'],
+                "page_number": outcome.result['outcome_comments']['page_number'],
+            }, template_name='photo_app/detail_photo.html')
         else:
-            return Response(
-                {
-                    "photo": PhotoSerializer(outcome.result['outcome_comments']['photo']).data,
-                    "page_obj": None,
-                    "page_number": outcome.result['outcome_comments']['page_number'],
-                },
-                template_name='photo_app/detail_photo.html',
-            )
+            return render(request, context=
+            {
+                "photo": outcome.result['outcome_comments']['photo'],
+                "page_obj": None,
+                "page_number": outcome.result['outcome_comments']['page_number'],
+            }, template_name='photo_app/detail_photo.html')
 
 
 class UploadPhotoView(View):

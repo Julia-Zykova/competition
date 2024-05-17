@@ -3,6 +3,7 @@ from django.db.models import Count
 from models_app.models.photo.models import Photo
 from photo_app.serializers import UserSerializer
 
+
 class PhotoSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     photo_small = serializers.SerializerMethodField()
@@ -11,6 +12,9 @@ class PhotoSerializer(serializers.ModelSerializer):
 
     def get_photo_small(self, obj):
         return obj.photo_small.url
+
+    def get_photo_big(self, obj):
+        return obj.photo_big.url
 
     def get_voices(self, obj):
         sum_voices = len(obj.voices.values())
@@ -23,8 +27,6 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = [
-        'id', 'title', 'author', 'image', 'photo_small', 'description',
-        'comments', 'voices', 'pub_date', 'is_deleted', 'state'
+            'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
+            'comments', 'voices', 'pub_date', 'is_deleted', 'state'
         ]
-
-        
