@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
@@ -47,11 +49,23 @@ class PhotoAdmin(admin.ModelAdmin):
     search_fields = ['author', 'title']
     list_filter = ['pub_date', 'state', 'title']
 
-    # def save_model(self, request, obj, form, change):
-    #     if 'state' in form.changed_data:
-    #         from django.contrib import messages
-    #         messages.info(request, f'Модерационный статус фото {obj} изменился')
-    #     super().save_model(request, obj, form, change)
+    def save_model(self, request, obj, form, change):
+        if 'state' in form.changed_data:
+            channel_layer = get_channel_layer()
+            author = obj.author
+
+            if obj.state == "approved":
+                message = f'Ваше фото "{obj.title}" было одобрено'
+            elif obj.state == "rejected":
+                message = f'Ваше фото "{obj.title}" было отклонено'
+            async_to_sync(channel_layer.group_send)(
+                'user_' + str(author.id),
+                {
+                    'type': 'user.message',
+                    'message': message
+                }
+            )
+        super().save_model(request, obj, form, change)
 
     def post_photo(self, obj):
         return mark_safe(f'<img src="{obj.photo_small.url}">')

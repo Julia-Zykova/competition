@@ -219,6 +219,8 @@
 
 		</ul>
 	</nav>
+
+	<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 			
 </div>
 
@@ -228,6 +230,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'photo_app/js/content_replace.js' %}"></script>
+<script src="{% static 'photo_app/js/messages.js' %}"></script>
 <script>
 	$(document).ready(function(){
 		$("select.current_sorting").change(function(){
@@ -306,18 +309,15 @@
 
 
 <script>
-	let socket = new WebSocket('ws://localhost:8000/ws/notifications/')
-
-	socket.onmessage = function(event) {
-		console.log(event.data);
-		var message = JSON.parse(event.data['message']);
-
-		document.getElementsByClassName("container-fluid text-center").insertAdjacentHTML("beforeend", '<div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"><div class="toast-header"><img src="..." class="rounded me-2" alt="..."><strong class="me-auto">Уведомление</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button></div><div class="toast-body"></div></div></div>');
-		document.getElementsByClassName("toast-body").insertAdjacentText("afterbegin", message);
-		}
-
+	$(document).ready(function(){
+		let socket = new WebSocket('ws://localhost:8000/ws/notifications/');
+		socket.onmessage = function(event) {
+			view_messages(event);
+			}
+	});
 
 </script>
+
 
 
 {% endblock javascript %}
