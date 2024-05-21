@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'models_app.apps.ModelsAppConfig',
     'photo_app.apps.PhotoAppConfig',
     'notifications_app.apps.NotificationsAppConfig',
+    'drf.apps.DrfConfig',
 ]
 
 

@@ -8,9 +8,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('photo_app.urls')),
+    path('photo-app/', include('photo_app.urls')),
     path('accounts/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('', include('drf.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
