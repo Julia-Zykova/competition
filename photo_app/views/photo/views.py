@@ -1,4 +1,3 @@
-from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.shortcuts import render, redirect
 
@@ -30,7 +29,7 @@ class ListPhotoView(View):
             ListOfPhotoService, request.GET.dict() | {
                 'user': request.user if self.request.user.is_authenticated else None
             })
-        channel_layer = get_channel_layer()
+        get_channel_layer()
 
         if request.method == 'GET' and is_ajax(request):
             serialized_data = PhotoSerializer(outcome.result['page_obj'].object_list, many=True).data
@@ -73,7 +72,8 @@ class UploadPhotoView(View):
 
     #permission_classes = (IsAuthenticated)
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
+        get_channel_layer()
         return render(request, self.template_name, context={"form": UploadPhotoForm()})
 
     def post(self, request):
@@ -91,7 +91,8 @@ class EditPhotoView(View):
 
     #permission_classes = (IsAuthenticated)
 
-    def get(self, request, **kwargs):
+    def get(self, request, *args, **kwargs):
+        get_channel_layer()
         return render(
             request, self.template_name,
             context={'photo': Photo.objects.get(id=self.kwargs['photo'])})

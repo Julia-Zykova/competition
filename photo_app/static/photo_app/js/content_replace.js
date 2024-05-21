@@ -12,9 +12,9 @@ function content_replace(data) {
                 }
             }
         }
-    return cookieValue;
-}
-const csrftoken = getCookie('csrftoken');
+    return cookieValue;}
+
+    const csrftoken = getCookie('csrftoken');
 
 	let posts = data["posts"];
     let ind_post = 0;

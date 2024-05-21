@@ -1,62 +1,12 @@
 {% extends 'photo_app/base.html' %}
-
+{% load static %}
 {% block content %}
 
 {% if user.is_authenticated %}
 
 <div class="container-fluid my-4">
 	<div class="card mx-5 border-white mb-3">
-		{% if photo %}
-		<div class="row g-0">
-			<div class="col-md-4">
-				<p>Старое фото:</p>
-				<img src="{{photo.photo_big.url}}" class="img-fluid rounded-start" alt="...">
-		    </div>
-			<div class="col-md-8">
-			    <form action="" method="post" enctype="multipart/form-data" class="container ms-4">
-					{% csrf_token %}
-					<div class="row mb-3">
-						<div class="col-sm-6 ">
-							<label for="exampleFormControlInput1" class="form-label">Автор</label>
-							<input disabled type="text" name="author" class="form-control" value="{{ user }}">
-						</div>
-					</div>
-					<input type="hidden" name="photo" value="{{photo.id}}">
-					<div class="row mb-3">
-						<div class="col-sm-6">
-							<label for="exampleFormControlInput1" class="form-label">Название</label>
-							<input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Название фото" value="{{photo.title}}">
-						</div>
-					</div>
 
-					<div class="row mb-3">
-						<div class="col-sm-7">
-							<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
-							<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="4" placeholder="Расскажите о вашем фото">{{photo.description}}</textarea>
-						</div>
-					</div>
-
-					<div class="row mb-3">
-						<div class="col-sm-6">
-
-						  	<label for="formFile" class="form-label">Загрузите фото</label>
-						  	<input name="image" class="form-control" type="file" id="formFile">
-
-						</div>
-					</div>
-
-							
-					<div class="row mb-3">
-						<div class="col-sm-2">
-							<button class="btn btn-outline-light" style="background-color: #028E9B;">
-							Сохранить</button>
-						</div>
-					</div>
-							
-				</form>
-			</div>
-		</div>
-		{% else %}
 		<form action="" method="post" enctype="multipart/form-data" class="container">
 			{% csrf_token %}
 			<div class="row mb-3">
@@ -98,11 +48,24 @@
 			</div>
 					
 		</form>
-
-		
+		<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 	</div>
 </div>
 {% else %}
 <h4>Только авторизованные пользователи могут добавлять фото. Пожалуйста, авторизуйтесь! :)</h4>
 {% endif %}
+
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'photo_app/js/messages.js' %}"></script>
+<script>
+	$(document).ready(function(){
+		let socket = new WebSocket('ws://localhost:8000/ws/notifications/');
+		socket.onmessage = function(event) {
+			view_messages(event);
+			}
+	});
+</script>
+{% endblock javascript %}
+
 {% endblock %}
