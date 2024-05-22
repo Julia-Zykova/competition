@@ -45,7 +45,7 @@ class Photo(BaseSoftDeleteModel):
 
     @transition(field=state, source='on_delete', target='in_moderation')
     def recover(self):
-        pass
+        self.save(update_fields='state')
 
     def __str__(self):
         return self.title

@@ -1,18 +1,19 @@
 from rest_framework import generics
-from rest_framework.generics import get_object_or_404
-from rest_framework.renderers import JSONRenderer
+
 from rest_framework.response import Response
 from service_objects.services import ServiceOutcome
 
-from drf.services.photo.list import ListPhotoService
-from models_app.models import Photo, CustomUser
-from photo_app.serializers import PhotoSerializer
-from photo_app.services import UploadPhotoService
+
+from drf.services import ListPhotoService, DetailPhotoService, EditPhotoService, UploadPhotoService, SoftDeletePhotoService
+from drf.utils import PhotoPagination
+from models_app.models import Photo
+from drf.serializers import PhotoSerializer, CommentSerializer
 
 
 class ListCreatePhotosAPIView(generics.ListCreateAPIView):
     serializer_class = PhotoSerializer
     queryset = Photo.objects.all()
+    pagination_class = PhotoPagination
 
     def get(self, request, *args, **kwargs):
         return self.index(request, *args, **kwargs)
@@ -26,9 +27,9 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
                 'user': request.user if self.request.user.is_authenticated else None
             })
 
-        queryset = outcome.result
+        queryset = self.paginate_queryset(outcome.result)
         serializer = PhotoSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
@@ -42,3 +43,34 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
     #     author = get_object_or_404(CustomUser, id=self.request.user.id)
     #     return serializer.save(author=author)
 
+
+class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = PhotoSerializer
+    queryset = Photo.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return self.index(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def index(self, request, *args, **kwargs):
+        outcome = ServiceOutcome(DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["pk"]})
+        photo_serializer = PhotoSerializer(outcome.result['photo'])
+        comment_serializer = CommentSerializer(outcome.result['comments'], many=True)
+        return Response({'photo': photo_serializer.data, 'comments': comment_serializer.data})
+
+    def update(self, request, *args, **kwargs):
+        outcome = ServiceOutcome(
+            EditPhotoService, request.POST.dict() | {'photo': self.kwargs['pk']})
+        serializer = PhotoSerializer(outcome.result)
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        outcome = ServiceOutcome(
+            SoftDeletePhotoService, request.POST.dict() | {'photo': self.kwargs['pk']})
+        serializer = PhotoSerializer(outcome.result)
+        return Response(serializer.data)
