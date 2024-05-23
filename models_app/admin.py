@@ -1,3 +1,5 @@
+import datetime
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib import admin
@@ -56,6 +58,7 @@ class PhotoAdmin(admin.ModelAdmin):
 
             if obj.state == "approved":
                 message = f'Ваше фото "{obj.title}" было одобрено'
+                obj.pub_date = datetime.datetime.now()
             elif obj.state == "rejected":
                 message = f'Ваше фото "{obj.title}" было отклонено'
             async_to_sync(channel_layer.group_send)(

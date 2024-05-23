@@ -28,7 +28,7 @@ class Photo(BaseSoftDeleteModel):
                                processors=[ResizeToFit(391, 520, False, mat_color="#A4C0BF")], format='JPEG',
                                options={'quality': 100})
     description = models.CharField(max_length=220)
-    pub_date = models.DateTimeField(auto_now=True, blank=True, null=True)
+    pub_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     state = FSMField(default='in_moderation', choices=STATES)
 
     @transition(field=state, source='in_moderation', target='approved')

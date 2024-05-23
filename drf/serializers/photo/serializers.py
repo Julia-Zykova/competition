@@ -1,32 +1,37 @@
 from rest_framework import serializers
 
-from drf.serializers import CommentSerializer
+from drf.serializers import UserSerializer
 from models_app.models.photo.models import Photo
-from photo_app.serializers import UserSerializer
 
 
 class PhotoSerializer(serializers.ModelSerializer):
+    #author = serializers.HiddenField(default=serializers.CurrentUserDefault())
     author = UserSerializer()
     voices = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     photo_small = serializers.SerializerMethodField()
     photo_big = serializers.SerializerMethodField()
 
-    def get_voices(self, obj):
+    @staticmethod
+    def get_voices(obj):
         return obj.voices.all().count()
 
-    def get_comments(self, obj):
+    @staticmethod
+    def get_comments(obj):
         return obj.comments.all().count()
 
-    def get_photo_small(self, obj):
+    @staticmethod
+    def get_photo_small(obj):
         return obj.photo_small.url
 
-    def get_photo_big(self, obj):
+    @staticmethod
+    def get_photo_big(obj):
         return obj.photo_big.url
 
     class Meta:
         model = Photo
         fields = [
             'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
-            'comments', 'voices', 'pub_date', 'is_deleted', 'state'
+            'comments', 'voices', 'pub_date', 'state'
         ]
+        read_only_fields = ['author', 'pub_date', 'id', 'state']
