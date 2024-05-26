@@ -5,8 +5,7 @@ from models_app.models.photo.models import Photo
 
 
 class PhotoSerializer(serializers.ModelSerializer):
-    #author = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    author = UserSerializer()
+    author = UserSerializer(read_only=True)
     voices = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     photo_small = serializers.SerializerMethodField()

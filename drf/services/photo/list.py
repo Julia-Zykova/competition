@@ -18,18 +18,21 @@ class ListPhotoService(ServiceWithResult):
         ('-comments', '-comments'),
         ('comments', 'comments')
     )
-
+    personal_filter_choices = {
+        'in_moderation': 'На модерации',
+        'approved': 'Одобрено',
+        'on_delete': 'На удалении',
+    }
     orderby = forms.ChoiceField(required=False, choices=CHOICES, initial='-pub_date')
     orderbysearch = forms.CharField(min_length=3, max_length=30, required=False)
     personal_list = forms.BooleanField(initial=False, required=False)
-    personal_filter = forms.CharField(required=False)
+    personal_filter = forms.ChoiceField(required=False, choices=personal_filter_choices)
     user = ModelField(CustomUser, required=False)
 
     def process(self):
         if self.is_valid():
             self.result = self._get_queryset
         return self
-
 
     @property
     def _get_queryset(self):
@@ -59,7 +62,7 @@ class ListPhotoService(ServiceWithResult):
             ).exclude(state__in=['rejected', 'in_moderation'])
 
         personal_list = self.cleaned_data['personal_list']
-        if personal_list == True:
+        if personal_list:
             qs = Photo.objects.filter(
                 author=self.cleaned_data['user'],
                 state__in=['in_moderation', 'approved', 'on_delete']

@@ -18,3 +18,4 @@ class RestorePhotoService(ServiceWithResult):
         if photo.state == 'on_delete':
             photo.recover()
             photo.save()
+            return photo

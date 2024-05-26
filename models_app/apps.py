@@ -6,10 +6,12 @@ class ModelsAppConfig(AppConfig):
     name = 'models_app'
 
     def ready(self):
-        from models_app.signals import skip_saving_file, save_file
+        from models_app.signals import skip_saving_file, save_file, create_auth_token
         from django.db.models.signals import pre_save, post_save
         from models_app.models import Photo
 
-        
         pre_save.connect(skip_saving_file, sender=Photo)
         post_save.connect(save_file, sender=Photo)
+
+        from django.conf import settings
+        post_save.connect(create_auth_token, sender=settings.AUTH_USER_MODEL)

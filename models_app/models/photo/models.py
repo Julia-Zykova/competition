@@ -3,7 +3,9 @@ from django.urls import reverse
 from imagekit.models.fields import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 from django_fsm import FSMField, transition
+from rest_framework.permissions import IsAdminUser
 
+from drf.permissions import IsOwnerOrReadOnly
 from models_app.signals import uploaded_file_path
 from models_app.models import BaseSoftDeleteModel
 
@@ -31,19 +33,19 @@ class Photo(BaseSoftDeleteModel):
     pub_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     state = FSMField(default='in_moderation', choices=STATES)
 
-    @transition(field=state, source='in_moderation', target='approved')
+    @transition(field=state, source='in_moderation', target='approved', permission=[IsAdminUser,])
     def approve(self):
         pass
 
-    @transition(field=state, source='in_moderation', target='rejected')
+    @transition(field=state, source='in_moderation', target='rejected', permission=[IsAdminUser,])
     def reject(self):
         pass
 
-    @transition(field=state, source=['approved', 'rejected'], target='on_delete')
+    @transition(field=state, source=['approved', 'rejected'], target='on_delete', permission=[IsOwnerOrReadOnly,])
     def remove_photo(self):
         pass
 
-    @transition(field=state, source='on_delete', target='in_moderation')
+    @transition(field=state, source='on_delete', target='in_moderation', permission=[IsOwnerOrReadOnly,])
     def recover(self):
         self.save(update_fields='state')
 

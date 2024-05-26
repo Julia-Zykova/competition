@@ -8,6 +8,7 @@ from django.db import models
 
 from rest_framework.authtoken.models import Token
 
+
 #Create new upload_to path
 def uploaded_file_path(instance: models.Model, filename: str, **kwargs) -> str:
     path = re.sub(r"(\d.+)(\d{3})(\d{3})$", r"\1/\2/\3", f"{instance.id:09d}")
@@ -39,10 +40,15 @@ def save_file(sender: models.Model, instance: models.Model, created: bool, **kwa
             field
             for field in instance.__dict__.keys()
             if issubclass(instance.__dict__[field].__class__, FieldFile)
-            and not instance.__dict__[field]
+               and not instance.__dict__[field]
         ]
         for field in file_fields:
-            if hasattr(instance,f"tmp_{field}_field"):
+            if hasattr(instance, f"tmp_{field}_field"):
                 setattr(instance, field, getattr(instance, f"tmp_{field}_field"))
 
             instance.save()
+
+
+def create_auth_token(sender: models.Model, instance: models.Model, created: False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
