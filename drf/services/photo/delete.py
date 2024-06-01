@@ -2,7 +2,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django import forms
 
-from photo_app.tasks import delete_photo
+from drf.tasks import delete_photo
 
 from models_app.models import Photo
 from service_objects.services import ServiceWithResult

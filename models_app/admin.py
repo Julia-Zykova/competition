@@ -33,12 +33,14 @@ class PhotoAdminForm(forms.ModelForm):
         fields = "__all__"
 
     def clean_state(self):
-        if self.cleaned_data["state"] == "in_moderation":
-            raise forms.ValidationError("Вы не можете направить фото на повторную модерацию")
-        if self.initial['state'] == "approved" and self.cleaned_data["state"] == "rejected":
-            raise forms.ValidationError("Вы не можете отклонить одобренное фото")
-        elif self.initial['state'] == "rejected" and self.cleaned_data["state"] == "approved":
-            raise forms.ValidationError("Вы не можете одобрить отклоненное фото")
+        if self.cleaned_data['state'] == 'in_moderation':
+            raise forms.ValidationError('Вы не можете направить фото на повторную модерацию')
+        if self.initial['state'] == 'approved' and self.cleaned_data['state'] == 'rejected':
+            raise forms.ValidationError('Вы не можете отклонить одобренное фото')
+        elif self.initial['state'] == 'rejected' and self.cleaned_data['state'] == 'approved':
+            raise forms.ValidationError('Вы не можете одобрить отклоненное фото')
+        elif self.initial['state'] == 'on_delete' and self.cleaned_data['state'] in ['in_moderation', 'approved', 'rejected']:
+            raise forms.ValidationError('Вы не можете сменить статус этого фото')
         return self.cleaned_data["state"]
 
 

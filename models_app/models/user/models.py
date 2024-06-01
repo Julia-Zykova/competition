@@ -1,18 +1,7 @@
 from audioop import reverse
-
-import jwt
-from datetime import datetime
-from datetime import timedelta
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
-
-from conf import settings
-from imagekit.models.fields import ImageSpecField
-from imagekit.processors import ResizeToFill
-
 from models_app.signals import uploaded_file_path
-
 from .managers import CustomUserManager
 
 

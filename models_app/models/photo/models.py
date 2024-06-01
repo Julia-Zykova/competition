@@ -47,13 +47,13 @@ class Photo(BaseSoftDeleteModel):
 
     @transition(field=state, source='on_delete', target='in_moderation', permission=[IsOwnerOrReadOnly,])
     def recover(self):
-        self.save(update_fields='state')
+        pass
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('photo_app:detail', kwargs={'pk': self.id})
+        return reverse('photo_app:detail', kwargs={'photo': self.id})
 
     class Meta:
         verbose_name = 'Фото'

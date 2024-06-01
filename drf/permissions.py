@@ -20,9 +20,10 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         elif request.method in ['PATCH', 'DELETE', 'PUT']:
 
             if request.user.is_authenticated:
-                photo = request.parser_context['kwargs']['pk']
-                user = CustomUser.objects.get(photos=photo)
-                return user == request.user
+                photo = request.parser_context['kwargs']['photo']
+                author = CustomUser.objects.get(photos=photo)
+                return author.auth_token.key == request.user.auth_token.key
+
             return False
 
     def has_object_permission(self, request, view, obj):
@@ -33,7 +34,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         elif request.method in ['PATCH', 'DELETE', 'PUT']:
             if hasattr(obj, 'user'):
                 # Instance must have an attribute named `user`.
-                return obj.user == request.user
+                return obj.user.auth_token.key == request.user.auth_token.key
             elif hasattr(obj, 'author'):
                 # Instance must have an attribute named `author`.
-                return obj.author == request.user
+                return obj.author.auth_token.key == request.user.auth_token.key

@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
-
     'models_app.apps.ModelsAppConfig',
     'photo_app.apps.PhotoAppConfig',
     'notifications_app.apps.NotificationsAppConfig',

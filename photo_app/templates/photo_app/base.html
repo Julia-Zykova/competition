@@ -24,7 +24,7 @@
 			 	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
 			 		<li class="nav-item">
-			 			<a class="nav-link active text-light"  aria-current="page" href="/">Галерея</a>
+			 			<a class="nav-link active text-light"  aria-current="page" href="{% url 'photo_app:home' %}">Галерея</a>
 			 		</li>
 		        	{% if user.is_authenticated %}
 		        	<li class="nav-item">
