@@ -13,8 +13,8 @@ class ListPhotoService(ServiceWithResult):
     CHOICES = (
         ('pub_date', 'pub_date'),
         ('-pub_date', '-pub_date'),
-        ('-voices', '-voices'),
-        ('voices', 'voices'),
+        ('-voice', '-voice'),
+        ('voice', 'voice'),
         ('-comments', '-comments'),
         ('comments', 'comments')
     )
@@ -41,11 +41,11 @@ class ListPhotoService(ServiceWithResult):
         orderby = self.cleaned_data['orderby']
 
         if orderby:
-            if orderby in ['voices', 'comments']:
+            if orderby in ['voice', 'comments']:
                 qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
                     .annotate(sum=Count(orderby)) \
                     .order_by('sum')
-            elif orderby in ['-voices', '-comments']:
+            elif orderby in ['-voice', '-comments']:
                 qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
                     .annotate(sum=Count(orderby[1:])) \
                     .order_by('-sum')

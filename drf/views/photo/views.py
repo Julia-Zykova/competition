@@ -44,13 +44,12 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Photo.objects.all()
     permission_classes = [IsOwnerOrReadOnly, ]
     http_method_names = ["get", "head", "options", "patch", "delete"]
-    lookup_field = "detail"
 
     def get(self, request, *args, **kwargs):
         outcome = ServiceOutcome(DetailPhotoService, request.GET.dict() | {
             "photo": self.kwargs["photo"],
             "user": request.user if self.request.user.is_authenticated else None,
-            "com_size": int(request.query_params["com_size"]),
+            "com_size": int(request.query_params["com_size"]) if request.query_params else None,
         })
         photo_serializer = PhotoSerializer(outcome.result["photo"])
         comment_serializer = CommentSerializer(outcome.result["comments"], many=True)

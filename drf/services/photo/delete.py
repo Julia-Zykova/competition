@@ -23,21 +23,21 @@ class SoftDeletePhotoService(ServiceWithResult):
         photo.remove_photo()
         photo.save()
 
-        # users_list = []
-        # users_list += [comment.get('user_id') for comment in photo.comments.all().values()]
-        # users_set = set(users_list)
-        #
-        # channel_layer = get_channel_layer()
-        # message = f'Фотография "{photo.title}" отправлена на удаление. Ваши комментарии к нему скоро будут удалены.'
-        #
-        # for user in users_set:
-        #     async_to_sync(channel_layer.group_send)(
-        #         'user_' + str(user),
-        #         {
-        #             'type': 'user.message',
-        #             'message': message
-        #         }
-        #     )
+        users_list = []
+        users_list += [comment.get('user_id') for comment in photo.comments.all().values()]
+        users_set = set(users_list)
+
+        channel_layer = get_channel_layer()
+        message = f'Фотография "{photo.title}" отправлена на удаление. Ваши комментарии к нему скоро будут удалены.'
+
+        for user in users_set:
+            async_to_sync(channel_layer.group_send)(
+                'user_' + str(user),
+                {
+                    'type': 'user.message',
+                    'message': message
+                }
+            )
         import environ
         env = environ.Env()
         result = delete_photo.apply_async(

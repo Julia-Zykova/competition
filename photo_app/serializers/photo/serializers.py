@@ -1,10 +1,11 @@
 from rest_framework import serializers
+
+from drf.serializers import ShortInfUserSerializer
 from models_app.models.photo.models import Photo
-from photo_app.serializers import UserSerializer
 
 
 class PhotoSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
+    author = ShortInfUserSerializer()
     voices = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     photo_small = serializers.SerializerMethodField()
@@ -26,5 +27,5 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = [
             'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
-            'comments', 'voices', 'pub_date', 'is_deleted', 'state'
+            'comments', 'voice', 'pub_date', 'is_deleted', 'state'
         ]

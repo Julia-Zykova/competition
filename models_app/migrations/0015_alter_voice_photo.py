@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='voice',
             name='photo',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='voices', to='models_app.photo'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='voice', to='models_app.photo'),
         ),
     ]

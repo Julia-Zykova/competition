@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 class DetailPhotoService(ServiceWithResult):
     photo = forms.IntegerField()
     user = ModelField(CustomUser)
-    com_size = forms.IntegerField()
+    com_size = forms.IntegerField(required=False)
     custom_validations = ["is_author", ]
 
     def process(self):
@@ -24,7 +24,10 @@ class DetailPhotoService(ServiceWithResult):
     @property
     def _comments(self):
         photo = self._photo
-        return photo.comments.order_by("-created_at")[:self.cleaned_data["com_size"]]
+        if self.cleaned_data["com_size"]:
+            return photo.comments.order_by("-created_at")[:self.cleaned_data["com_size"]]
+        else:
+            return photo.comments.order_by("-created_at")[:3]
 
     def is_author(self):
         if self._photo.state == "in_moderation":
