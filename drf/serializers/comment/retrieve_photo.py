@@ -5,7 +5,12 @@ from models_app.models.comment.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    comments = serializers.SerializerMethodField()
     user = UserSerializer(read_only=True)
+
+    @staticmethod
+    def get_comments(obj):
+        return CommentSerializer(obj.comments.all().order_by("-created_at")[:3], many=True).data
 
     class Meta:
         model = Comment

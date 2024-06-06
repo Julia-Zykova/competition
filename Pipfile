@@ -18,6 +18,7 @@ channels = {extras = ["daphne"], version = "*"}
 channels-redis = "*"
 psycopg2-binary = "*"
 django-allauth = {extras = ["socialaccount"], version = "*"}
+drf-yasg = {extras = ["validation"], version = "*"}
 
 [dev-packages]
 

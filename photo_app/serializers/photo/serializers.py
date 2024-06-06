@@ -1,11 +1,10 @@
 from rest_framework import serializers
-
-from drf.serializers import ShortInfUserSerializer
+from drf.serializers import UserSerializer
 from models_app.models.photo.models import Photo
 
 
 class PhotoSerializer(serializers.ModelSerializer):
-    author = ShortInfUserSerializer()
+    author = UserSerializer()
     voices = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     photo_small = serializers.SerializerMethodField()

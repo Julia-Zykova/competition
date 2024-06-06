@@ -17,7 +17,8 @@ class CreateVoiceAPIView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
             CreateVoiceService, request.POST.dict() | {
-                'user': request.user if self.request.user.is_authenticated else None,
+                "user": request.user if self.request.user.is_authenticated else None,
+                "photo": self.kwargs["photo"],
 
             })
         return Response(VoiceSerializer(outcome.result).data, status=status.HTTP_201_CREATED)
@@ -31,7 +32,8 @@ class DestroyVoiceAPIView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
             DestroyVoiceService, request.POST.dict() | {
-                'user': request.user if self.request.user.is_authenticated else None,
+                "user": request.user if self.request.user.is_authenticated else None,
+                "photo": self.kwargs["photo"],
 
             })
         return Response(VoiceSerializer(outcome.result).data, status=status.HTTP_204_NO_CONTENT)

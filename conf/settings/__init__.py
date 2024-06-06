@@ -8,5 +8,6 @@ include(
     'celery.py',
     'django_allauth.py',
     'websocket.py',
+    'swagger.py',
 )
 

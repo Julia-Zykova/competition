@@ -9,12 +9,12 @@ from channels.layers import get_channel_layer
 class CreateVoiceService(ServiceWithResult):
     photo = forms.IntegerField()
     user = ModelField(CustomUser)
-    custom_validations = ["is_vote", "is_approved"]
+    custom_validations = ["is_approved", ]
 
     def process(self):
         if self.is_valid():
             self.run_custom_validations()
-            self.result = self._voice
+            self.result = self._vote
         return self
 
     @property
@@ -22,33 +22,29 @@ class CreateVoiceService(ServiceWithResult):
         return Photo.objects.get(id=self.cleaned_data['photo'])
 
     @property
-    def _voice(self):
+    def _send_message(self):
         channel_layer = get_channel_layer()
         author = self._photo.author
-
-        obj = Voice.objects.create(
-            photo=self._photo,
-            user=self.cleaned_data['user'],
-        )
         sum_voices = self._photo.voices.count()
         message = (f'Пользователь {self.cleaned_data["user"]} проголосовал за ваше фото "{self._photo.title}". '
                    f'Всего голосов: {sum_voices}.')
 
-        async_to_sync(channel_layer.group_send)(
+        return async_to_sync(channel_layer.group_send)(
             'user_' + str(author.id),
             {
                 'type': 'user.message',
                 'message': message
             }
         )
-        return obj
 
-    def is_vote(self):
-        try:
-            obj = Voice.objects.get(user=self.cleaned_data["user"], photo=self._photo)
-            return False
-        except Voice.DoesNotExist:
-            return True
+    @property
+    def _vote(self):
+        voice, created = Voice.objects.update_or_create(
+            user=self.cleaned_data["user"], photo=self._photo, is_deleted=False,
+            defaults={"user": self.cleaned_data["user"], "photo": self._photo}
+        )
+        self._send_message()
+        return voice, created
 
     def is_approved(self):
         if self._photo.state != 'approved':

@@ -93,9 +93,9 @@ class PhotoAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'text')
+    list_display = ('user', 'text', 'id')
 
 
 @admin.register(Voice)
 class VoiceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'photo')
+    list_display = ('user', 'photo', 'id')

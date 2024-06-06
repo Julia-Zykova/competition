@@ -11,5 +11,5 @@ urlpatterns = [
     path('photo/<int:photo>/comments/', ListCreateCommentsAPIView.as_view()),
     path('photo/<int:photo>/comments/<int:comment>/', RetrieveUpdateDestroyCommentAPIView.as_view()),
     path('photo/<int:photo>/vote/', CreateVoiceAPIView.as_view()),
-    path('photo/<int:photo>/<int:voice>/', DestroyVoiceAPIView.as_view()),
+    path('photo/<int:photo>/voice/<int:voice>/', DestroyVoiceAPIView.as_view()),
 ]

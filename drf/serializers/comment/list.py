@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from drf.serializers import CommentRetrieveSerializer, ShortInfUserSerializer
+from drf.serializers import CommentRetrieveSerializer, UserSerializer
 from models_app.models.comment.models import Comment
 
 
 class CommentListSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField()
-    user = ShortInfUserSerializer()
+    user = UserSerializer()
 
     @staticmethod
     def get_comments(obj):
