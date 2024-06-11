@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models.query import QuerySet
 
 from django.db.models import Count, Q
 
@@ -13,8 +14,8 @@ class ListPhotoService(ServiceWithResult):
     CHOICES = (
         ('pub_date', 'pub_date'),
         ('-pub_date', '-pub_date'),
-        ('-voice', '-voice'),
-        ('voice', 'voice'),
+        ('-voices', '-voices'),
+        ('voices', 'voices'),
         ('-comments', '-comments'),
         ('comments', 'comments')
     )
@@ -29,13 +30,13 @@ class ListPhotoService(ServiceWithResult):
     personal_filter = forms.ChoiceField(required=False, choices=personal_filter_choices)
     user = ModelField(CustomUser, required=False)
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._get_queryset
         return self
 
     @property
-    def _get_queryset(self):
+    def _get_queryset(self) -> QuerySet[Photo]:
 
         qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
         orderby = self.cleaned_data['orderby']

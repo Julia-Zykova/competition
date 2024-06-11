@@ -17,17 +17,17 @@ class UploadPhotoService(ServiceWithResult):
         'required': 'Без описания - никак',
     })
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._create_photo
             return self
 
     @property
-    def _photo(self):
+    def _photo(self) -> Photo:
         return Photo.objects.get(id=self.cleaned_data['photo'])
 
     @property
-    def _create_photo(self):
+    def _create_photo(self) -> Photo:
         return Photo.objects.create(
             title=self.cleaned_data['title'],
             image=self.cleaned_data['image'],

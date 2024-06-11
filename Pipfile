@@ -4,9 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
 django-imagekit = "*"
-djangorestframework = "*"
+djangorestframework = "==3.13"
 django-split-settings = "*"
 django-environ = "*"
 django-service-objects = {git = "git+https://git.snpdev.ru/saltpepper/django-service-objects.git"}
@@ -19,6 +18,7 @@ channels-redis = "*"
 psycopg2-binary = "*"
 django-allauth = {extras = ["socialaccount"], version = "*"}
 drf-yasg = {extras = ["validation"], version = "*"}
+django = "==4.1"
 
 [dev-packages]
 

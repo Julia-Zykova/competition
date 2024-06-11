@@ -26,5 +26,5 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = [
             'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
-            'comments', 'voice', 'pub_date', 'is_deleted', 'state'
+            'comments', 'voices', 'pub_date', 'is_deleted', 'state'
         ]

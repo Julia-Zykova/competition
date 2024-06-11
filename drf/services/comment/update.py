@@ -1,5 +1,7 @@
 from django import forms
 
+from django.db.models.query import QuerySet
+
 from models_app.models import Comment
 from service_objects.services import ServiceWithResult
 
@@ -11,17 +13,17 @@ class PatchCommentService(ServiceWithResult):
         'required': 'Вы не можете оставить пустой комментарий',
     })
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._update_comment
         return self
 
     @property
-    def _comment(self):
+    def _comment(self) -> QuerySet[Comment]:
         return Comment.objects.filter(id=self.cleaned_data['comment'])
 
     @property
-    def _update_comment(self):
+    def _update_comment(self) -> int:
         return self._comment.update(
             text=self.cleaned_data['text'],
         )

@@ -9,12 +9,12 @@ from drf.permissions import IsOwnerOrReadOnly
 from models_app.signals import uploaded_file_path
 from models_app.models import BaseSoftDeleteModel
 
-STATES = {
-    'in_moderation': 'На модерации',
-    'approved': 'Одобрено',
-    'rejected': 'Отклонено',
-    'on_delete': 'На удалении',
-}
+STATES = (
+    ('in_moderation', 'На модерации'),
+    ('approved', 'Одобрено'),
+    ('rejected', 'Отклонено'),
+    ('on_delete', 'На удалении'),
+)
 
 
 class Photo(BaseSoftDeleteModel):

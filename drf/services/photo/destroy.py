@@ -6,28 +6,28 @@ from drf.tasks import delete_photo
 
 from models_app.models import Photo
 from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
+
 
 
 class SoftDeletePhotoService(ServiceWithResult):
     photo = forms.IntegerField()
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._soft_delete
         return self
 
     @property
-    def _soft_delete(self):
-        photo = Photo.objects.get(id=self.cleaned_data['photo'])
-        photo.remove_photo()
-        photo.save()
+    def _photo(self) -> Photo:
+        return Photo.objects.get(id=self.cleaned_data['photo'])
 
+    @property
+    def _send_message(self) -> None:
+        photo = self._photo
+        channel_layer = get_channel_layer()
         users_list = []
         users_list += [comment.get('user_id') for comment in photo.comments.all().values()]
         users_set = set(users_list)
-
-        channel_layer = get_channel_layer()
         message = f'Фотография "{photo.title}" отправлена на удаление. Ваши комментарии к нему скоро будут удалены.'
 
         for user in users_set:
@@ -38,6 +38,13 @@ class SoftDeletePhotoService(ServiceWithResult):
                     'message': message
                 }
             )
+
+    @property
+    def _soft_delete(self) -> Photo:
+        photo = self._photo
+        photo.remove_photo()
+        photo.save()
+
         import environ
         env = environ.Env()
         result = delete_photo.apply_async(

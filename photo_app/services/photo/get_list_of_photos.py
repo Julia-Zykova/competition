@@ -14,8 +14,8 @@ class ListOfPhotoService(ServiceWithResult):
     CHOICES = (
         ('pub_date', 'pub_date'),
         ('-pub_date', '-pub_date'),
-        ('-voice', '-voice'),
-        ('voice', 'voice'),
+        ('-voices', '-voices'),
+        ('voices', 'voices'),
         ('-comments', '-comments'),
         ('comments', 'comments')
     )

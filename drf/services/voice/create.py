@@ -1,3 +1,5 @@
+from typing import Optional
+
 from asgiref.sync import async_to_sync
 from django import forms
 from models_app.models import Voice, Photo, CustomUser
@@ -11,18 +13,18 @@ class CreateVoiceService(ServiceWithResult):
     user = ModelField(CustomUser)
     custom_validations = ["is_approved", ]
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.run_custom_validations()
             self.result = self._vote
         return self
 
     @property
-    def _photo(self):
+    def _photo(self) -> Photo:
         return Photo.objects.get(id=self.cleaned_data['photo'])
 
     @property
-    def _send_message(self):
+    def _send_message(self) -> None:
         channel_layer = get_channel_layer()
         author = self._photo.author
         sum_voices = self._photo.voices.count()
@@ -38,15 +40,13 @@ class CreateVoiceService(ServiceWithResult):
         )
 
     @property
-    def _vote(self):
-        voice, created = Voice.objects.update_or_create(
-            user=self.cleaned_data["user"], photo=self._photo, is_deleted=False,
-            defaults={"user": self.cleaned_data["user"], "photo": self._photo}
-        )
-        self._send_message()
-        return voice, created
+    def _vote(self) -> Voice:
+        voice, created = Voice.all_objects.update_or_create(user=self.cleaned_data["user"], photo=self._photo,
+                                                            defaults={"is_deleted": False, })
+        self._send_message
+        return voice
 
-    def is_approved(self):
+    def is_approved(self) -> Optional[bool]:
         if self._photo.state != 'approved':
             raise forms.ValidationError("Вы не можете поставить голос к этому фото")
         else:

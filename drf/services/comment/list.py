@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models.query import QuerySet
 
 from service_objects.services import ServiceWithResult
 from models_app.models import Comment, Photo
@@ -7,16 +8,15 @@ from models_app.models import Comment, Photo
 class ListCommentsService(ServiceWithResult):
     photo = forms.IntegerField(required=False)
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._get_queryset
         return self
 
     @property
-    def _photo(self):
-        photo = Photo.objects.get(id=self.cleaned_data['photo'])
-        return photo
+    def _photo(self) -> Photo:
+        return Photo.objects.get(id=self.cleaned_data['photo'])
 
     @property
-    def _get_queryset(self):
+    def _get_queryset(self) -> QuerySet[Comment]:
         return Comment.objects.filter(photo=self._photo)

@@ -14,10 +14,15 @@ class SoftDeleteManager(models.Manager):
         return super().get_queryset().filter(is_deleted=False)
 
 
+class BaseManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()
+
+
 class BaseSoftDeleteModel(BaseModel):
     is_deleted = models.BooleanField(default=False)
-
     objects = SoftDeleteManager()
+    all_objects = BaseManager()
 
     def soft_delete(self):
         if not self.is_deleted:

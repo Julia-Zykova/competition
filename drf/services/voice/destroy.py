@@ -1,3 +1,5 @@
+from typing import Optional
+
 from asgiref.sync import async_to_sync
 from django import forms
 from models_app.models import Voice, Photo, CustomUser
@@ -10,34 +12,34 @@ class DestroyVoiceService(ServiceWithResult):
     photo = forms.IntegerField()
     user = ModelField(CustomUser)
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._delete_voice
         return self
 
     @property
-    def _photo(self):
+    def _photo(self) -> Photo:
         return Photo.objects.get(id=self.cleaned_data['photo'])
 
     @property
-    def _get_voice(self):
+    def _get_voice(self) -> Optional[Voice]:
         try:
-            obj = Voice.objects.get(user=self.cleaned_data["user"], photo=self._photo)
+            obj = Voice.all_objects.get(user=self.cleaned_data["user"], photo=self._photo)
             return obj
         except Voice.DoesNotExist:
-            return False
+            return None
 
     @property
-    def _delete_voice(self):
-        obj = self._get_voice()
+    def _delete_voice(self) -> None:
+        obj = self._get_voice
         if obj:
-            self._send_message()
+            self._send_message
             return obj.soft_delete()
         else:
             raise Voice.DoesNotExist
 
     @property
-    def _send_message(self):
+    def _send_message(self) -> None:
         channel_layer = get_channel_layer()
         author = self._photo.author
         sum_voices = self._photo.voices.count() - 1

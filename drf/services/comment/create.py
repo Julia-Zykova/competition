@@ -16,13 +16,13 @@ class CreateCommentService(ServiceWithResult):
     })
     comment = forms.IntegerField(required=False)
 
-    def process(self):
+    def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._comment
         return self
 
     @property
-    def _photo(self):
+    def _photo(self) -> Photo:
         photo = Photo.objects.get(id=self.cleaned_data['photo'])
         if photo.state == 'approved':
             return photo
@@ -30,35 +30,38 @@ class CreateCommentService(ServiceWithResult):
             raise forms.ValidationError("Вы не можете оставить комментарий к этому фото")
 
     @property
-    def _parent_comment(self):
+    def _parent_comment(self) -> Comment:
         return Comment.objects.get(id=self.cleaned_data['comment'])
 
     @property
-    def _comment(self):
+    def _send_message(self) -> None:
         channel_layer = get_channel_layer()
         author = self._photo.author
+        sum_сomments = self._photo.comments.count()
+        message = (
+            f'Пользователь {self.cleaned_data["user"]} оставил свой комментарий к вашему фото "{self._photo.title}".'
+            f'Всего комментариев: {sum_сomments}.')
+        async_to_sync(channel_layer.group_send)(
+            'user_' + str(author.id),
+            {
+                'type': 'user.message',
+                'message': message
+            }
+        )
 
-        if self.cleaned_data['comment']:
-            return Comment.objects.create(
-                user=self.cleaned_data['user'],
-                text=self.cleaned_data['text'],
-                comment=self._parent_comment,
-            )
-        else:
+    @property
+    def _comment(self) -> Comment:
+        if not self.cleaned_data['comment']:
             obj = Comment.objects.create(
                 user=self.cleaned_data['user'],
                 text=self.cleaned_data['text'],
                 photo=self._photo,
             )
-            sum_сomments = self._photo.comments.count()
-            message = (
-                f'Пользователь {self.cleaned_data["user"]} оставил свой комментарий к вашему фото "{self._photo.title}".'
-                f'Всего комментариев: {sum_сomments}.')
-            async_to_sync(channel_layer.group_send)(
-                'user_' + str(author.id),
-                {
-                    'type': 'user.message',
-                    'message': message
-                }
-            )
+            self._send_message
             return obj
+        else:
+            return Comment.objects.create(
+                user=self.cleaned_data['user'],
+                text=self.cleaned_data['text'],
+                comment=self._parent_comment,
+            )
