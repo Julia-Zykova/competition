@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from service_objects.services import ServiceOutcome
 
 from drf.permissions import IsOwnerOrReadOnly
-from drf.serializers import CommentRetrieveSerializer, CommentSerializer, CommentListSerializer
+from drf.serializers import CommentRetrieveSerializer, CommentSerializer, CommentListSerializer, CreateCommentSerializer
 from drf.services import ListCommentsService, CreateCommentService, DestroyCommentService, PatchCommentService, \
     RetrieveCommentService
 
@@ -30,6 +30,10 @@ class ListCreateCommentsAPIView(generics.ListCreateAPIView):
                 'photo', openapi.IN_PATH, required=True, type=openapi.TYPE_INTEGER,
             ),
         ],
+        responses={
+            "200": "OK",
+            "400": "Invalid parameters",
+        },
         operation_description="Shows a list of comments on a photo using a set of parameters: page size, page number",
     )
     def get(self, request, *args, **kwargs):
@@ -42,13 +46,22 @@ class ListCreateCommentsAPIView(generics.ListCreateAPIView):
         return self.get_paginated_response(serializer.data)
 
     @swagger_auto_schema(
-        request_body=CommentSerializer,
-        manual_parameters=[
-            openapi.Parameter(
-            'comment', openapi.IN_BODY, required=False, type=openapi.TYPE_INTEGER,
-                description="ID of the parent comment"
-            ),
-        ],
+        request_body=CreateCommentSerializer,
+        # manual_parameters=[
+        #     openapi.Parameter(
+        #     'text', openapi.IN_BODY, required=True, type=openapi.TYPE_INTEGER,
+        #         description="Comment's text"
+        #     ),
+        #     openapi.Parameter(
+        #         'comment', openapi.IN_BODY, required=False, type=openapi.TYPE_INTEGER,
+        #         description="ID of the parent comment"
+        #     ),
+        # ],
+        responses={
+            "201": "Comment was create successfully",
+            "400": "Invalid parameters",
+            "401": "Unauthorized",
+        },
         operation_description="Adds a comment to the photo"
     )
     def post(self, request, *args, **kwargs):
@@ -72,6 +85,10 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
                 'photo', openapi.IN_PATH, required=True, type=openapi.TYPE_INTEGER,
             ),
         ],
+        responses={
+            "200": "OK",
+            "400": "Invalid parameter 'comment'",
+        },
         operation_description="Shows a list of answers on a comment",
     )
     def get(self, request, *args, **kwargs):
@@ -88,6 +105,11 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
 
     @swagger_auto_schema(
         request_body=CommentSerializer,
+        responses={
+            "201": "Comment was mark as deleted successfully",
+            "400": "Invalid parameter 'comment'",
+            "401": "Unauthorized or insufficient permissions to access",
+        },
         operation_description="Deletes the user's comment"
     )
     def delete(self, request, *args, **kwargs):
@@ -97,6 +119,11 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
 
     @swagger_auto_schema(
         request_body=CommentSerializer,
+        responses={
+            "200": "Comment's text was changed successfully",
+            "400": "Invalid parameter 'comment'",
+            "401": "Unauthorized or insufficient permissions to access",
+        },
         operation_description="Changes the text of comment"
     )
     @parser_classes([JSONParser])

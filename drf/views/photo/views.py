@@ -49,6 +49,10 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
                             "in_moderation, approved, on_delete."
             ),
         ],
+        responses={
+            "200": "OK",
+            "400": "Invalid parameters",
+        },
         operation_description="Shows a list of photos using a set of parameters: page size, page number, sort by, "
                               "search, personal photos and filter personal photos by moderation state",
     )
@@ -62,6 +66,11 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
         return self.get_paginated_response(serializer.data)
 
     @swagger_auto_schema(request_body=PhotoSerializer,
+                         responses={
+                             "201": "Photo was upload successfully",
+                             "400": "Invalid parameters",
+                             "401": "Unauthorized",
+                         },
                          operation_description="Uploading photos")
     def post(self, request: HttpRequest, *args, **kwargs) -> 'HttpResponse':
         outcome = ServiceOutcome(
@@ -88,6 +97,10 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
                 'photo', openapi.IN_PATH, required=True, type=openapi.TYPE_INTEGER,
             ),
         ],
+        responses={
+            "200": "OK",
+            "400": "Invalid parameters",
+        },
         operation_description="View the photo in detail with comments on it. The number of comments might be changed "
                               "using the 'com_size' parameter, by default there it's 3."
     )
@@ -104,6 +117,11 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
         )
 
     @swagger_auto_schema(request_body=PhotoSerializer,
+                         responses={
+                             "204": "Photo was marked as deleted successfully",
+                             "400": "Invalid parameters",
+                             "401": "Unauthorized or insufficient permissions to access",
+                         },
                          operation_description="Sets the 'is_deleted' parameter to True"
                          )
     def delete(self, request: HttpRequest, *args, **kwargs) -> 'HttpResponse':
@@ -124,6 +142,11 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
         #         description="Change the description of the photo"
         #     ),
         # ],
+        responses={
+            "200": "Data was change successfully",
+            "400": "Invalid parameters",
+            "401": "Unauthorized or insufficient permissions to access",
+        },
         operation_description="Changes the title and/or description of the photo"
     )
     @parser_classes([JSONParser])
@@ -141,6 +164,11 @@ class UpdatePhotoRestoreAPIView(generics.UpdateAPIView):
     http_method_names = ["patch", ]
 
     @swagger_auto_schema(request_body=PhotoSerializer,
+                         responses={
+                             "200": "State was change successfully",
+                             "400": "Invalid parameters",
+                             "401": "Unauthorized or insufficient permissions to access",
+                         },
                          operation_description="Sets the 'is_deleted' parameter to False")
     def patch(self, request: HttpRequest, *args, **kwargs) -> 'HttpResponse':
         outcome = ServiceOutcome(

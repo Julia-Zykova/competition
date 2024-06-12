@@ -19,6 +19,11 @@ class CreateVoiceAPIView(generics.CreateAPIView):
 
     @swagger_auto_schema(
         request_body=VoiceSerializer,
+        responses={
+            "201": "Voice was create successfully",
+            "400": "Invalid parameters",
+            "401": "Unauthorized",
+        },
         operation_description="Adds a voice to the photo. One user can vote for one photo once"
     )
     def post(self, request, *args, **kwargs):
@@ -38,6 +43,11 @@ class DestroyVoiceAPIView(generics.DestroyAPIView):
 
     @swagger_auto_schema(
         request_body=VoiceSerializer,
+        responses={
+            "204": "Voice was mark as deleted successfully",
+            "400": "Invalid parameters",
+            "401": "Unauthorized or insufficient permissions to access",
+        },
         operation_description="Removes the voice from the photo"
     )
     def delete(self, request, *args, **kwargs):

@@ -9,6 +9,8 @@ from models_app.models.user.models import CustomUser
 from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
 
+from django.http import HttpResponseBadRequest
+
 
 class ListPhotoService(ServiceWithResult):
     CHOICES = (
@@ -33,6 +35,8 @@ class ListPhotoService(ServiceWithResult):
     def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._get_queryset
+        else:
+            raise HttpResponseBadRequest
         return self
 
     @property
@@ -74,3 +78,5 @@ class ListPhotoService(ServiceWithResult):
             qs = Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
 
         return qs
+
+
