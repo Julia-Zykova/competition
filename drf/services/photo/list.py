@@ -9,8 +9,6 @@ from models_app.models.user.models import CustomUser
 from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
 
-from django.http import HttpResponseBadRequest
-
 
 class ListPhotoService(ServiceWithResult):
     CHOICES = (
@@ -35,48 +33,57 @@ class ListPhotoService(ServiceWithResult):
     def process(self) -> ServiceWithResult:
         if self.is_valid():
             self.result = self._get_queryset
-        else:
-            raise HttpResponseBadRequest
         return self
 
     @property
-    def _get_queryset(self) -> QuerySet[Photo]:
-
-        qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
+    def _sort_by(self) -> QuerySet[Photo]:
         orderby = self.cleaned_data['orderby']
+        if orderby in ['voice', 'comments']:
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
+                .annotate(sum=Count(orderby)) \
+                .order_by('sum')
+        elif orderby in ['-voice', '-comments']:
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
+                .annotate(sum=Count(orderby[1:])) \
+                .order_by('-sum')
+        else:
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
+                .order_by(orderby)
 
-        if orderby:
-            if orderby in ['voice', 'comments']:
-                qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
-                    .annotate(sum=Count(orderby)) \
-                    .order_by('sum')
-            elif orderby in ['-voice', '-comments']:
-                qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
-                    .annotate(sum=Count(orderby[1:])) \
-                    .order_by('-sum')
-            else:
-                qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
-                    .order_by(orderby)
-
+    @property
+    def _search(self):
         orderbysearch = self.cleaned_data['orderbysearch']
         if orderbysearch:
-            qs = Photo.objects.filter(
+            return Photo.objects.filter(
                 Q(title__icontains=orderbysearch) |
                 Q(description__icontains=orderbysearch) |
                 Q(author__email__icontains=orderbysearch)
             ).exclude(state__in=['rejected', 'in_moderation'])
 
+    @property
+    def _personal_list(self) -> QuerySet[Photo]:
         personal_list = self.cleaned_data['personal_list']
         if personal_list:
-            qs = Photo.objects.filter(
+            return Photo.objects.filter(
                 author=self.cleaned_data['user'],
                 state__in=['in_moderation', 'approved', 'on_delete']
             )
 
+    @property
+    def _personal_filter(self) -> QuerySet[Photo]:
         personal_filter = self.cleaned_data['personal_filter']
         if personal_filter:
-            qs = Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
+            return Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
 
-        return qs
-
-
+    @property
+    def _get_queryset(self) -> QuerySet[Photo]:
+        if self.cleaned_data['orderby']:
+            return self._sort_by
+        elif self.cleaned_data['orderbysearch']:
+            return self._search
+        elif self.cleaned_data['personal_list']:
+            return self._personal_list
+        elif self.cleaned_data['personal_filter']:
+            self._personal_filter
+        else:
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])

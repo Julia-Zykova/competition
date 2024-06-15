@@ -20,7 +20,7 @@ class CreateVoiceAPIView(generics.CreateAPIView):
     @swagger_auto_schema(
         request_body=VoiceSerializer,
         responses={
-            "201": "Voice was create successfully",
+            "201": openapi.Response("Voice was create successfully", schema=VoiceSerializer),
             "400": "Invalid parameters",
             "401": "Unauthorized",
         },
@@ -44,7 +44,7 @@ class DestroyVoiceAPIView(generics.DestroyAPIView):
     @swagger_auto_schema(
         request_body=VoiceSerializer,
         responses={
-            "204": "Voice was mark as deleted successfully",
+            "204": openapi.Response("Voice was mark as deleted successfully", schema=VoiceSerializer),
             "400": "Invalid parameters",
             "401": "Unauthorized or insufficient permissions to access",
         },

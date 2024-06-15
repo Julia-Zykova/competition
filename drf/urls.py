@@ -5,11 +5,13 @@ from drf.views.photo.views import ListCreatePhotosAPIView, RetrieveUpdateDestroy
 from drf.views.voice.views import CreateVoiceAPIView, DestroyVoiceAPIView
 
 urlpatterns = [
-    path('', ListCreatePhotosAPIView.as_view()),
-    path('photo/<int:photo>/', RetrieveUpdateDestroyPhotoAPIView.as_view()),
-    path('photo/<int:photo>/restore/', UpdatePhotoRestoreAPIView.as_view()),
-    path('photo/<int:photo>/comments/', ListCreateCommentsAPIView.as_view()),
-    path('photo/<int:photo>/comments/<int:comment>/', RetrieveUpdateDestroyCommentAPIView.as_view()),
-    path('photo/<int:photo>/vote/', CreateVoiceAPIView.as_view()),
-    path('photo/<int:photo>/voice/<int:voice>/', DestroyVoiceAPIView.as_view()),
+    path('photos/', ListCreatePhotosAPIView.as_view()),
+    path('photos/<int:photo>/', RetrieveUpdateDestroyPhotoAPIView.as_view()),
+    path('photos/<int:photo>/restore/', UpdatePhotoRestoreAPIView.as_view()),
+    path('photos/<int:photo>/comments/', ListCreateCommentsAPIView.as_view()),
+    path('photos/<int:photo>/comments/<int:comment>/', RetrieveUpdateDestroyCommentAPIView.as_view()),
+    path('photos/<int:photo>/vote/', CreateVoiceAPIView.as_view()),
+    path('photos/<int:photo>/voice/<int:voice>/', DestroyVoiceAPIView.as_view()),
 ]
+
+

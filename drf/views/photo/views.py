@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from service_objects.services import ServiceOutcome
 
 from drf.permissions import IsOwnerOrReadOnly
+from drf.schemas import list_photos, invalid_inputs
 from drf.services import ListPhotoService, DetailPhotoService, EditPhotoService, UploadPhotoService, \
     SoftDeletePhotoService
 from drf.services.photo.restore import RestorePhotoService
@@ -30,9 +31,8 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
         manual_parameters=[
             openapi.Parameter(
                 'orderby', openapi.IN_QUERY, required=False, type=openapi.TYPE_STRING,
-                description="Photos will be sorted by this parameter.\n"
-                            "Available options:\n"
-                            "pub_date, -pub_date, voices, -voices, comments, -comments."
+                description="Photos will be sorted by this parameter.",
+                enum=['pub_date', '-pub_date', 'voices', '-voices', 'comments', '-comments']
             ),
             openapi.Parameter(
                 'orderbysearch', openapi.IN_QUERY, required=False, type=openapi.TYPE_STRING,
@@ -44,14 +44,13 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
             ),
             openapi.Parameter(
                 'personal_filter', openapi.IN_QUERY, required=False, type=openapi.TYPE_STRING,
-                description="Filters user photos by moderation status. \n"
-                            "Available options:\n"
-                            "in_moderation, approved, on_delete."
+                description="Filters user photos by moderation status.",
+                enum=["in_moderation", "approved", "on_delete"]
             ),
         ],
         responses={
-            "200": "OK",
-            "400": "Invalid parameters",
+            "200": openapi.Response("OK", schema=list_photos),
+            "400": openapi.Response("Invalid parameters", schema=invalid_inputs),
         },
         operation_description="Shows a list of photos using a set of parameters: page size, page number, sort by, "
                               "search, personal photos and filter personal photos by moderation state",
@@ -67,7 +66,7 @@ class ListCreatePhotosAPIView(generics.ListCreateAPIView):
 
     @swagger_auto_schema(request_body=PhotoSerializer,
                          responses={
-                             "201": "Photo was upload successfully",
+                             "201": openapi.Response("Photo was upload successfully", schema=PhotoSerializer),
                              "400": "Invalid parameters",
                              "401": "Unauthorized",
                          },
@@ -98,7 +97,7 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
             ),
         ],
         responses={
-            "200": "OK",
+            "200": openapi.Response("OK", schema=PhotoSerializer),
             "400": "Invalid parameters",
         },
         operation_description="View the photo in detail with comments on it. The number of comments might be changed "
@@ -118,7 +117,8 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     @swagger_auto_schema(request_body=PhotoSerializer,
                          responses={
-                             "204": "Photo was marked as deleted successfully",
+                             "204": openapi.Response("Photo was marked as deleted successfully",
+                                                     schema=PhotoSerializer),
                              "400": "Invalid parameters",
                              "401": "Unauthorized or insufficient permissions to access",
                          },
@@ -132,18 +132,8 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     @swagger_auto_schema(
         request_body=PhotoSerializer,
-        # manual_parameters=[
-        #     openapi.Parameter(
-        #         'title', openapi.IN_BODY, required=False, type=openapi.TYPE_STRING,
-        #         description="Change the title of the photo"
-        #     ),
-        #     openapi.Parameter(
-        #         'description', openapi.IN_BODY, required=False, type=openapi.TYPE_STRING,
-        #         description="Change the description of the photo"
-        #     ),
-        # ],
         responses={
-            "200": "Data was change successfully",
+            "200": openapi.Response("Data was change successfully", schema=PhotoSerializer),
             "400": "Invalid parameters",
             "401": "Unauthorized or insufficient permissions to access",
         },
@@ -165,7 +155,7 @@ class UpdatePhotoRestoreAPIView(generics.UpdateAPIView):
 
     @swagger_auto_schema(request_body=PhotoSerializer,
                          responses={
-                             "200": "State was change successfully",
+                             "200": openapi.Response("State was change successfully", schema=PhotoSerializer),
                              "400": "Invalid parameters",
                              "401": "Unauthorized or insufficient permissions to access",
                          },

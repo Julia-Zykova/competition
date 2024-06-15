@@ -31,7 +31,7 @@ class ListCreateCommentsAPIView(generics.ListCreateAPIView):
             ),
         ],
         responses={
-            "200": "OK",
+            "200": openapi.Response("OK", schema=CommentListSerializer(many=True)),
             "400": "Invalid parameters",
         },
         operation_description="Shows a list of comments on a photo using a set of parameters: page size, page number",
@@ -47,18 +47,8 @@ class ListCreateCommentsAPIView(generics.ListCreateAPIView):
 
     @swagger_auto_schema(
         request_body=CreateCommentSerializer,
-        # manual_parameters=[
-        #     openapi.Parameter(
-        #     'text', openapi.IN_BODY, required=True, type=openapi.TYPE_INTEGER,
-        #         description="Comment's text"
-        #     ),
-        #     openapi.Parameter(
-        #         'comment', openapi.IN_BODY, required=False, type=openapi.TYPE_INTEGER,
-        #         description="ID of the parent comment"
-        #     ),
-        # ],
         responses={
-            "201": "Comment was create successfully",
+            "201": openapi.Response(description="Comment was create successfully", schema=CommentListSerializer),
             "400": "Invalid parameters",
             "401": "Unauthorized",
         },
@@ -86,7 +76,7 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
             ),
         ],
         responses={
-            "200": "OK",
+            "200": openapi.Response("OK", schema=CommentRetrieveSerializer),
             "400": "Invalid parameter 'comment'",
         },
         operation_description="Shows a list of answers on a comment",
@@ -106,7 +96,7 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
     @swagger_auto_schema(
         request_body=CommentSerializer,
         responses={
-            "201": "Comment was mark as deleted successfully",
+            "201": openapi.Response("Comment was mark as deleted successfully", schema=CommentSerializer),
             "400": "Invalid parameter 'comment'",
             "401": "Unauthorized or insufficient permissions to access",
         },
@@ -120,7 +110,7 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
     @swagger_auto_schema(
         request_body=CommentSerializer,
         responses={
-            "200": "Comment's text was changed successfully",
+            "200": openapi.Response("Comment's text was changed successfully", schema=CommentSerializer),
             "400": "Invalid parameter 'comment'",
             "401": "Unauthorized or insufficient permissions to access",
         },

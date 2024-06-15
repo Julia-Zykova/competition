@@ -13,20 +13,20 @@ class PhotoSerializer(serializers.ModelSerializer):
     photo_small = serializers.SerializerMethodField()
     photo_big = serializers.SerializerMethodField()
 
-    @swagger_serializer_method(serializer_or_field=serializers.IntegerField)
-    def get_voices(self, obj):
+    @staticmethod
+    def get_voices(obj) -> int:
         return obj.voices.all().count()
 
-    @swagger_serializer_method(serializer_or_field=serializers.IntegerField)
-    def get_comments(self, obj):
+    @staticmethod
+    def get_comments(obj) -> int:
         return obj.comments.all().count()
 
     @staticmethod
-    def get_photo_small(obj):
+    def get_photo_small(obj) -> str:
         return obj.photo_small.url
 
     @staticmethod
-    def get_photo_big(obj):
+    def get_photo_big(obj) -> str:
         return obj.photo_big.url
 
     class Meta:
