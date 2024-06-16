@@ -6,10 +6,12 @@ list_photos = openapi.Schema(
         "count": openapi.Schema(type=openapi.TYPE_INTEGER, title="Total count of posts"),
         "next": openapi.Schema(
             type=openapi.TYPE_STRING, title="The URL of the next page",
+            format=openapi.FORMAT_URI,
             pattern=f"http://localhost:8000/api/v1/photos/\?page={int}",
         ),
         "previous": openapi.Schema(
             type=openapi.TYPE_STRING, title="The URL of the previous page",
+            format=openapi.FORMAT_URI,
             pattern=f"http://localhost:8000/api/v1/photos/\?page={int}",
         ),
         "results": openapi.Schema(
@@ -62,6 +64,19 @@ list_photos = openapi.Schema(
         ),
     },
 )
+
+def errors_schema(extra):
+    return openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            "type": openapi.Schema(type=openapi.TYPE_STRING, default=extra["type"]),
+            "message": openapi.Schema(type=openapi.TYPE_STRING, default=extra["message"]),
+            "translation_key": openapi.Schema(type=openapi.TYPE_STRING, default=extra["translation_key"]),
+            "debug_message": openapi.Schema(type=openapi.TYPE_STRING, default=extra["debug_message"]),
+            "backtrace": openapi.Schema(type=openapi.TYPE_STRING, default=extra["backtrace"]),
+
+        }
+    )
 
 
 invalid_inputs = openapi.Schema(

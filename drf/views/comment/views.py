@@ -11,7 +11,7 @@ from drf.serializers import CommentRetrieveSerializer, CommentSerializer, Commen
 from drf.services import ListCommentsService, CreateCommentService, DestroyCommentService, PatchCommentService, \
     RetrieveCommentService
 
-from drf.utils import LargeCommentsPagination
+from utils.pagination import LargeCommentsPagination
 from models_app.models import Comment
 
 from drf_yasg.utils import swagger_auto_schema

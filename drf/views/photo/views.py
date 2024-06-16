@@ -12,7 +12,7 @@ from drf.schemas import list_photos, invalid_inputs
 from drf.services import ListPhotoService, DetailPhotoService, EditPhotoService, UploadPhotoService, \
     SoftDeletePhotoService
 from drf.services.photo.restore import RestorePhotoService
-from drf.utils import PhotoPagination
+from utils.pagination import PhotoPagination
 from models_app.models import Photo
 from drf.serializers import PhotoSerializer, CommentSerializer
 

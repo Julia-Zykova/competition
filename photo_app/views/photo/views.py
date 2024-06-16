@@ -13,7 +13,7 @@ from photo_app.services.photo.restore import RestorePhotoService
 from photo_app.services.photo.upload import UploadPhotoService
 
 from photo_app.serializers import PhotoSerializer, CommentSerializer
-from photo_app.utils import is_ajax
+from utils.ajax import is_ajax
 
 from models_app.models.photo.forms import UploadPhotoForm
 from models_app.models.photo.models import Photo
