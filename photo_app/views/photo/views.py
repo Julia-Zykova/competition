@@ -22,9 +22,7 @@ from models_app.models.photo.models import Photo
 class ListPhotoView(View):
     template_name = 'photo_app/list_of_photos.html'
 
-    #permission_classes = (IsAuthenticatedOrReadOnly)
-
-    def get(self, request, **kwargs):
+    def get(self, request):
         outcome = ServiceOutcome(
             ListOfPhotoService, request.GET.dict() | {
                 'user': request.user if self.request.user.is_authenticated else None
@@ -47,7 +45,6 @@ class ListPhotoView(View):
 
 
 class DetailPhotoView(View):
-    #permission_classes = (IsAuthenticatedOrReadOnly) 
 
     def get(self, request, **kwargs):
         outcome = ServiceOutcome(
@@ -68,26 +65,27 @@ class DetailPhotoView(View):
 class UploadPhotoView(View):
     template_name = 'photo_app/upload_photos.html'
 
-    #permission_classes = (IsAuthenticated)
-
     def get(self, request, *args, **kwargs):
         get_channel_layer()
         return render(request, self.template_name, context={"form": UploadPhotoForm()})
 
     def post(self, request):
-        outcome = ServiceOutcome(
-            UploadPhotoService, request.POST.dict() | {
-                'author': request.user if self.request.user.is_authenticated else None
-            }, request.FILES.dict()
-        )
+        form = UploadPhotoForm(request.POST)
+        if form.is_valid():
+            outcome = ServiceOutcome(
+                UploadPhotoService, request.POST.dict() | {
+                    'author': request.user if self.request.user.is_authenticated else None
+                }, request.FILES.dict()
+            )
 
-        return redirect('photo_app:detail', photo=outcome.result.id)
+            return redirect('photo_app:detail', photo=outcome.result.id)
+        else:
+
+            return render(request, self.template_name, context={"form": form})
 
 
 class EditPhotoView(View):
     template_name = 'photo_app/edit_photo.html'
-
-    #permission_classes = (IsAuthenticated)
 
     def get(self, request, *args, **kwargs):
         get_channel_layer()
@@ -102,7 +100,6 @@ class EditPhotoView(View):
 
 
 class DeletePhotoView(View):
-    #permission_classes = (IsAuthenticated)
 
     def post(self, request, *args, **kwargs):
         outcome = ServiceOutcome(
@@ -111,8 +108,8 @@ class DeletePhotoView(View):
 
 
 class RestorePhotoView(View):
-    #permission_classes = (IsAuthenticated)
-    def post(self, request, *args, **kwargs):
+
+    def post(self, request, **kwargs):
         outcome = ServiceOutcome(
             RestorePhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
         return redirect('photo_app:detail', photo=self.kwargs['photo'])

@@ -6,7 +6,6 @@ from service_objects.fields import ModelField
 
 
 class UploadPhotoService(ServiceWithResult):
-
     author = ModelField(CustomUser)
     title = forms.CharField(max_length=50, error_messages={
         'max_length': 'Слишком длинный заголовок.',
@@ -24,14 +23,10 @@ class UploadPhotoService(ServiceWithResult):
             return self
 
     @property
-    def _photo(self):
-       return Photo.objects.get(id=self.cleaned_data['photo'])
-
-    @property
     def _create_photo(self):
         return Photo.objects.create(
-            title=self.cleaned_data['title'],
-            image=self.cleaned_data['image'],
-            description=self.cleaned_data['description'],
             author=self.cleaned_data['author'],
+            title=self.cleaned_data['title'],
+            description=self.cleaned_data['description'],
+            image=self.cleaned_data['image'],
         )
