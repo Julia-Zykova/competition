@@ -214,14 +214,19 @@
 				{% endfor %}
 				{% endif %}
 				
-				{% if user.is_authenticated %}
+				{% if user.is_authenticated%}
 				<div class="row">
 					<div class="col ms-4">
 						<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment='0' %}" enctype="multipart/form-data">
 							{% csrf_token %}
 							<input type="hidden" name="_method" value="POST">
+							{% if photo.state != 'in_moderation' %}
 				  			<textarea class="form-control" name="text" rows="3" placeholder="Оставьте свой комментарий" maxlength="200" required></textarea>
 	                    	<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Отправить</button>
+							{% else %}
+							<textarea disabled class="form-control" name="text" rows="3" placeholder="Вы не можете оставить комментарий к фотографии, находящейся в статусе 'на модерации'" maxlength="200" required></textarea>
+	                    	<button disabled type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Отправить</button>
+							{% endif %}
 	                	</form>
 					</div>
 				</div>

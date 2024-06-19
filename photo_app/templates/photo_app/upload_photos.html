@@ -9,6 +9,14 @@
 
 		<form action="" method="post" enctype="multipart/form-data" class="container">
 			{% csrf_token %}
+			{% if form.errors %}
+			<div class="alert alert-danger" role="alert">
+				{% for message in form.errors.values %}
+				{{message}}
+				{% endfor %}
+			</div>
+			{% endif %}
+
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
 					<label for="exampleFormControlInput1" class="form-label">Автор</label>
@@ -16,15 +24,18 @@
 				</div>
 			</div>
 
+
 			<div class="row mb-3">
 				<div class="col-sm-4 ">
+
 					<label for="exampleFormControlInput1" class="form-label">Название</label>
-					<input type="text" name="title" class="form-control" id="exampleFormControlInput1" placeholder="Название фото" maxlength="50" required>
+					<input type="text" name="title" class="form-control"id="exampleFormControlInput1" placeholder="Название фото">
 				</div>
 			</div>
 
 			<div class="row mb-3">
 				<div class="col-sm-6">
+
 					<label for="exampleFormControlTextarea1" class="form-label">Описание</label>
 					<textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="4" placeholder="Расскажите о вашем фото" maxlength="220" required></textarea>
 				</div>
