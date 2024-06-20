@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from .models import *
 from django import forms
 
-from drf.tasks import reject_photo
+from tasks.photo_reject import reject_photo
 
 
 @admin.register(CustomUser)
