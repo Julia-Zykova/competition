@@ -70,7 +70,7 @@ class UploadPhotoView(View):
         return render(request, self.template_name, context={"form": UploadPhotoForm()})
 
     def post(self, request):
-        form = UploadPhotoForm(request.POST)
+        form = UploadPhotoForm(request.POST, request.FILES)
         if form.is_valid():
             outcome = ServiceOutcome(
                 UploadPhotoService, request.POST.dict() | {
