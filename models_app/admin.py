@@ -75,8 +75,7 @@ class PhotoAdmin(admin.ModelAdmin):
         return False
 
     def save_model(self, request, obj, form, change):
-        # import pdb
-        # pdb.set_trace()
+
         if 'state' in form.changed_data:
             if obj.state == "approved":
                 channel_layer = get_channel_layer()
