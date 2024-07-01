@@ -1,3 +1,5 @@
+import datetime
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib import admin
@@ -73,8 +75,7 @@ class PhotoAdmin(admin.ModelAdmin):
         return False
 
     def save_model(self, request, obj, form, change):
-        # import pdb
-        # pdb.set_trace()
+
         if 'state' in form.changed_data:
             if obj.state == "approved":
                 channel_layer = get_channel_layer()

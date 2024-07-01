@@ -1,8 +1,7 @@
 from split_settings.tools import include
 
-
 include(
-'celery.py',
+    'celery.py',
     'database.py',
     'django.py',
     'django_allauth.py',
