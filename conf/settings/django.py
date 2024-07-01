@@ -3,21 +3,19 @@ import environ
 
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 env = environ.Env()
 
 # read the .env file
-environ.Env.read_env(env_file=str(BASE_DIR) + '/.env')    
+environ.Env.read_env(env_file=str(BASE_DIR) + '/.env')
 
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -43,7 +41,6 @@ INSTALLED_APPS = [
     'drf.apps.DrfConfig',
 ]
 
-
 AUTH_USER_MODEL = 'models_app.CustomUser'
 
 MIDDLEWARE = [
@@ -63,7 +60,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-        BASE_DIR, 'templates',
+            BASE_DIR, 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -80,12 +77,10 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    ]
-
+]
 
 WSGI_APPLICATION = 'conf.wsgi.application'
 ASGI_APPLICATION = 'conf.asgi.application'
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -110,13 +105,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 STATIC_URL = env('STATIC_URL')
 
-STATIC_ROOT = os.path.join(BASE_DIR,env('STATIC_ROOT'))
+STATIC_ROOT = os.path.join(BASE_DIR, env('STATIC_ROOT'))
 
 MEDIA_URL = env('MEDIA_URL')
 
-MEDIA_ROOT = os.path.join(BASE_DIR,env('MEDIA_ROOT'))
+MEDIA_ROOT = os.path.join(BASE_DIR, env('MEDIA_ROOT'))
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

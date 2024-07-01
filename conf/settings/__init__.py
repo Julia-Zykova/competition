@@ -7,6 +7,7 @@ include(
     'redis.py',
     'celery.py',
     'django_allauth.py',
+    'logger.py',
     'websocket.py',
     'swagger.py',
 )

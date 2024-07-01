@@ -6,3 +6,4 @@ competition_project.sublime-project
 competition_project.sublime-workspace
 dump.rdb
 **/__pycache__/
+**/*.log
