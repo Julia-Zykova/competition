@@ -6,6 +6,7 @@ include(
     'database.py',
     'django.py',
     'django_allauth.py',
+    'logger.py',
     'redis.py',
     'restframework.py',
     'websocket.py',

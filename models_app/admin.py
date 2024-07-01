@@ -73,11 +73,12 @@ class PhotoAdmin(admin.ModelAdmin):
         return False
 
     def save_model(self, request, obj, form, change):
+        # import pdb
+        # pdb.set_trace()
         if 'state' in form.changed_data:
-            channel_layer = get_channel_layer()
-            author = obj.author
-
             if obj.state == "approved":
+                channel_layer = get_channel_layer()
+                author = obj.author
                 message = f'Ваше фото "{obj.title}" было одобрено'
                 obj.pub_date = datetime.datetime.now()
                 async_to_sync(channel_layer.group_send)(
@@ -88,7 +89,20 @@ class PhotoAdmin(admin.ModelAdmin):
                     }
                 )
 
-        super().save_model(request, obj, form, change)
+            super().save_model(request, obj, form, change)
+
+    def save_form(self, request, form, change):
+        if form.instance.state == 'rejected':
+            import environ
+            env = environ.Env()
+            result = reject_photo.apply_async(
+                args=[form.instance.id], countdown=int(env("TIME_BEFORE_REJECT"))
+            )
+
+            form.instance.state = 'in_moderation'
+        return form.save(commit=False)
+
+
 
     def post_photo(self, obj):
         return mark_safe(f'<img src="{obj.photo_small.url}">')
