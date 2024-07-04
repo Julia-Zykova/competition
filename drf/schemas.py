@@ -65,6 +65,7 @@ list_photos = openapi.Schema(
     },
 )
 
+
 def errors_schema(extra):
     return openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -111,4 +112,3 @@ invalid_inputs = openapi.Schema(
         "additional_info": openapi.Schema(type=openapi.TYPE_STRING, description="Might be null or str"),
     }
 )
-

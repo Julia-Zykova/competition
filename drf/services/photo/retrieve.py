@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from django import forms
@@ -37,4 +38,6 @@ class DetailPhotoService(ServiceWithResult):
             if self._photo.author == self.cleaned_data["user"]:
                 return True
             else:
+                logging.exception("Фото в статусе 'на модерации' может просматривать только автор", exc_info=True)
                 raise PermissionDenied("Фото в статусе 'на модерации' может просматривать только автор")
+
