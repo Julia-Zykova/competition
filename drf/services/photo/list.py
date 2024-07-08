@@ -38,16 +38,16 @@ class ListPhotoService(ServiceWithResult):
     @property
     def _sort_by(self) -> QuerySet[Photo]:
         orderby = self.cleaned_data['orderby']
-        if orderby in ['voice', 'comments']:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
-                .annotate(sum=Count(orderby)) \
-                .order_by('sum')
-        elif orderby in ['-voice', '-comments']:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
-                .annotate(sum=Count(orderby[1:])) \
-                .order_by('-sum')
+        if orderby in ['voices', 'comments']:
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
+                .annotate(sum=Count(orderby))\
+                .order_by('sum', '-pub_date')
+        elif orderby in ['-voices', '-comments']:
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
+                .annotate(sum=Count(orderby[1:]))\
+                .order_by('-sum', '-pub_date')
         else:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
+            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
                 .order_by(orderby)
 
     @property
