@@ -41,11 +41,11 @@ class ListOfPhotoService(ServiceWithResult):
             if orderby in ['voices', 'comments']:
                 qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
                     .annotate(sum=Count(orderby)) \
-                    .order_by('sum')
+                    .order_by('sum', '-pub_date')
             elif orderby in ['-voices', '-comments']:
                 qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
                     .annotate(sum=Count(orderby[1:])) \
-                    .order_by('-sum')
+                    .order_by('-sum', '-pub_date')
             else:
                 qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
                     .order_by(orderby)

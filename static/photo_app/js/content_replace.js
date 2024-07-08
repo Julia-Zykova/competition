@@ -28,7 +28,7 @@ function content_replace(data) {
     for (const l of list) {
     	l.remove();
     }
-    
+    console.log(posts);
 
 	for (const p of posts) {
 		document.getElementById("cardplace").insertAdjacentHTML("beforeend", '<div class="col-md-3"><div class="card" style="width: 18rem; border-color: #E5E5E5;"></div></div>');
