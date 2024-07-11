@@ -35,7 +35,7 @@ class ListPhotoView(View):
             return JsonResponse(q_dict)
 
         elif request.method == 'GET' and not is_ajax(request):
-            context = {
+            return render(request, context={
                 "page_obj": outcome.result['page_obj'],
                 "page_number": outcome.result['page_number'],
                 "personal_list": outcome.result['personal_list'],

@@ -51,6 +51,7 @@ class ListOfPhotoService(ServiceWithResult):
                     .order_by(orderby)
 
         orderbysearch = self.cleaned_data['orderbysearch']
+
         if orderbysearch:
             qs = Photo.objects.filter(
                 Q(title__icontains=orderbysearch) |
@@ -59,7 +60,8 @@ class ListOfPhotoService(ServiceWithResult):
             ).exclude(state__in=['rejected', 'in_moderation'])
 
         personal_list = self.cleaned_data['personal_list']
-        if personal_list == True:
+
+        if personal_list:
             qs = Photo.objects.filter(
                 author=self.cleaned_data['user'],
                 state__in=['in_moderation', 'approved', 'on_delete']

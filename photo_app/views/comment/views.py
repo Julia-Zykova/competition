@@ -15,32 +15,31 @@ class CommentView(View):
     template_name = 'photo_app/detail_comment.html'
 
     def get(self, request, **kwargs):
-        outcome = ServiceOutcome(ShowCommentsService, request.GET.dict() | {'photo':self.kwargs['photo']})
+        outcome = ServiceOutcome(ShowCommentsService, request.GET.dict() | {'photo': self.kwargs['photo']})
         get_channel_layer()
         context = {
             "page_obj": outcome.result['page_obj'],
             "page_number": outcome.result['page_number'],
             "photo": outcome.result['photo']
-            }
-        return render(request, template_name=self.template_name, context = context)
+        }
+        return render(request, template_name=self.template_name, context=context)
 
     def post(self, request, **kwargs):
         if request.POST['_method'] == 'POST':
             outcome = ServiceOutcome(
                 CommentForPhotoService, request.POST.dict() |
-                {
-                'user': request.user if self.request.user.is_authenticated else None,
-                'photo':self.kwargs['photo']
-                })
+                                        {
+                                            'user': request.user if self.request.user.is_authenticated else None,
+                                            'photo': self.kwargs['photo']
+                                        })
 
         if request.POST['_method'] == 'PATCH':
             outcome = ServiceOutcome(
                 EditCommentService, request.POST.dict())
-            
+
 
         elif request.POST['_method'] == 'DELETE':
             outcome = ServiceOutcome(
                 DeleteCommentService, request.POST.dict())
-        
-        return redirect('photo_app:detail', photo = self.kwargs['photo']) 
-    
+
+        return redirect('photo_app:detail', photo=self.kwargs['photo'])
