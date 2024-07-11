@@ -12,8 +12,8 @@ from photo_app.services.photo.soft_delete import SoftDeletePhotoService
 from photo_app.services.photo.restore import RestorePhotoService
 from photo_app.services.photo.upload import UploadPhotoService
 
-from photo_app.serializers import PhotoSerializer
-from photo_app.utils import is_ajax
+from photo_app.serializers import PhotoSerializer, CommentSerializer
+from utils.ajax import is_ajax
 
 from models_app.models.photo.forms import UploadPhotoForm
 from models_app.models.photo.models import Photo
@@ -40,8 +40,7 @@ class ListPhotoView(View):
                 "page_number": outcome.result['page_number'],
                 "personal_list": outcome.result['personal_list'],
                 "personal_filter": outcome.result['personal_filter'],
-            }
-            return render(request, template_name=self.template_name, context=context)
+            }, template_name=self.template_name)
 
 
 class DetailPhotoView(View):
@@ -49,17 +48,20 @@ class DetailPhotoView(View):
     def get(self, request, **kwargs):
         outcome = ServiceOutcome(
             DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["photo"], "detail_photo": True})
-        get_channel_layer()
-        context = {
-            "photo": outcome.result['outcome_comments']['photo'],
-            "page_obj": outcome.result['outcome_comments']['page_obj'],
-            "page_number": outcome.result['outcome_comments']['page_number'],
-        }
 
-        return render(
-            request, template_name='photo_app/detail_photo.html',
-            context=context
-        )
+        if outcome.result['outcome_comments']['page_obj'].object_list:
+            return render(request, context={
+                "photo": outcome.result['outcome_comments']['photo'],
+                "page_obj": outcome.result['outcome_comments']['page_obj'],
+                "page_number": outcome.result['outcome_comments']['page_number'],
+            }, template_name='photo_app/detail_photo.html')
+        else:
+            return render(request, context=
+            {
+                "photo": outcome.result['outcome_comments']['photo'],
+                "page_obj": None,
+                "page_number": outcome.result['outcome_comments']['page_number'],
+            }, template_name='photo_app/detail_photo.html')
 
 
 class UploadPhotoView(View):
@@ -93,7 +95,7 @@ class EditPhotoView(View):
             request, self.template_name,
             context={'photo': Photo.objects.get(id=self.kwargs['photo'])})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         outcome = ServiceOutcome(
             EditPhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
         return redirect('photo_app:detail', photo=self.kwargs['photo'])
@@ -101,7 +103,7 @@ class EditPhotoView(View):
 
 class DeletePhotoView(View):
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         outcome = ServiceOutcome(
             SoftDeletePhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
         return redirect('photo_app:home')

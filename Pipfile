@@ -19,6 +19,7 @@ psycopg2-binary = "*"
 django-allauth = {extras = ["socialaccount"], version = "*"}
 drf-yasg = {extras = ["validation"], version = "*"}
 django = "==4.1"
+factory-boy = "*"
 
 [dev-packages]
 

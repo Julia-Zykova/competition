@@ -38,7 +38,7 @@ class ListOfPhotoService(ServiceWithResult):
 
         orderby = self.cleaned_data['orderby']
         if orderby:
-            if orderby in ['voices', 'comments']:
+            if orderby in ['voice', 'comments']:
                 qs = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
                     .annotate(sum=Count(orderby)) \
                     .order_by('sum', '-pub_date')
@@ -78,8 +78,10 @@ class ListOfPhotoService(ServiceWithResult):
 
         qs = self.get_queryset()
         p = Paginator(qs, 8)
+
         page_number = self.cleaned_data['page']
-        if page_number == None:
+
+        if page_number is None:
             page_number = self.fields['page'].initial
 
         try:
@@ -92,7 +94,8 @@ class ListOfPhotoService(ServiceWithResult):
             page_obj = p.page(p.num_pages)
 
         return {
-            "page_number": page_number, "page_obj": page_obj,
+            "page_obj": page_obj,
+            "page_number": page_number,
             "personal_list": self.cleaned_data['personal_list'],
             "personal_filter": self.cleaned_data['personal_filter']
         }

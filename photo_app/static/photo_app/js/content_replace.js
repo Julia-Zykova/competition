@@ -69,7 +69,7 @@ function content_replace(data) {
         document.getElementsByClassName("first_sm")[ind_post].insertAdjacentText("afterbegin", p["author"]["email"]);
 		
 		document.getElementsByClassName("list-group list-group-flush")[ind_post].insertAdjacentHTML("beforeend", '<li class="list-group-item"><p class="card-text"><small class = "second_sm"></small></p></li>');
-        
+
         dt = new Date(Date.parse(posts[ind_post]["pub_date"]));
 
         fulldt = ('0' + dt.getDate()).slice(-2) + '.' + ("0"+(dt.getMonth()+1)).slice(-2) + '.' + dt.getFullYear()+ '\n' +dt.getHours() + ':' + dt.getMinutes();

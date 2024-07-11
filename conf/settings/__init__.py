@@ -1,12 +1,14 @@
 from split_settings.tools import include
 
 include(
-    'celery.py',
-    'database.py',
     'django.py',
+    'database.py',
+    'restframework.py',
+    'redis.py',
+    'celery.py',
     'django_allauth.py',
     'logger.py',
-    'redis.py',
-    'restframework.py',
     'websocket.py',
+    'swagger.py',
 )
+

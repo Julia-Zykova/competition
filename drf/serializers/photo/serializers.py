@@ -1,0 +1,38 @@
+from rest_framework import serializers
+
+from drf.serializers import UserSerializer
+from models_app.models.photo.models import Photo
+
+from drf_yasg.utils import swagger_serializer_method
+
+
+class PhotoSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+    voices = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+    photo_small = serializers.SerializerMethodField()
+    photo_big = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_voices(obj) -> int:
+        return obj.voices.all().count()
+
+    @staticmethod
+    def get_comments(obj) -> int:
+        return obj.comments.all().count()
+
+    @staticmethod
+    def get_photo_small(obj) -> str:
+        return obj.photo_small.url
+
+    @staticmethod
+    def get_photo_big(obj) -> str:
+        return obj.photo_big.url
+
+    class Meta:
+        model = Photo
+        fields = [
+            'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
+            'comments', 'voices', 'pub_date', 'state'
+        ]
+        read_only_fields = ['author', 'pub_date', 'id', 'state']

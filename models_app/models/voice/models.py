@@ -1,5 +1,5 @@
 from django.db import models
-from models_app.models import BaseModel, BaseSoftDeleteModel
+from models_app.models import BaseSoftDeleteModel
 
 
 class Voice(BaseSoftDeleteModel):

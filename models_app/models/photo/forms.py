@@ -2,6 +2,7 @@ from django import forms
 
 from .models import Photo
 
+
 class UploadPhotoForm(forms.ModelForm):
     title = forms.CharField(
         max_length=50,
