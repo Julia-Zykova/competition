@@ -9,8 +9,6 @@ class CommentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Comment
 
-    id = factory.Sequence(lambda n: n + 1)
-
     # comment = factory.SubFactory(CommentFactory)
     photo = factory.SubFactory(PhotoFactory)
     user = factory.SubFactory(UserFactory)

@@ -1,20 +1,25 @@
+import os
+
 import factory
 from factory import fuzzy
 
 from models_app.factories.user import UserFactory
 from models_app.models import Photo
 
+images = os.path.join(
+    "/mnt/c/Users/Юля/PycharmProjects/competition/media/photos/",
+    os.listdir('/mnt/c/Users/Юля/PycharmProjects/competition/media/photos/')
+)
+
 
 class PhotoFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Photo
 
-    id = factory.Sequence(lambda n: n + 1)
-
     title = factory.Faker("sentence", nb_words=2)
     author = factory.SubFactory(UserFactory)
 
-    image = factory.django.ImageField(from_path="media/photos/000/000/003/file/9I-bPcL0ICs.jpg")
+    image = factory.django.ImageField(from_path=FuzzyChoice(images))
 
     description = factory.Faker("sentence")
     pub_date = factory.Faker("date_time")

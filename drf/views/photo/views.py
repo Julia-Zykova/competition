@@ -106,7 +106,7 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request: HttpRequest, *args, **kwargs) -> 'HttpResponse':
         outcome = ServiceOutcome(DetailPhotoService, request.GET.dict() | {
             "photo": self.kwargs["photo"],
-            "user": request.user if self.request.user.is_authenticated else None,
+            "user": request.user.id if self.request.user.is_authenticated else None,
             "com_size": int(request.query_params["com_size"]) if request.query_params else None,
         })
         photo_serializer = PhotoSerializer(outcome.result["photo"])

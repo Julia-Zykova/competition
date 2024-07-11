@@ -9,8 +9,6 @@ class VoiceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Voice
 
-    id = factory.Sequence(lambda n: n + 1)
-
     photo = factory.SubFactory(PhotoFactory)
     user = factory.SubFactory(UserFactory)
     is_deleted = False

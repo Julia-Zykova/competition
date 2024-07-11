@@ -11,7 +11,7 @@ from django.core.exceptions import PermissionDenied
 
 class DetailPhotoService(ServiceWithResult):
     photo = forms.IntegerField()
-    user = ModelField(CustomUser)
+    user = forms.IntegerField(required=False)
     com_size = forms.IntegerField(required=False)
     custom_validations = ["is_author", ]
 
@@ -20,6 +20,10 @@ class DetailPhotoService(ServiceWithResult):
             self.run_custom_validations()
             self.result = {"photo": self._photo, "comments": self._comments}
         return self
+
+    @property
+    def _user(self) -> CustomUser:
+        return CustomUser.objects.get(id=self.cleaned_data["user"])
 
     @property
     def _photo(self) -> Photo:
@@ -35,9 +39,8 @@ class DetailPhotoService(ServiceWithResult):
 
     def is_author(self) -> Optional[bool]:
         if self._photo.state == "in_moderation":
-            if self._photo.author == self.cleaned_data["user"]:
+            if self._photo.author == self._user:
                 return True
             else:
                 logging.exception("Фото в статусе 'на модерации' может просматривать только автор", exc_info=True)
                 raise PermissionDenied("Фото в статусе 'на модерации' может просматривать только автор")
-

@@ -88,7 +88,7 @@ class RetrieveUpdateDestroyCommentAPIView(generics.RetrieveUpdateDestroyAPIView)
 
         return Response(
             {
-                "comment": CommentRetrieveSerializer(outcome.result["comment"]).data,
+                "comment": CommentRetrieveSerializer(outcome.result).data,
             },
             status=status.HTTP_200_OK
         )
