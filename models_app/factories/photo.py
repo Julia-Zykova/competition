@@ -3,13 +3,15 @@ import os
 import factory
 from factory import fuzzy
 
+from conf.settings.django import STATIC_ROOT
 from models_app.factories.user import UserFactory
 from models_app.models import Photo
 
-images = os.path.join(
-    "/mnt/c/Users/Юля/PycharmProjects/competition/media/photos/",
-    os.listdir('/mnt/c/Users/Юля/PycharmProjects/competition/media/photos/')
-)
+path = STATIC_ROOT + "\images_for_tests\\"
+
+list_images = os.listdir(path)
+
+images = [path + image for image in list_images]
 
 
 class PhotoFactory(factory.django.DjangoModelFactory):
@@ -19,7 +21,7 @@ class PhotoFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("sentence", nb_words=2)
     author = factory.SubFactory(UserFactory)
 
-    image = factory.django.ImageField(from_path=FuzzyChoice(images))
+    image = factory.django.ImageField(from_path=fuzzy.FuzzyChoice(images))
 
     description = factory.Faker("sentence")
     pub_date = factory.Faker("date_time")

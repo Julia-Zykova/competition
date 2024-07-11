@@ -5,7 +5,7 @@ from django import forms
 from django.db.models.query import QuerySet
 from models_app.models import Photo, CustomUser, Comment
 from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
+
 from django.core.exceptions import PermissionDenied
 
 

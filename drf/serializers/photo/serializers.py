@@ -6,8 +6,7 @@ from models_app.models.photo.models import Photo
 from drf_yasg.utils import swagger_serializer_method
 
 
-class PhotoSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+class PhotoBaseSerializer(serializers.ModelSerializer):
     voices = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     photo_small = serializers.SerializerMethodField()
@@ -28,6 +27,18 @@ class PhotoSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_photo_big(obj) -> str:
         return obj.photo_big.url
+
+    class Meta:
+        model = Photo
+        fields = [
+            'id', 'title', 'image', 'photo_small', 'photo_big', 'description',
+            'comments', 'voices', 'pub_date', 'state'
+        ]
+        read_only_fields = ['pub_date', 'id', 'state']
+
+
+class PhotoSerializer(PhotoBaseSerializer):
+    author = UserSerializer(read_only=True)
 
     class Meta:
         model = Photo

@@ -12,7 +12,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     password = factory.Faker("password")
 
-    email = factory.LazyAttribute(lambda obj: f"{obj.first_name}.{obj.id}@example.com")
+    email = factory.Sequence(lambda obj: f"{obj}@example.com")
 
     is_staff = False
     is_superuser = False

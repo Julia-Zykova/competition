@@ -36,29 +36,39 @@ class ListPhotoService(ServiceWithResult):
         return self
 
     @property
+    def _get_photos_state(self):
+        return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
+
+    @property
+    def _get_photos_sum_voices_comments(self):
+        return self._get_photos_state.annotate(
+            sum_voices=Count("voices", filter=Q(voices__is_deleted=False)),
+            sum_comments=Count("comments")
+        )
+
+    @property
     def _sort_by(self) -> QuerySet[Photo]:
         orderby = self.cleaned_data['orderby']
-        if orderby in ['voices', 'comments']:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
-                .annotate(sum=Count(orderby))\
-                .order_by('sum', '-pub_date')
-        elif orderby in ['-voices', '-comments']:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
-                .annotate(sum=Count(orderby[1:]))\
-                .order_by('-sum', '-pub_date')
+        if orderby == 'voices':
+            return self._get_photos_sum_voices_comments.order_by('sum_voices', '-pub_date')
+        elif orderby == '-voices':
+            return self._get_photos_sum_voices_comments.order_by('-sum_voices', '-pub_date')
+        elif orderby == 'comments':
+            return self._get_photos_sum_voices_comments.order_by('sum_comments', '-pub_date')
+        elif orderby == '-comments':
+            return self._get_photos_sum_voices_comments.order_by('-sum_comments', '-pub_date')
         else:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])\
-                .order_by(orderby)
+            return self._get_photos_sum_voices_comments.order_by(orderby)
 
     @property
     def _search(self):
         orderbysearch = self.cleaned_data['orderbysearch']
         if orderbysearch:
-            return Photo.objects.filter(
+            return self._get_photos_state.filter(
                 Q(title__icontains=orderbysearch) |
                 Q(description__icontains=orderbysearch) |
                 Q(author__email__icontains=orderbysearch)
-            ).exclude(state__in=['rejected', 'in_moderation'])
+            )
 
     @property
     def _personal_list(self) -> QuerySet[Photo]:
@@ -86,4 +96,4 @@ class ListPhotoService(ServiceWithResult):
         elif self.cleaned_data['personal_filter']:
             self._personal_filter
         else:
-            return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
+            return self._get_photos_state

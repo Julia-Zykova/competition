@@ -14,7 +14,7 @@ from drf.services import ListPhotoService, DetailPhotoService, EditPhotoService,
 from drf.services.photo.restore import RestorePhotoService
 from utils.pagination import PhotoPagination
 from models_app.models import Photo
-from drf.serializers import PhotoSerializer, CommentSerializer
+from drf.serializers import PhotoBaseSerializer, PhotoSerializer, CommentSerializer
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -115,7 +115,7 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
             {"photo": photo_serializer.data, "comments": comment_serializer.data}, status=status.HTTP_200_OK
         )
 
-    @swagger_auto_schema(request_body=PhotoSerializer,
+    @swagger_auto_schema(
                          responses={
                              "204": openapi.Response("Photo was marked as deleted successfully",
                                                      schema=PhotoSerializer),
@@ -131,9 +131,9 @@ class RetrieveUpdateDestroyPhotoAPIView(generics.RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(
-        request_body=PhotoSerializer,
+        request_body=PhotoBaseSerializer,
         responses={
-            "200": openapi.Response("Data was change successfully", schema=PhotoSerializer),
+            "200": openapi.Response("Data was change successfully", schema=PhotoBaseSerializer),
             "400": "Invalid parameters",
             "401": "Unauthorized or insufficient permissions to access",
         },

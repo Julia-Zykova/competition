@@ -4,4 +4,4 @@ from .comment.retrieve_photo import CommentSerializer
 from .comment.retrieve_comment import CommentRetrieveSerializer
 from .comment.list import CommentListSerializer
 from .voice.serializers import VoiceSerializer
-from .photo.serializers import PhotoSerializer
+from .photo.serializers import PhotoBaseSerializer, PhotoSerializer
