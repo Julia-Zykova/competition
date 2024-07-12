@@ -9,6 +9,8 @@ from models_app.models.user.models import CustomUser
 from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
 
+from functools import lru_cache
+
 
 class ListPhotoService(ServiceWithResult):
     CHOICES = (
@@ -36,10 +38,12 @@ class ListPhotoService(ServiceWithResult):
         return self
 
     @property
+    @lru_cache
     def _get_photos_state(self):
         return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
 
     @property
+    @lru_cache
     def _get_photos_sum_voices_comments(self):
         return self._get_photos_state.annotate(
             sum_voices=Count("voices", filter=Q(voices__is_deleted=False)),
@@ -47,6 +51,7 @@ class ListPhotoService(ServiceWithResult):
         )
 
     @property
+    @lru_cache
     def _sort_by(self) -> QuerySet[Photo]:
         orderby = self.cleaned_data['orderby']
         if orderby == 'voices':
@@ -61,6 +66,7 @@ class ListPhotoService(ServiceWithResult):
             return self._get_photos_sum_voices_comments.order_by(orderby)
 
     @property
+    @lru_cache
     def _search(self):
         orderbysearch = self.cleaned_data['orderbysearch']
         if orderbysearch:
@@ -71,6 +77,7 @@ class ListPhotoService(ServiceWithResult):
             )
 
     @property
+    @lru_cache
     def _personal_list(self) -> QuerySet[Photo]:
         personal_list = self.cleaned_data['personal_list']
         if personal_list:
@@ -80,12 +87,14 @@ class ListPhotoService(ServiceWithResult):
             )
 
     @property
+    @lru_cache
     def _personal_filter(self) -> QuerySet[Photo]:
         personal_filter = self.cleaned_data['personal_filter']
         if personal_filter:
             return Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
 
     @property
+    @lru_cache
     def _get_queryset(self) -> QuerySet[Photo]:
         if self.cleaned_data['orderby']:
             return self._sort_by
