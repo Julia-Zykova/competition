@@ -7,7 +7,7 @@ from conf.settings.django import STATIC_ROOT
 from models_app.factories.user import UserFactory
 from models_app.models import Photo
 
-path = STATIC_ROOT + "\images_for_tests\\"
+path = STATIC_ROOT + "/images_for_tests/"
 
 list_images = os.listdir(path)
 

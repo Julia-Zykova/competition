@@ -21,12 +21,6 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
             if request.user.is_authenticated:
 
-                # outcome = ServiceOutcome(
-                #         IsOwnerService, request.parser_context['kwargs'] | {
-                #             "user": request.user
-                #         })
-                #     return outcome.result
-
                 if request.parser_context['kwargs']:
 
                     if request.parser_context['kwargs'].get('comment'):
