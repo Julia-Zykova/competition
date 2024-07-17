@@ -15,7 +15,7 @@ class DeletePhotoViewTest(APITestCase):
     def tearDowns(self):
         pass
 
-    def test_update_photo_with_title_params_status_200(self):
+    def test_delete_photo_status_204(self):
         user = CustomUser.objects.get(first_name="Vi")
         token = Token.objects.get(user=user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
