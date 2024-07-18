@@ -12,7 +12,7 @@ class UpdatePhotoViewTest(APITestCase):
 
     def setUp(self):
         self.user = UserFactory.create(first_name="Vi")
-        self.token = Token.objects.get(user=user)
+        self.token = Token.objects.get(user=self.user)
         self.photo = PhotoFactory(
             title="test_title", description="test_description", state="approved", is_deleted=False, author=self.user
         )
