@@ -78,20 +78,21 @@ class ListOfPhotoService(ServiceWithResult):
 
     @property
     def _personal_filter(self) -> QuerySet[Photo]:
-        personal_filter = self.cleaned_data['personal_filter']
-        if personal_filter:
-            return Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
+        return Photo.objects.filter(author=self.cleaned_data['user'], state=self.cleaned_data['personal_filter'])
 
     @property
     def _get_queryset(self) -> QuerySet[Photo]:
+
         if self.cleaned_data['orderby']:
             return self._sort_by
         elif self.cleaned_data['orderbysearch']:
             return self._search
         elif self.cleaned_data['personal_list']:
-            return self._personal_list
-        elif self.cleaned_data['personal_filter']:
-            self._personal_filter
+            if self.cleaned_data['personal_filter']:
+                return self._personal_filter
+            else:
+                return self._personal_list
+
         else:
             return self._get_photos_state
 

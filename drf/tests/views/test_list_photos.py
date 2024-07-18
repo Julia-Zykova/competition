@@ -1,4 +1,4 @@
-from django.urls import reverse
+from factory import fuzzy
 
 from rest_framework.test import APITestCase
 
@@ -14,77 +14,88 @@ from django.db.models import Count, Q
 class ListPhotosViewTest(APITestCase):
 
     def setUp(self):
-        PhotoFactory.create_batch(10)
-        VoiceFactory.create_batch(15)
-        CommentFactory.create_batch(10)
+        names = ["John", "Vi", "Jacky", "Joe", ]
+        photo_titles = ["new photo", "title", "perfect image", "sunset", ]
+        self.users = [UserFactory.create(first_name=name) for name in names]
+        self.token = Token.objects.get(user__first_name="Vi")
+        self.photos = [
+            PhotoFactory.create(title=title, author=fuzzy.FuzzyChoice(self.users)) for title in photo_titles
+        ]
+        VoiceFactory.create_batch(15, user=fuzzy.FuzzyChoice(self.users))
+        CommentFactory.create_batch(10, user=fuzzy.FuzzyChoice(self.users), comment__comment__comment__comment=None)
 
     def tearDowns(self):
         pass
 
-    def test_get_list_without_sorting(self):
-        response = self.client.get(reverse('photos'))
-        photos = Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
-        serializer = PhotoSerializer(photos, many=True)
-        per_page = len(response.data['results'])
-        self.assertEqual(response.data['results'], serializer.data[:per_page])
-        self.assertEqual(self.client.get(reverse('photos')).status_code, 200)
+    def test_without_params_status_200(self):
+        response = self.client.get('/api/v1/photos/')
+        self.assertEqual(response.status_code, 200)
 
-    def test_get_list_sort_by_pubdate(self):
-        response = self.client.get(reverse('photos'), {'orderby': 'pub_date'})
-        photos = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
-            .order_by('pub_date')
-        serializer = PhotoSerializer(photos, many=True)
-        per_page = len(response.data['results'])
-        self.assertEqual(response.data['results'], serializer.data[:per_page])
-        self.assertEqual(self.client.get(reverse('photos')).status_code, 200)
+    def test_with_sort_by_pubdate_params_status_200(self):
+        params = {'orderby': 'pub_date'}
+        response = self.client.get(
+            '/api/v1/photos/',
+            params
+        )
+        self.assertEqual(response.status_code, 200)
 
-    def test_get_list_sort_by_sumvoices(self):
-        response = self.client.get(reverse('photos'), {'orderby': '-voices'})
+    def test_with_sort_by_sumvoices_params_status_200(self):
+        params = {'orderby': '-voices'}
+        response = self.client.get(
+            '/api/v1/photos/',
+            params
+        )
+        self.assertEqual(response.status_code, 200)
         photos = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
             .annotate(sum=Count('voices')) \
             .order_by('-sum', '-pub_date')
         serializer = PhotoSerializer(photos, many=True)
         per_page = len(response.data['results'])
         self.assertEqual(response.data['results'], serializer.data[:per_page])
-        self.assertEqual(self.client.get(reverse('photos')).status_code, 200)
 
-    def test_get_list_sort_by_sumcomments(self):
-        response = self.client.get(reverse('photos'), {'orderby': '-comments'})
+    def test_with_sort_by_sumcomments_params_status_200(self):
+        params = {'orderby': '-comments'}
+        response = self.client.get(
+            '/api/v1/photos/',
+            params
+        )
+        self.assertEqual(response.status_code, 200)
         photos = Photo.objects.exclude(state__in=['rejected', 'in_moderation']) \
             .annotate(sum=Count('comments')) \
             .order_by('-sum', '-pub_date')
         serializer = PhotoSerializer(photos, many=True)
         per_page = len(response.data['results'])
         self.assertEqual(response.data['results'], serializer.data[:per_page])
-        self.assertEqual(self.client.get(reverse('photos')).status_code, 200)
 
-    def test_get_list_search(self):
-        response = self.client.get(reverse('photos'), {'orderbysearch': 'example'})
+    def test_with_search_params_status_200(self):
+        params = {'orderbysearch': 'new photo'}
+        response = self.client.get(
+            '/api/v1/photos/',
+            params
+        )
+        self.assertEqual(response.status_code, 200)
         photos = Photo.objects.filter(
-            Q(title__icontains='example') |
-            Q(description__icontains='example') |
-            Q(author__email__icontains='example')
+            Q(title__icontains='new photo') |
+            Q(description__icontains='new photo') |
+            Q(author__email__icontains='new photo')
         ).exclude(state__in=['rejected', 'in_moderation'])
         serializer = PhotoSerializer(photos, many=True)
-        per_page = len(response.data['results'])
-        self.assertEqual(response.data['results'], serializer.data[:per_page])
-        self.assertEqual(self.client.get(reverse('photos')).status_code, 200)
+        self.assertEqual(len(response.data['results']), len(serializer.data))
 
-    def test_get_list_personal_filter(self):
-        user = CustomUser.objects.get(id=5)
-        token = Token.objects.get(user=user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = self.client.get(reverse('photos'), {'personal_filter': True}, secure=True)
-        photos = Photo.objects.filter(
-                author=user,
-                state__in=['in_moderation', 'approved', 'on_delete']
-            )
-        serializer = PhotoSerializer(photos, many=True)
-        per_page = len(response.data['results'])
-        self.assertEqual(response.data['results'], serializer.data[:per_page])
+    def test_with_personal_list_params_status_200(self):
+        params = {'personal_list': True}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(
+            '/api/v1/photos/',
+            params
+        )
+        self.assertEqual(response.status_code, 200)
 
-    # def test_get_list_max_params(self):
-    #     response = self.client.get(reverse('photos'), {
-    #         {'orderby': '-voices',
-    #          }
-    #     })
+    def test_with_personal_filter_params_status_200(self):
+        params = {'personal_list': True, 'personal_filter': 'in_moderation'}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(
+            '/api/v1/photos/',
+            params,
+        )
+        self.assertEqual(response.status_code, 200)

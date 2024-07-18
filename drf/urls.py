@@ -5,8 +5,8 @@ from drf.views.photo.views import ListCreatePhotosAPIView, RetrieveUpdateDestroy
 from drf.views.voice.views import CreateVoiceAPIView, DestroyVoiceAPIView
 
 urlpatterns = [
-    path('photos/', ListCreatePhotosAPIView.as_view(), name="photos"),
-    path('photos/<int:photo>/', RetrieveUpdateDestroyPhotoAPIView.as_view(), name=""),
+    path('photos/', ListCreatePhotosAPIView.as_view()),
+    path('photos/<int:photo>/', RetrieveUpdateDestroyPhotoAPIView.as_view()),
     path('photos/<int:photo>/restore/', UpdatePhotoRestoreAPIView.as_view()),
     path('photos/<int:photo>/comments/', ListCreateCommentsAPIView.as_view()),
     path('photos/<int:photo>/comments/<int:comment>/', RetrieveUpdateDestroyCommentAPIView.as_view()),

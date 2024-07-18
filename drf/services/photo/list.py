@@ -21,11 +21,11 @@ class ListPhotoService(ServiceWithResult):
         ('-comments', '-comments'),
         ('comments', 'comments')
     )
-    personal_filter_choices = {
-        'in_moderation': 'На модерации',
-        'approved': 'Одобрено',
-        'on_delete': 'На удалении',
-    }
+    personal_filter_choices = (
+        ('in_moderation', 'in_moderation'),
+        ('approved', 'approved'),
+        ('on_delete', 'on_delete'),
+    )
     orderby = forms.ChoiceField(required=False, choices=CHOICES, initial='-pub_date')
     orderbysearch = forms.CharField(min_length=3, max_length=30, required=False)
     personal_list = forms.BooleanField(initial=False, required=False)
@@ -89,9 +89,7 @@ class ListPhotoService(ServiceWithResult):
     @property
     @lru_cache
     def _personal_filter(self) -> QuerySet[Photo]:
-        personal_filter = self.cleaned_data['personal_filter']
-        if personal_filter:
-            return Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
+        return Photo.objects.filter(author=self.cleaned_data['user'], state=self.cleaned_data['personal_filter'])
 
     @property
     @lru_cache
@@ -101,8 +99,10 @@ class ListPhotoService(ServiceWithResult):
         elif self.cleaned_data['orderbysearch']:
             return self._search
         elif self.cleaned_data['personal_list']:
-            return self._personal_list
-        elif self.cleaned_data['personal_filter']:
-            self._personal_filter
+            if self.cleaned_data['personal_filter']:
+                return self._personal_filter
+            else:
+                return self._personal_list
+
         else:
             return self._get_photos_state
