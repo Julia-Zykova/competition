@@ -17,11 +17,12 @@ class ListPhotosViewTest(APITestCase):
         names = ["John", "Vi", "Jacky", "Joe", ]
         photo_titles = ["new photo", "title", "perfect image", "sunset", ]
         self.users = [UserFactory.create(first_name=name) for name in names]
+        self.token = Token.objects.get(user__first_name="Vi")
         self.photos = [
             PhotoFactory.create(title=title, author=fuzzy.FuzzyChoice(self.users)) for title in photo_titles
         ]
         VoiceFactory.create_batch(15, user=fuzzy.FuzzyChoice(self.users))
-        CommentFactory.create_batch(10, user=fuzzy.FuzzyChoice(self.users))
+        CommentFactory.create_batch(10, user=fuzzy.FuzzyChoice(self.users), comment__comment__comment__comment=None)
 
     def tearDowns(self):
         pass
@@ -83,9 +84,7 @@ class ListPhotosViewTest(APITestCase):
 
     def test_with_personal_list_params_status_200(self):
         params = {'personal_list': True}
-        user = CustomUser.objects.get(first_name="Vi")
-        token = Token.objects.get(user=user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get(
             '/api/v1/photos/',
             params
@@ -94,9 +93,7 @@ class ListPhotosViewTest(APITestCase):
 
     def test_with_personal_filter_params_status_200(self):
         params = {'personal_list': True, 'personal_filter': 'in_moderation'}
-        user = CustomUser.objects.get(first_name="Vi")
-        token = Token.objects.get(user=user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get(
             '/api/v1/photos/',
             params,

@@ -10,6 +10,7 @@ class DetailPhotoViewTest(APITestCase):
 
     def setUp(self):
         self.user = UserFactory.create(first_name="Vi")
+        self.token = Token.objects.get(user=self.user)
         self.photo_approved = PhotoFactory(state="approved", is_deleted=False, author=self.user)
         self.photo_in_moderation = PhotoFactory(state="in_moderation", is_deleted=False, author=self.user)
 
@@ -25,8 +26,6 @@ class DetailPhotoViewTest(APITestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_detail_photo_in_moderation_for_author_status_200(self):
-        user = CustomUser.objects.get(first_name="Vi")
-        token = Token.objects.get(user=user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get(f'/api/v1/photos/{self.photo_in_moderation.id}/')
         self.assertEqual(response.status_code, 200)
