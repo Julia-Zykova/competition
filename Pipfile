@@ -20,6 +20,8 @@ django-allauth = {extras = ["socialaccount"], version = "*"}
 drf-yasg = {extras = ["validation"], version = "*"}
 django = "==4.1"
 factory-boy = "*"
+django-log-request-id = "*"
+rich = "*"
 
 [dev-packages]
 

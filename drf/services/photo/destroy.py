@@ -10,6 +10,7 @@ from tasks.delete_photo import delete_photo
 
 from models_app.models import Photo, CustomUser
 from service_objects.services import ServiceWithResult
+from conf.settings.celery import TIME_BEFORE_DELETE
 
 
 class SoftDeletePhotoService(ServiceWithResult):
@@ -54,11 +55,9 @@ class SoftDeletePhotoService(ServiceWithResult):
         photo.remove_photo()
         photo.save()
 
-        import environ
-        env = environ.Env()
         result = delete_photo.apply_async(
             args=[self.cleaned_data['photo']],
-            countdown=int(env('TIME_BEFORE_DELETE'))
+            countdown=TIME_BEFORE_DELETE
         )
         return photo
 
