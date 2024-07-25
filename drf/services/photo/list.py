@@ -9,7 +9,7 @@ from models_app.models.user.models import CustomUser
 from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
 
-from functools import lru_cache
+from functools import lru_cache, cached_property
 
 
 class ListPhotoService(ServiceWithResult):
@@ -37,20 +37,21 @@ class ListPhotoService(ServiceWithResult):
             self.result = self._get_queryset
         return self
 
-    @property
+    @cached_property
     @lru_cache
     def _get_photos_state(self):
-        return Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
+        return (Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
+                .select_related("author"))
 
-    @property
+    @cached_property
     @lru_cache
     def _get_photos_sum_voices_comments(self):
-        return self._get_photos_state.annotate(
+        return self._get_photos_state.prefetch_related("voices__is_deleted").annotate(
             sum_voices=Count("voices", filter=Q(voices__is_deleted=False)),
             sum_comments=Count("comments")
         )
 
-    @property
+    @cached_property
     @lru_cache
     def _sort_by(self) -> QuerySet[Photo]:
         orderby = self.cleaned_data['orderby']
@@ -65,7 +66,7 @@ class ListPhotoService(ServiceWithResult):
         else:
             return self._get_photos_sum_voices_comments.order_by(orderby)
 
-    @property
+    @cached_property
     @lru_cache
     def _search(self):
         orderbysearch = self.cleaned_data['orderbysearch']
@@ -76,24 +77,25 @@ class ListPhotoService(ServiceWithResult):
                 Q(author__email__icontains=orderbysearch)
             )
 
-    @property
+    @cached_property
     @lru_cache
     def _personal_list(self) -> QuerySet[Photo]:
         personal_list = self.cleaned_data['personal_list']
         if personal_list:
-            return Photo.objects.filter(
+            return Photo.objects.select_related("author").filter(
                 author=self.cleaned_data['user'],
                 state__in=['in_moderation', 'approved', 'on_delete']
             )
 
-    @property
+    @cached_property
     @lru_cache
     def _personal_filter(self) -> QuerySet[Photo]:
         personal_filter = self.cleaned_data['personal_filter']
         if personal_filter:
-            return Photo.objects.filter(author=self.cleaned_data['user'], state=personal_filter)
+            return Photo.objects.select_related("author").filter(author=self.cleaned_data['user'],
+                                                                 state=personal_filter)
 
-    @property
+    @cached_property
     @lru_cache
     def _get_queryset(self) -> QuerySet[Photo]:
         if self.cleaned_data['orderby']:

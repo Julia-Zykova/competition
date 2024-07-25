@@ -27,15 +27,14 @@ class DetailPhotoService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data["photo"])
+        return Photo.objects.select_related("author").prefetch_related("comments").get(id=self.cleaned_data["photo"])
 
     @property
     def _comments(self) -> QuerySet[Comment]:
-        photo = self._photo
         if self.cleaned_data["com_size"]:
-            return photo.comments.order_by("-created_at")[:self.cleaned_data["com_size"]]
+            return self._photo.comments.order_by("-created_at")[:self.cleaned_data["com_size"]]
         else:
-            return photo.comments.order_by("-created_at")[:3]
+            return self._photo.comments.order_by("-created_at")[:3]
 
     def is_author(self) -> Optional[bool]:
         if self._photo.state == "in_moderation":

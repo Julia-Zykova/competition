@@ -29,7 +29,7 @@ class SoftDeletePhotoService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data['photo'])
+        return Photo.objects.select_related("author").prefetch_related("comments").get(id=self.cleaned_data['photo'])
 
     @property
     def _send_message(self) -> None:

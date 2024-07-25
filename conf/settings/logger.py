@@ -63,6 +63,7 @@ LOGGING = {
         "django.db.backends": {
             "level": getattr(logging, env("LOG_LEVEL_DB", default="DEBUG")),
             "handlers": ["console",],
+            "propagate": False,
         },
         "myproject.custom": {
             "handlers": ["console", "file"],
