@@ -37,22 +37,22 @@ class ListPhotoService(ServiceWithResult):
             self.result = self._get_queryset
         return self
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _get_photos_state(self):
         return (Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
                 .select_related("author"))
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _get_photos_sum_voices_comments(self):
-        return self._get_photos_state.prefetch_related("voices__is_deleted").annotate(
+        return self._get_photos_state.prefetch_related("voices", "comments").annotate(
             sum_voices=Count("voices", filter=Q(voices__is_deleted=False)),
             sum_comments=Count("comments")
         )
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _sort_by(self) -> QuerySet[Photo]:
         orderby = self.cleaned_data['orderby']
         if orderby == 'voices':
@@ -66,8 +66,8 @@ class ListPhotoService(ServiceWithResult):
         else:
             return self._get_photos_sum_voices_comments.order_by(orderby)
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _search(self):
         orderbysearch = self.cleaned_data['orderbysearch']
         if orderbysearch:
@@ -77,8 +77,8 @@ class ListPhotoService(ServiceWithResult):
                 Q(author__email__icontains=orderbysearch)
             )
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _personal_list(self) -> QuerySet[Photo]:
         personal_list = self.cleaned_data['personal_list']
         if personal_list:
@@ -87,16 +87,16 @@ class ListPhotoService(ServiceWithResult):
                 state__in=['in_moderation', 'approved', 'on_delete']
             )
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _personal_filter(self) -> QuerySet[Photo]:
         personal_filter = self.cleaned_data['personal_filter']
         if personal_filter:
             return Photo.objects.select_related("author").filter(author=self.cleaned_data['user'],
                                                                  state=personal_filter)
 
-    @cached_property
-    @lru_cache
+    @property
+    @lru_cache()
     def _get_queryset(self) -> QuerySet[Photo]:
         if self.cleaned_data['orderby']:
             return self._sort_by
@@ -107,4 +107,4 @@ class ListPhotoService(ServiceWithResult):
         elif self.cleaned_data['personal_filter']:
             self._personal_filter
         else:
-            return self._get_photos_state
+            return self._get_photos_sum_voices_comments

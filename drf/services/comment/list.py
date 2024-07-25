@@ -14,9 +14,5 @@ class ListCommentsService(ServiceWithResult):
         return self
 
     @property
-    def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data['photo'])
-
-    @property
     def _get_queryset(self) -> QuerySet[Comment]:
-        return Comment.objects.filter(photo=self._photo)
+        return Comment.objects.filter(photo__id=self.cleaned_data['photo'])

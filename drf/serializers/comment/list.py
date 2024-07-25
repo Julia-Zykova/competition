@@ -10,7 +10,7 @@ class CommentListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_comments(obj):
-        return CommentRetrieveSerializer(obj.comments.all().order_by("-created_at")[:3], many=True).data
+        return CommentRetrieveSerializer(obj.comments.order_by("-created_at")[:3], many=True).data
 
     class Meta:
         model = Comment
