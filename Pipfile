@@ -8,7 +8,7 @@ django-imagekit = "*"
 djangorestframework = "==3.13"
 django-split-settings = "*"
 django-environ = "*"
-django-service-objects = {git = "git+https://git.snpdev.ru/saltpepper/django-service-objects.git"}
+django-service-objects = {editable = true, git = "https://git.snpdev.ru/saltpepper/django-service-objects.git", ref = "master"}
 django-widget-tweaks = "*"
 django-fsm = "*"
 celery = "*"
