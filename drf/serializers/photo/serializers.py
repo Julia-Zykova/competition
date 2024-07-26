@@ -14,11 +14,11 @@ class PhotoBaseSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_voices(obj) -> int:
-        return obj.voices.all().count()
+        return obj.sum_voices
 
     @staticmethod
     def get_comments(obj) -> int:
-        return obj.comments.all().count()
+        return obj.sum_comments
 
     @staticmethod
     def get_photo_small(obj) -> str:

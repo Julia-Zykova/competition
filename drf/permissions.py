@@ -25,17 +25,17 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
                     if request.parser_context['kwargs'].get('comment'):
                         comment = request.parser_context['kwargs']['comment']
-                        user = CustomUser.objects.get(comments=comment)
+                        user = CustomUser.objects.select_related("auth_token__key").get(comments=comment)
                         return user.auth_token.key == request.user.auth_token.key
 
                     elif request.parser_context['kwargs'].get('voice'):
                         voice = request.parser_context['kwargs']['voice']
-                        user = CustomUser.objects.get(voices=voice)
+                        user = CustomUser.objects.select_related("auth_token__key").get(voices=voice)
                         return user.auth_token.key == request.user.auth_token.key
 
                     elif request.parser_context['kwargs'].get('photo'):
                         photo = request.parser_context['kwargs']['photo']
-                        author = CustomUser.objects.get(photos=photo)
+                        author = CustomUser.objects.select_related("auth_token__key").get(photos=photo)
                         return author.auth_token.key == request.user.auth_token.key
 
             return False

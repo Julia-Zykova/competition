@@ -19,12 +19,12 @@ class IsOwnerService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data['photo'])
+        return Photo.objects.select_related("author").get(id=self.cleaned_data['photo'])
 
     @property
     def _voice(self) -> bool:
         try:
-            obj = Voice.objects.get(id=self.cleaned_data['voice'])
+            obj = Voice.objects.select_related("user").get(id=self.cleaned_data['voice'])
             return True
         except Voice.DoesNotExist:
             return False
@@ -32,7 +32,7 @@ class IsOwnerService(ServiceWithResult):
     @property
     def _comment(self) -> bool:
         try:
-            obj = Comment.objects.get(id=self.cleaned_data['comment'])
+            obj = Comment.objects.select_related("user").get(id=self.cleaned_data['comment'])
             return True
         except Comment.DoesNotExist:
             return False
@@ -40,10 +40,10 @@ class IsOwnerService(ServiceWithResult):
     @property
     def is_owner(self) -> bool:
         if self.cleaned_data['voice'] and self._voice:
-            owner = CustomUser.objects.get(voices=self.cleaned_data['voice'])
+            owner = CustomUser.objects.select_related("auth_token__key").get(voices=self.cleaned_data['voice'])
         elif self.cleaned_data['comment'] and self._comment:
-            owner = CustomUser.objects.get(comments=self.cleaned_data['comment'])
+            owner = CustomUser.objects.select_related("auth_token__key").get(comments=self.cleaned_data['comment'])
         else:
-            owner = CustomUser.objects.get(photos=self.cleaned_data['photo'])
+            owner = CustomUser.objects.select_related("auth_token__key").get(photos=self.cleaned_data['photo'])
 
         return owner.auth_token.key == self.cleaned_data['user'].auth_token.key
