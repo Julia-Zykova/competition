@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
     'daphne',
     'django.contrib.staticfiles',
     'channels',
@@ -35,6 +36,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
     'drf_yasg',
+    'django_celery_beat',
+
     'models_app.apps.ModelsAppConfig',
     'photo_app.apps.PhotoAppConfig',
     'notifications_app.apps.NotificationsAppConfig',

@@ -13,8 +13,9 @@ from tasks.photo_reject import reject_photo
 
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'last_name', 'first_name', 'user_photo', 'id')
-    fields = ['email', 'last_name', 'first_name', 'user_photo', 'id']
+    list_display = ('email', 'last_name', 'first_name', 'user_photo', 'id', 'is_active')
+    list_editable = ('is_active',)
+    fields = ['email', 'last_name', 'first_name', 'user_photo', 'id', 'is_active']
     readonly_fields = ['email', 'last_name', 'first_name', 'user_photo', 'id', 'personal_photo']
 
     @staticmethod

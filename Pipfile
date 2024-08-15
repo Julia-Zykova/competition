@@ -22,6 +22,7 @@ django = "==4.1"
 factory-boy = "*"
 django-log-request-id = "*"
 rich = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 
