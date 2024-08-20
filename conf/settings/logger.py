@@ -1,4 +1,5 @@
 import logging.config
+
 import environ
 
 from conf.settings.django import BASE_DIR
@@ -30,7 +31,6 @@ LOGGING = {
             "datefmt": "[%X]",
         },
     },
-
     "handlers": {
         "console": {
             "level": getattr(logging, env("LOG_LEVEL_CONSOLE", default="DEBUG")),
@@ -62,7 +62,9 @@ LOGGING = {
         },
         "django.db.backends": {
             "level": getattr(logging, env("LOG_LEVEL_DB", default="DEBUG")),
-            "handlers": ["console",],
+            "handlers": [
+                "console",
+            ],
             "propagate": False,
         },
         "myproject.custom": {

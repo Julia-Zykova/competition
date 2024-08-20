@@ -1,6 +1,6 @@
 import inspect
 import re
-from conf import settings
+from typing import Any
 
 from django.core.files import File
 from django.db.models.fields.files import FieldFile
@@ -49,6 +49,6 @@ def save_file(sender: models.Model, instance: models.Model, created: bool, **kwa
             instance.save()
 
 
-def create_auth_token(sender: models.Model, instance: models.Model, created: False, **kwargs):
+def create_auth_token(sender: Any, instance: models.Model, created: bool, **kwargs):
     if created:
         Token.objects.create(user=instance)
