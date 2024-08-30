@@ -7,27 +7,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('contenttypes', '0002_remove_content_type_name'),
-        ('models_app', '0038_customuser_user_photo'),
+        ("contenttypes", "0002_remove_content_type_name"),
+        ("models_app", "0038_customuser_user_photo"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='comment',
-            name='comment',
+            model_name="comment",
+            name="comment",
         ),
         migrations.RemoveField(
-            model_name='comment',
-            name='photo',
+            model_name="comment",
+            name="photo",
         ),
         migrations.AddField(
-            model_name='comment',
-            name='comment_id',
+            model_name="comment",
+            name="comment_id",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='comment_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype', verbose_name='Type'),
+            model_name="comment",
+            name="comment_type",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="contenttypes.contenttype",
+                verbose_name="Type",
+            ),
         ),
     ]

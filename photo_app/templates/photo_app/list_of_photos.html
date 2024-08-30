@@ -7,7 +7,7 @@
 <div class="container-fluid">
 	<div class="d-flex justify-content-between">
 
-		
+
 		{% if page_obj %}
 			{% if personal_list == True %}
 				<div class="p-6">
@@ -19,9 +19,9 @@
 					<h1 id="page-title" value="{{page_obj.number}}"> Галерея страница {{page_obj.number}}</h1>
 				</div>
 			{% endif %}
-		
+
 		{% endif %}
-		
+
 		<div class="p-6">
 			{% if personal_list == True %}
 			<form method="get" action="{% url 'photo_app:home' %}">
@@ -56,9 +56,9 @@
 				  	<small>
 				  		<label class="form-check-label" for="inlineCheckbox2">На модерации</label>
 				  	</small>
-				</div>	
+				</div>
 					{% endif %}
-				
+
 					{% if personal_filter == 'on_delete' %}
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox3" value="on_delete" checked>
@@ -78,11 +78,11 @@
 				</div>
 				<button type="submit" class="btn btn-outline-light text-light sm" style="background-color: #028E9B;">
 				Применить
-				</button>	
+				</button>
 					{% endif %}
-				
+
 				{% else %}
-				
+
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="personal_filter" id="inlineCheckbox1" value="approved">
 					<small>
@@ -105,7 +105,7 @@
 				Применить
 				</button>
 				{% endif %}
-			</form>			
+			</form>
 			{% else %}
 				{% if page_obj %}
 			<select class="current_sorting form-select text-light mb-1 mt-1" style="background-color: #028E9B;">
@@ -118,9 +118,9 @@
 			</select>
 				{% endif %}
 			{% endif %}
-			
-			
-			
+
+
+
 	  	</div>
 	</div>
 </div>
@@ -180,7 +180,7 @@
 						 			<span class="badge text-light" style="background-color: #028E9B;" id="comments">{{p.comments.all.count}}</span>
 						 		</button>
                                 </div>
-                                
+
                             </div>
                         </form>
 							{% else %}
@@ -231,20 +231,20 @@
 						 			<span class="badge text-light" style="background-color: #028E9B;" id="comments">{{p.comments.all.count}}</span>
 						 		</button>
                                 </div>
-                            
+
                         </div>
                         {% endif %}
                     </div>
 				</div>
 
-				
+
 			</div>
 		</div>
 		{% empty %}
 		<h2>К сожалению не найдено ни одного фото:(</h2>
 		{% endfor %}
 
-		
+
 
 	</div>
 	<nav class="mt-4">
@@ -267,7 +267,7 @@
 	</nav>
 
 	<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-			
+
 </div>
 
 
@@ -318,7 +318,7 @@
 					orderby: document.querySelector('select.current_sorting').value,
 					orderbysearch: orderbysearch.value,
 					personal_list: p_list,
-				}, 
+				},
 			    success: content_replace,
 			});
 		});

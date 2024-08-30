@@ -7,17 +7,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0036_comment_comment'),
+        ("models_app", "0036_comment_comment"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='comment',
-            options={'ordering': ['created_at'], 'verbose_name': 'Комментарий', 'verbose_name_plural': 'Комментарии'},
+            name="comment",
+            options={"ordering": ["created_at"], "verbose_name": "Комментарий", "verbose_name_plural": "Комментарии"},
         ),
         migrations.AlterField(
-            model_name='comment',
-            name='comment',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='models_app.comment', verbose_name='Ответ'),
+            model_name="comment",
+            name="comment",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="models_app.comment",
+                verbose_name="Ответ",
+            ),
         ),
     ]

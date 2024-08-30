@@ -13,4 +13,4 @@ class CommentFactory(factory.django.DjangoModelFactory):
     photo = factory.SubFactory(PhotoFactory)
     user = factory.SubFactory(UserFactory)
     text = factory.Faker("text")
-    comment = factory.SubFactory('models_app.factories.CommentFactory')
+    comment = factory.SubFactory("models_app.factories.CommentFactory")

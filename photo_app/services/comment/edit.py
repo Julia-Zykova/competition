@@ -1,15 +1,18 @@
 from django import forms
+from service_objects.services import ServiceWithResult
 
 from models_app.models import Comment
-from service_objects.services import ServiceWithResult
 
 
 class EditCommentService(ServiceWithResult):
     comment = forms.IntegerField()
-    text = forms.CharField(max_length=200, error_messages={
-        'max_length': 'Слишком длинный комментарий.',
-        'required': 'Вы не можете оставить пустой комментарий',
-    })
+    text = forms.CharField(
+        max_length=200,
+        error_messages={
+            "max_length": "Слишком длинный комментарий.",
+            "required": "Вы не можете оставить пустой комментарий",
+        },
+    )
 
     def process(self):
         if self.is_valid():
@@ -18,10 +21,10 @@ class EditCommentService(ServiceWithResult):
 
     @property
     def _comment(self):
-        return Comment.objects.filter(id=self.cleaned_data['comment'])
+        return Comment.objects.filter(id=self.cleaned_data["comment"])
 
     @property
     def _update_comment(self):
         return self._comment.update(
-            text=self.cleaned_data['text'],
+            text=self.cleaned_data["text"],
         )

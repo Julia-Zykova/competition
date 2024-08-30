@@ -1,9 +1,8 @@
 from django import forms
-
 from service_objects.fields import ModelField
 from service_objects.services import ServiceWithResult
 
-from models_app.models import Voice, Photo, Comment, CustomUser
+from models_app.models import Comment, CustomUser, Photo, Voice
 
 
 class IsOwnerService(ServiceWithResult):
@@ -19,12 +18,12 @@ class IsOwnerService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.select_related("author").get(id=self.cleaned_data['photo'])
+        return Photo.objects.select_related("author").get(id=self.cleaned_data["photo"])
 
     @property
     def _voice(self) -> bool:
         try:
-            obj = Voice.objects.select_related("user").get(id=self.cleaned_data['voice'])
+            Voice.objects.select_related("user").get(id=self.cleaned_data["voice"])
             return True
         except Voice.DoesNotExist:
             return False
@@ -32,18 +31,18 @@ class IsOwnerService(ServiceWithResult):
     @property
     def _comment(self) -> bool:
         try:
-            obj = Comment.objects.select_related("user").get(id=self.cleaned_data['comment'])
+            Comment.objects.select_related("user").get(id=self.cleaned_data["comment"])
             return True
         except Comment.DoesNotExist:
             return False
 
     @property
     def is_owner(self) -> bool:
-        if self.cleaned_data['voice'] and self._voice:
-            owner = CustomUser.objects.select_related("auth_token__key").get(voices=self.cleaned_data['voice'])
-        elif self.cleaned_data['comment'] and self._comment:
-            owner = CustomUser.objects.select_related("auth_token__key").get(comments=self.cleaned_data['comment'])
+        if self.cleaned_data["voice"] and self._voice:
+            owner = CustomUser.objects.select_related("auth_token__key").get(voices=self.cleaned_data["voice"])
+        elif self.cleaned_data["comment"] and self._comment:
+            owner = CustomUser.objects.select_related("auth_token__key").get(comments=self.cleaned_data["comment"])
         else:
-            owner = CustomUser.objects.select_related("auth_token__key").get(photos=self.cleaned_data['photo'])
+            owner = CustomUser.objects.select_related("auth_token__key").get(photos=self.cleaned_data["photo"])
 
-        return owner.auth_token.key == self.cleaned_data['user'].auth_token.key
+        return owner.auth_token.key == self.cleaned_data["user"].auth_token.key

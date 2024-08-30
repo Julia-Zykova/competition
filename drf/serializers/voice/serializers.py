@@ -16,4 +16,4 @@ class VoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Voice
-        fields = ['photo', 'user', 'id', 'is_deleted']
+        fields = ["photo", "user", "id", "is_deleted"]

@@ -12,7 +12,7 @@
     	<img src="{% static 'photo_app/images/user_848081.png' %}">
     	{% endif %}
     </div>
-    
+
     <div class="col-9">
       <div class="row">
         <h4>{{user.first_name}}  {{user.last_name}}</h4>
@@ -33,7 +33,7 @@
           </button>
         </form>
       </div>
-      
+
     </div>
   </div>
   <div class="row align-items-start text-center">
@@ -79,9 +79,9 @@
                     </svg>
                     <span class="badge text-light" style="background-color: #028E9B;" id="comments">{{p.comments.all.count}}</span>
                   </button>
-                </div>                  
+                </div>
               </div>
-            </form>                 
+            </form>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@
       {% empty %}
       <h2>К сожалению не найдено ни одного фото:(</h2>
       {% endfor %}
-    
+
   </div>
     <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </div>

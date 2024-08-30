@@ -35,11 +35,11 @@
 	            </a></li>
 				{% endif %}
 				</ul>
-			
+
 		</div>
 	</div>
 	{% else %}
-<div class="container-fluid mt-4">	
+<div class="container-fluid mt-4">
 	{% endif %}
 {% endif %}
 
@@ -59,7 +59,7 @@
 						<small class="card-text">{{photo.author.email}}</small>
 						<h4 class="card-title fw-bold">{{photo.title}}</h4>
 	    			</div>
-				   
+
 
 					<div class="col">
 						<div class="d-flex w-100 justify-content-start">
@@ -89,7 +89,7 @@
 						<small>{{photo.pub_date|date:"j.m.Y"}} {{photo.pub_date|time:"H:i"}}</small>
 					</div>
 				</div>
-			
+
 				<div class="row mb-2">
 					<div class="col ms-4">
 						<p class="card-text text-break">{{photo.description}}</p>
@@ -101,7 +101,7 @@
 						<div class="col-8">
 							<h6 class="ms-4 text-dark"> Комментарии</h6>
 						</div>
-						
+
 						<div class="col-2 p-0">
 							<div class="d-flex w-100 justify-content-end">
 								<ul class="pagination pagination-sm">
@@ -119,25 +119,25 @@
 								</ul>
 							</div>
 						</div>
-					
+
 					</div>
-					
-					
+
+
 				</div>
-				
+
 				<hr class="ms-4 mt-0">
 				{% if page_obj %}
 				{% for com in page_obj %}
 				<div class="row g-0">
 					<div class="col ms-4">
 						<small class="text-body-secondary text-dark" id ="element">
-							
+
 		                	<div class="d-flex w-100 justify-content-between">
 		                		<div class="col-8">
 		                			<h6 class="mb-1 text-dark">{{com.user.first_name}} {{com.user.last_name}}</h6>
 		                		</div>
 								<div class="col-2 p-0 d-flex justify-content-end">
-									<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>	
+									<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
 								</div>
 
 								{% if user.id == com.user.id %}
@@ -159,7 +159,7 @@
 							</div>
 
 							{% if com.comments.get_queryset %}
-								
+
 								<p class="mb-1 text-break text-dark">{{com.text}}</p>
 								<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
 								<hr class="ms-4 m-0">
@@ -180,7 +180,7 @@
 							<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
 							{% endif %}
 
-							
+
 							{% if user.is_authenticated %}
 							<div class="collapse multi-collapse" id="answer_{{com.id}}">
 								<form method="post" action="{% url 'photo_app:comment' photo=photo.id comment=com.id %}" enctype="multipart/form-data">
@@ -189,7 +189,7 @@
 									<input type="hidden" name="comment" value="{{ com.id }}">
 									<input type="hidden" name="photo" value="{{ com.photo.id }}">
 									<textarea class="form-control" name="text"rows="3" maxlength="200" required></textarea>
-									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>
 								</form>
 						    </div>
 
@@ -200,20 +200,20 @@
 									<input type="hidden" name="_method" value="PATCH">
 									<input type="hidden" name="comment" value="{{ com.id }}">
 									<textarea class="form-control" name="text"rows="3" maxlength="200" required>{{com.text}}</textarea>
-									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+									<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>
 								</form>
     						</div>
     						{% endif %}
 
-		                       
-	                       
+
+
 						</small>
 					</div>
 				</div>
 				<hr class="ms-4">
 				{% endfor %}
 				{% endif %}
-				
+
 				{% if user.is_authenticated%}
 				<div class="row">
 					<div class="col ms-4">
@@ -231,8 +231,8 @@
 					</div>
 				</div>
 				{% endif %}
-			</div>		
-	      
+			</div>
+
 	    </div>
 	  </div>
 	</div>

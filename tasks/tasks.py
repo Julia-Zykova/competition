@@ -1,7 +1,7 @@
 from conf.celery import app
 
 
-@app.task(task_reject_on_worker_lost=True, name='delete_inactive_users')
+@app.task(task_reject_on_worker_lost=True, name="delete_inactive_users")
 def delete_inactive_users():
     from models_app.models import CustomUser
 

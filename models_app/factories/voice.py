@@ -12,5 +12,3 @@ class VoiceFactory(factory.django.DjangoModelFactory):
     photo = factory.SubFactory(PhotoFactory)
     user = factory.SubFactory(UserFactory)
     is_deleted = False
-
-

@@ -1,7 +1,7 @@
 from django import forms
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from service_objects.services import ServiceWithResult
+
 from models_app.models import Comment, Photo
 
 
@@ -17,7 +17,7 @@ class ShowCommentsService(ServiceWithResult):
 
     @property
     def _photo(self):
-        photo = Photo.objects.get(id=self.cleaned_data['photo'])
+        photo = Photo.objects.get(id=self.cleaned_data["photo"])
         return photo
 
     @property
@@ -25,15 +25,15 @@ class ShowCommentsService(ServiceWithResult):
 
         qs = Comment.objects.filter(photo=self._photo)
 
-        if self.cleaned_data['detail_photo']:
+        if self.cleaned_data["detail_photo"]:
             p = Paginator(qs, 3)
         else:
             p = Paginator(qs, 6)
 
-        page_number = self.cleaned_data['page']
+        page_number = self.cleaned_data["page"]
 
         if page_number is None:
-            page_number = self.fields['page'].initial
+            page_number = self.fields["page"].initial
 
         try:
             page_obj = p.get_page(page_number)  # returns the desired page object

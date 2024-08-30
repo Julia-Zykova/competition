@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0023_alter_customuser_first_name_and_more'),
+        ("models_app", "0023_alter_customuser_first_name_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='photo',
-            name='slug',
-            field=models.SlugField(blank=True, max_length=255, null=True, unique=True, verbose_name='URL'),
+            model_name="photo",
+            name="slug",
+            field=models.SlugField(blank=True, max_length=255, null=True, unique=True, verbose_name="URL"),
         ),
     ]

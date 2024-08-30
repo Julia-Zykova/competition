@@ -1,10 +1,9 @@
-from rest_framework.test import APITestCase
 from django.test.client import encode_multipart
+from rest_framework.authtoken.models import Token
+from rest_framework.test import APITestCase
 
 from conf.settings.django import STATIC_ROOT
 from models_app.factories import UserFactory
-
-from rest_framework.authtoken.models import Token
 
 
 class CreatePhotosViewTest(APITestCase):
@@ -18,21 +17,19 @@ class CreatePhotosViewTest(APITestCase):
         pass
 
     def test_create_with_all_params_status_201(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        with open(
-                self.img_path, "rb"
-        ) as img:
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        with open(self.img_path, "rb") as img:
             params = {
-                'author': self.user,
-                'title': "Test title",
-                'image': img,
-                'description': "Test description",
+                "author": self.user,
+                "title": "Test title",
+                "image": img,
+                "description": "Test description",
             }
-            content = encode_multipart('BoUnDaRyStRiNg', params)
-            content_type = 'multipart/form-data; boundary=BoUnDaRyStRiNg'
+            content = encode_multipart("BoUnDaRyStRiNg", params)
+            content_type = "multipart/form-data; boundary=BoUnDaRyStRiNg"
 
             response = self.client.post(
-                '/api/v1/photos/',
+                "/api/v1/photos/",
                 content_type=content_type,
                 data=content,
             )

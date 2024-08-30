@@ -15,7 +15,7 @@
 			<div class="d-flex w-100 justify-content-end">
 				<ul class="pagination pagination-sm">
 				{% for p in page_obj.paginator.page_range %}
-					{% if page_obj.number == p %}			
+					{% if page_obj.number == p %}
 					<li class="page-item active">
 						<span class="page-link" id = "pagenum_{{p}}" style="background-color: #028E9B;">{{ p }}</span>
 					</li>
@@ -27,22 +27,22 @@
 				{% endfor %}
 				</ul>
 			</div>
-		</div>					
+		</div>
 	</div>
 		{% endif %}
 </div>
-				
+
 <hr class="ms-4 mt-0">
 {% for com in page_obj %}
 <div class="row g-0">
 	<div class="col ms-4">
-		<small class="text-body-secondary text-dark" id ="element">							
+		<small class="text-body-secondary text-dark" id ="element">
 			<div class="d-flex w-100 justify-content-between">
 		    	<div class="col-8">
 		            <h6 class="mb-1 text-dark">{{com.user.get_full_name}}</h6>
 		        </div>
 				<div class="col-2 p-0 d-flex justify-content-end">
-					<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>	
+					<small>{{com.created_at|date:"j N"}} {{com.created_at|time:"H:i"}}</small>
 				</div>
 
 				{% if user.id == com.user.id %}
@@ -59,10 +59,10 @@
 					<input type="hidden" name="comment" value="{{ com.id }}">
 					<button type="submit" class="btn-close" id="{{com.id}}" aria-label="Удалить"></button>
 				</form>
-					{% endif %}	
+					{% endif %}
 				{% endif %}
 			</div>
-			{% if com.comments.get_queryset %}								
+			{% if com.comments.get_queryset %}
 			<p class="mb-1 text-break text-dark">{{com.text}}</p>
 			<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
 			<hr class="ms-3 m-0">
@@ -95,10 +95,10 @@
 						<input type="hidden" name="_method" value="PATCH">
 						<input type="hidden" name="comment" value="{{ answer.id }}">
 						<textarea class="form-control" name="text"rows="3" maxlength="200" required>{{answer.text}}</textarea>
-						<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+						<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>
 					</form>
     			</div>
-				
+
 				<form method="post" action="{% url 'photo_app:comment' photo=com.photo.id comment=answer.id %}" enctype="multipart/form-data">
 					{% csrf_token %}
 					<input type="hidden" name="_method" value="DELETE">
@@ -121,7 +121,7 @@
 					<input type="hidden" name="comment" value="{{ answer.id }}">
 					<input type="hidden" name="photo" value="{{ com.photo.id }}">
 					<textarea class="form-control" name="text"rows="3" maxlength="200" required></textarea>
-					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>
 				</form>
 			</div>
 			{% endif %}
@@ -155,7 +155,7 @@
 			<p class="mb-1 text-break text-dark">{{com.text}}</p>
 			<small><a class="" data-bs-toggle="collapse" href="#answer_{{com.id}}" role="button" aria-expanded="false" aria-controls="answer_{{com.id}}">Ответить</a></small>
 			{% endif %}
-							
+
 			{% if user.is_authenticated %}
 			<div class="collapse multi-collapse" id="answer_{{com.id}}">
 				<form method="post" action="{% url 'photo_app:comment' photo=com.photo.id comment=com.id %}" enctype="multipart/form-data">
@@ -164,7 +164,7 @@
 					<input type="hidden" name="comment" value="{{ com.id }}">
 					<input type="hidden" name="photo" value="{{ com.photo.id }}">
 					<textarea class="form-control" name="text"rows="3" maxlength="200" required></textarea>
-					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>
 				</form>
 			</div>
 
@@ -175,17 +175,17 @@
 					<input type="hidden" name="_method" value="PATCH">
 					<input type="hidden" name="comment" value="{{ com.id }}">
 					<textarea class="form-control" name="text"rows="3" maxlength="200" required>{{com.text}}</textarea>
-					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>	
+					<button type="submit" class="btn btn-outline-light mt-2" style="background-color: #028E9B;">Сохранить</button>
 				</form>
     		</div>
     		{% endif %}
-     
+
 		</small>
 	</div>
 </div>
 <hr class="ms-4">
 {% endfor %}
-				
+
 {% if user.is_authenticated %}
 <div class="row">
 	<div class="col ms-4">

@@ -8,31 +8,51 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0040_alter_comment_comment_id_alter_comment_comment_type'),
+        ("models_app", "0040_alter_comment_comment_id_alter_comment_comment_type"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='comment',
-            name='comment_id',
+            model_name="comment",
+            name="comment_id",
         ),
         migrations.RemoveField(
-            model_name='comment',
-            name='comment_type',
+            model_name="comment",
+            name="comment_type",
         ),
         migrations.AddField(
-            model_name='comment',
-            name='comment',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='models_app.comment', verbose_name='Ответ'),
+            model_name="comment",
+            name="comment",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="models_app.comment",
+                verbose_name="Ответ",
+            ),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='photo',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='models_app.photo'),
+            model_name="comment",
+            name="photo",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="models_app.photo",
+            ),
         ),
         migrations.AlterField(
-            model_name='comment',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comments', to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
+            model_name="comment",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Автор",
+            ),
         ),
     ]

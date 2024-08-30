@@ -6,24 +6,32 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0001_initial'),
+        ("models_app", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='comment',
-            options={'ordering': ['user', 'photo'], 'verbose_name': 'Комментарий', 'verbose_name_plural': 'Комментарии'},
+            name="comment",
+            options={
+                "ordering": ["user", "photo"],
+                "verbose_name": "Комментарий",
+                "verbose_name_plural": "Комментарии",
+            },
         ),
         migrations.AlterModelOptions(
-            name='customuser',
-            options={'ordering': ['email'], 'verbose_name': 'Пользователь', 'verbose_name_plural': 'Пользователи'},
+            name="customuser",
+            options={"ordering": ["email"], "verbose_name": "Пользователь", "verbose_name_plural": "Пользователи"},
         ),
         migrations.AlterModelOptions(
-            name='photo',
-            options={'ordering': ['author', 'pub_date', 'title', 'mod_status'], 'verbose_name': 'Фото', 'verbose_name_plural': 'Фото'},
+            name="photo",
+            options={
+                "ordering": ["author", "pub_date", "title", "mod_status"],
+                "verbose_name": "Фото",
+                "verbose_name_plural": "Фото",
+            },
         ),
         migrations.AlterModelOptions(
-            name='voice',
-            options={'ordering': ['photo', 'user'], 'verbose_name': 'Голос', 'verbose_name_plural': 'Голоса'},
+            name="voice",
+            options={"ordering": ["photo", "user"], "verbose_name": "Голос", "verbose_name_plural": "Голоса"},
         ),
     ]

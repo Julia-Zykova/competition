@@ -1,9 +1,7 @@
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-from models_app.factories import UserFactory, PhotoFactory
-from models_app.models import CustomUser
-
-from rest_framework.authtoken.models import Token
+from models_app.factories import PhotoFactory, UserFactory
 
 
 class DeletePhotoViewTest(APITestCase):
@@ -17,6 +15,6 @@ class DeletePhotoViewTest(APITestCase):
         pass
 
     def test_delete_photo_status_204(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        response = self.client.delete(f'/api/v1/photos/{self.photo.id}/')
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        response = self.client.delete(f"/api/v1/photos/{self.photo.id}/")
         self.assertEqual(response.status_code, 204)

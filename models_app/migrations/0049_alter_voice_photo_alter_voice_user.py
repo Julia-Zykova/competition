@@ -8,18 +8,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0047_alter_photo_pub_date'),
+        ("models_app", "0047_alter_photo_pub_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='voice',
-            name='photo',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='voices', to='models_app.photo'),
+            model_name="voice",
+            name="photo",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, related_name="voices", to="models_app.photo"
+            ),
         ),
         migrations.AlterField(
-            model_name='voice',
-            name='user',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='voices', to=settings.AUTH_USER_MODEL),
+            model_name="voice",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="voices",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

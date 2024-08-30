@@ -1,7 +1,7 @@
 from django import forms
+from service_objects.services import ServiceWithResult
 
 from models_app.models import Photo
-from service_objects.services import ServiceWithResult
 
 
 class EditPhotoService(ServiceWithResult):
@@ -16,14 +16,14 @@ class EditPhotoService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data['photo'])
+        return Photo.objects.get(id=self.cleaned_data["photo"])
 
     @property
     def _update_photo(self) -> Photo:
         photo = self._photo
-        if self.cleaned_data['title']:
-            photo.title = self.cleaned_data['title']
-        if self.cleaned_data['description']:
-            photo.description = self.cleaned_data['description']
+        if self.cleaned_data["title"]:
+            photo.title = self.cleaned_data["title"]
+        if self.cleaned_data["description"]:
+            photo.description = self.cleaned_data["description"]
         photo.save()
         return photo

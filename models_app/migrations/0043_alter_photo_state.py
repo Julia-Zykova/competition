@@ -7,13 +7,22 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0042_photo_state'),
+        ("models_app", "0042_photo_state"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='photo',
-            name='state',
-            field=django_fsm.FSMField(choices=[('На модерации', 'На модерации'), ('Одобрено', 'Одобрено'), ('Отклонено', 'Отклонено'), ('На удалении', 'На удалении')], default=('На модерации', 'На модерации'), max_length=50),
+            model_name="photo",
+            name="state",
+            field=django_fsm.FSMField(
+                choices=[
+                    ("На модерации", "На модерации"),
+                    ("Одобрено", "Одобрено"),
+                    ("Отклонено", "Отклонено"),
+                    ("На удалении", "На удалении"),
+                ],
+                default=("На модерации", "На модерации"),
+                max_length=50,
+            ),
         ),
     ]

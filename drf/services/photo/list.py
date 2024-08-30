@@ -1,32 +1,30 @@
-from django import forms
-from django.db.models.query import QuerySet
+from functools import lru_cache
 
+from django import forms
 from django.db.models import Count, Q
+from django.db.models.query import QuerySet
+from service_objects.fields import ModelField
+from service_objects.services import ServiceWithResult
 
 from models_app.models.photo.models import Photo
 from models_app.models.user.models import CustomUser
 
-from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
-
-from functools import lru_cache, cached_property
-
 
 class ListPhotoService(ServiceWithResult):
     CHOICES = (
-        ('pub_date', 'pub_date'),
-        ('-pub_date', '-pub_date'),
-        ('-voices', '-voices'),
-        ('voices', 'voices'),
-        ('-comments', '-comments'),
-        ('comments', 'comments')
+        ("pub_date", "pub_date"),
+        ("-pub_date", "-pub_date"),
+        ("-voices", "-voices"),
+        ("voices", "voices"),
+        ("-comments", "-comments"),
+        ("comments", "comments"),
     )
     personal_filter_choices = (
-        ('in_moderation', 'in_moderation'),
-        ('approved', 'approved'),
-        ('on_delete', 'on_delete'),
+        ("in_moderation", "in_moderation"),
+        ("approved", "approved"),
+        ("on_delete", "on_delete"),
     )
-    orderby = forms.ChoiceField(required=False, choices=CHOICES, initial='-pub_date')
+    orderby = forms.ChoiceField(required=False, choices=CHOICES, initial="-pub_date")
     orderbysearch = forms.CharField(min_length=3, max_length=30, required=False)
     personal_list = forms.BooleanField(initial=False, required=False)
     personal_filter = forms.ChoiceField(required=False, choices=personal_filter_choices)
@@ -40,70 +38,68 @@ class ListPhotoService(ServiceWithResult):
     @property
     @lru_cache()
     def _get_photos_state(self):
-        return (Photo.objects.exclude(state__in=['rejected', 'in_moderation'])
-                .select_related("author"))
+        return Photo.objects.exclude(state__in=["rejected", "in_moderation"]).select_related("author")
 
     @property
     @lru_cache()
     def _get_photos_sum_voices_comments(self):
         return self._get_photos_state.prefetch_related("voices", "comments").annotate(
-            sum_voices=Count("voices", filter=Q(voices__is_deleted=False)),
-            sum_comments=Count("comments")
+            sum_voices=Count("voices", filter=Q(voices__is_deleted=False)), sum_comments=Count("comments")
         )
 
     @property
     @lru_cache()
     def _sort_by(self) -> QuerySet[Photo]:
-        orderby = self.cleaned_data['orderby']
-        if orderby == 'voices':
-            return self._get_photos_sum_voices_comments.order_by('sum_voices', '-pub_date')
-        elif orderby == '-voices':
-            return self._get_photos_sum_voices_comments.order_by('-sum_voices', '-pub_date')
-        elif orderby == 'comments':
-            return self._get_photos_sum_voices_comments.order_by('sum_comments', '-pub_date')
-        elif orderby == '-comments':
-            return self._get_photos_sum_voices_comments.order_by('-sum_comments', '-pub_date')
+        orderby = self.cleaned_data["orderby"]
+        if orderby == "voices":
+            return self._get_photos_sum_voices_comments.order_by("sum_voices", "-pub_date")
+        elif orderby == "-voices":
+            return self._get_photos_sum_voices_comments.order_by("-sum_voices", "-pub_date")
+        elif orderby == "comments":
+            return self._get_photos_sum_voices_comments.order_by("sum_comments", "-pub_date")
+        elif orderby == "-comments":
+            return self._get_photos_sum_voices_comments.order_by("-sum_comments", "-pub_date")
         else:
             return self._get_photos_sum_voices_comments.order_by(orderby)
 
     @property
     @lru_cache()
     def _search(self):
-        orderbysearch = self.cleaned_data['orderbysearch']
+        orderbysearch = self.cleaned_data["orderbysearch"]
         if orderbysearch:
             return self._get_photos_state.filter(
-                Q(title__icontains=orderbysearch) |
-                Q(description__icontains=orderbysearch) |
-                Q(author__email__icontains=orderbysearch)
+                Q(title__icontains=orderbysearch)
+                | Q(description__icontains=orderbysearch)
+                | Q(author__email__icontains=orderbysearch)
             )
 
     @property
     @lru_cache()
     def _personal_list(self) -> QuerySet[Photo]:
-        personal_list = self.cleaned_data['personal_list']
+        personal_list = self.cleaned_data["personal_list"]
         if personal_list:
             return Photo.objects.select_related("author").filter(
-                author=self.cleaned_data['user'],
-                state__in=['in_moderation', 'approved', 'on_delete']
+                author=self.cleaned_data["user"], state__in=["in_moderation", "approved", "on_delete"]
             )
 
     @property
     @lru_cache()
     def _personal_filter(self) -> QuerySet[Photo]:
-        personal_filter = self.cleaned_data['personal_filter']
+        personal_filter = self.cleaned_data["personal_filter"]
         if personal_filter:
-            return Photo.objects.select_related("author").filter(author=self.cleaned_data['user'],
-                                                                 state=personal_filter)
+            return Photo.objects.select_related("author").filter(
+                author=self.cleaned_data["user"], state=personal_filter
+            )
 
     @property
     @lru_cache()
     def _get_queryset(self) -> QuerySet[Photo]:
-        if self.cleaned_data['orderby']:
+        if self.cleaned_data["orderby"]:
             return self._sort_by
-        elif self.cleaned_data['orderbysearch']:
+        elif self.cleaned_data["orderbysearch"]:
             return self._search
-        elif self.cleaned_data['personal_list']:
-            if self.cleaned_data['personal_filter']:
+        elif self.cleaned_data["personal_list"]:
+            if self.cleaned_data["personal_filter"]:
                 return self._personal_filter
             else:
                 return self._personal_list

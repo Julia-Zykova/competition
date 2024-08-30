@@ -14,27 +14,27 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        elif request.method == 'POST':
+        elif request.method == "POST":
             return request.user.is_authenticated
 
-        elif request.method in ['PATCH', 'DELETE', 'PUT']:
+        elif request.method in ["PATCH", "DELETE", "PUT"]:
 
             if request.user.is_authenticated:
 
-                if request.parser_context['kwargs']:
+                if request.parser_context["kwargs"]:
 
-                    if request.parser_context['kwargs'].get('comment'):
-                        comment = request.parser_context['kwargs']['comment']
+                    if request.parser_context["kwargs"].get("comment"):
+                        comment = request.parser_context["kwargs"]["comment"]
                         user = CustomUser.objects.select_related("auth_token__key").get(comments=comment)
                         return user.auth_token.key == request.user.auth_token.key
 
-                    elif request.parser_context['kwargs'].get('voice'):
-                        voice = request.parser_context['kwargs']['voice']
+                    elif request.parser_context["kwargs"].get("voice"):
+                        voice = request.parser_context["kwargs"]["voice"]
                         user = CustomUser.objects.select_related("auth_token__key").get(voices=voice)
                         return user.auth_token.key == request.user.auth_token.key
 
-                    elif request.parser_context['kwargs'].get('photo'):
-                        photo = request.parser_context['kwargs']['photo']
+                    elif request.parser_context["kwargs"].get("photo"):
+                        photo = request.parser_context["kwargs"]["photo"]
                         author = CustomUser.objects.select_related("auth_token__key").get(photos=photo)
                         return author.auth_token.key == request.user.auth_token.key
 
@@ -45,10 +45,10 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        elif request.method in ['PATCH', 'DELETE', 'PUT']:
-            if hasattr(obj, 'user'):
+        elif request.method in ["PATCH", "DELETE", "PUT"]:
+            if hasattr(obj, "user"):
                 # Instance must have an attribute named `user`.
                 return obj.user.auth_token.key == request.user.auth_token.key
-            elif hasattr(obj, 'author'):
+            elif hasattr(obj, "author"):
                 # Instance must have an attribute named `author`.
                 return obj.author.auth_token.key == request.user.auth_token.key

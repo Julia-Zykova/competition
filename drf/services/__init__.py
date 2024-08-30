@@ -15,4 +15,3 @@ from .user.is_owner import IsOwnerService
 
 from .voice.create import CreateVoiceService
 from .voice.destroy import DestroyVoiceService
-

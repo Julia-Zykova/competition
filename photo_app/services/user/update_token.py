@@ -1,8 +1,8 @@
 from rest_framework.authtoken.models import Token
+from service_objects.fields import ModelField
+from service_objects.services import ServiceWithResult
 
 from models_app.models import CustomUser
-from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
 
 
 class UpdateTokenService(ServiceWithResult):
@@ -14,10 +14,10 @@ class UpdateTokenService(ServiceWithResult):
             return self
 
     def _token_delete(self):
-        user = self.cleaned_data['user']
+        user = self.cleaned_data["user"]
         user.auth_token.delete()
 
     @property
     def _regenerated_token(self):
         self._token_delete()
-        return Token.objects.create(user=self.cleaned_data['user'])
+        return Token.objects.create(user=self.cleaned_data["user"])

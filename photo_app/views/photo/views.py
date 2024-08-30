@@ -1,71 +1,80 @@
 from channels.layers import get_channel_layer
-from django.shortcuts import render, redirect
-
 from django.http import JsonResponse
+from django.shortcuts import redirect, render
 from django.views.generic import View
 from service_objects.services import ServiceOutcome
 
+from models_app.models.photo.forms import UploadPhotoForm
+from models_app.models.photo.models import Photo
+from photo_app.serializers import PhotoSerializer
 from photo_app.services.photo.detail import DetailPhotoService
 from photo_app.services.photo.edit import EditPhotoService
 from photo_app.services.photo.get_list_of_photos import ListOfPhotoService
-from photo_app.services.photo.soft_delete import SoftDeletePhotoService
 from photo_app.services.photo.restore import RestorePhotoService
+from photo_app.services.photo.soft_delete import SoftDeletePhotoService
 from photo_app.services.photo.upload import UploadPhotoService
-
-from photo_app.serializers import PhotoSerializer, CommentSerializer
 from utils.ajax import is_ajax
-
-from models_app.models.photo.forms import UploadPhotoForm
-from models_app.models.photo.models import Photo
 
 
 class ListPhotoView(View):
-    template_name = 'photo_app/list_of_photos.html'
+    template_name = "photo_app/list_of_photos.html"
 
     def get(self, request):
         outcome = ServiceOutcome(
-            ListOfPhotoService, request.GET.dict() | {
-                'user': request.user if self.request.user.is_authenticated else None
-            })
+            ListOfPhotoService,
+            request.GET.dict() | {"user": request.user if self.request.user.is_authenticated else None},
+        )
         get_channel_layer()
 
-        if request.method == 'GET' and is_ajax(request):
-            serialized_data = PhotoSerializer(outcome.result['page_obj'].object_list, many=True).data
-            q_dict = {"posts": serialized_data, "page_number": outcome.result['page_number']}
+        if request.method == "GET" and is_ajax(request):
+            serialized_data = PhotoSerializer(outcome.result["page_obj"].object_list, many=True).data
+            q_dict = {"posts": serialized_data, "page_number": outcome.result["page_number"]}
             return JsonResponse(q_dict)
 
-        elif request.method == 'GET' and not is_ajax(request):
-            return render(request, context={
-                "page_obj": outcome.result['page_obj'],
-                "page_number": outcome.result['page_number'],
-                "personal_list": outcome.result['personal_list'],
-                "personal_filter": outcome.result['personal_filter'],
-            }, template_name=self.template_name)
+        elif request.method == "GET" and not is_ajax(request):
+            return render(
+                request,
+                context={
+                    "page_obj": outcome.result["page_obj"],
+                    "page_number": outcome.result["page_number"],
+                    "personal_list": outcome.result["personal_list"],
+                    "personal_filter": outcome.result["personal_filter"],
+                },
+                template_name=self.template_name,
+            )
 
 
 class DetailPhotoView(View):
 
     def get(self, request, **kwargs):
         outcome = ServiceOutcome(
-            DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["photo"], "detail_photo": True})
+            DetailPhotoService, request.GET.dict() | {"photo": self.kwargs["photo"], "detail_photo": True}
+        )
 
-        if outcome.result['outcome_comments']['page_obj'].object_list:
-            return render(request, context={
-                "photo": outcome.result['outcome_comments']['photo'],
-                "page_obj": outcome.result['outcome_comments']['page_obj'],
-                "page_number": outcome.result['outcome_comments']['page_number'],
-            }, template_name='photo_app/detail_photo.html')
+        if outcome.result["outcome_comments"]["page_obj"].object_list:
+            return render(
+                request,
+                context={
+                    "photo": outcome.result["outcome_comments"]["photo"],
+                    "page_obj": outcome.result["outcome_comments"]["page_obj"],
+                    "page_number": outcome.result["outcome_comments"]["page_number"],
+                },
+                template_name="photo_app/detail_photo.html",
+            )
         else:
-            return render(request, context=
-            {
-                "photo": outcome.result['outcome_comments']['photo'],
-                "page_obj": None,
-                "page_number": outcome.result['outcome_comments']['page_number'],
-            }, template_name='photo_app/detail_photo.html')
+            return render(
+                request,
+                context={
+                    "photo": outcome.result["outcome_comments"]["photo"],
+                    "page_obj": None,
+                    "page_number": outcome.result["outcome_comments"]["page_number"],
+                },
+                template_name="photo_app/detail_photo.html",
+            )
 
 
 class UploadPhotoView(View):
-    template_name = 'photo_app/upload_photos.html'
+    template_name = "photo_app/upload_photos.html"
 
     def get(self, request, *args, **kwargs):
         get_channel_layer()
@@ -75,43 +84,38 @@ class UploadPhotoView(View):
         form = UploadPhotoForm(request.POST, request.FILES)
         if form.is_valid():
             outcome = ServiceOutcome(
-                UploadPhotoService, request.POST.dict() | {
-                    'author': request.user if self.request.user.is_authenticated else None
-                }, request.FILES.dict()
+                UploadPhotoService,
+                request.POST.dict() | {"author": request.user if self.request.user.is_authenticated else None},
+                request.FILES.dict(),
             )
 
-            return redirect('photo_app:detail', photo=outcome.result.id)
+            return redirect("photo_app:detail", photo=outcome.result.id)
         else:
 
             return render(request, self.template_name, context={"form": form})
 
 
 class EditPhotoView(View):
-    template_name = 'photo_app/edit_photo.html'
+    template_name = "photo_app/edit_photo.html"
 
     def get(self, request, *args, **kwargs):
         get_channel_layer()
-        return render(
-            request, self.template_name,
-            context={'photo': Photo.objects.get(id=self.kwargs['photo'])})
+        return render(request, self.template_name, context={"photo": Photo.objects.get(id=self.kwargs["photo"])})
 
     def post(self, request, **kwargs):
-        outcome = ServiceOutcome(
-            EditPhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
-        return redirect('photo_app:detail', photo=self.kwargs['photo'])
+        ServiceOutcome(EditPhotoService, request.POST.dict() | {"photo": self.kwargs["photo"]})
+        return redirect("photo_app:detail", photo=self.kwargs["photo"])
 
 
 class DeletePhotoView(View):
 
     def post(self, request, **kwargs):
-        outcome = ServiceOutcome(
-            SoftDeletePhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
-        return redirect('photo_app:home')
+        ServiceOutcome(SoftDeletePhotoService, request.POST.dict() | {"photo": self.kwargs["photo"]})
+        return redirect("photo_app:home")
 
 
 class RestorePhotoView(View):
 
     def post(self, request, **kwargs):
-        outcome = ServiceOutcome(
-            RestorePhotoService, request.POST.dict() | {'photo': self.kwargs['photo']})
-        return redirect('photo_app:detail', photo=self.kwargs['photo'])
+        ServiceOutcome(RestorePhotoService, request.POST.dict() | {"photo": self.kwargs["photo"]})
+        return redirect("photo_app:detail", photo=self.kwargs["photo"])

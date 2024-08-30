@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from drf.serializers import UserSerializer
 from models_app.models.photo.models import Photo
 
@@ -25,6 +26,16 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = [
-            'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
-            'comments', 'voices', 'pub_date', 'is_deleted', 'state'
+            "id",
+            "title",
+            "author",
+            "image",
+            "photo_small",
+            "photo_big",
+            "description",
+            "comments",
+            "voices",
+            "pub_date",
+            "is_deleted",
+            "state",
         ]

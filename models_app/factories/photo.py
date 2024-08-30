@@ -25,5 +25,5 @@ class PhotoFactory(factory.django.DjangoModelFactory):
 
     description = factory.Faker("sentence")
     pub_date = factory.Faker("date_time")
-    state = factory.fuzzy.FuzzyChoice(choices=['in_moderation', 'approved', 'rejected', 'on_delete'])
+    state = factory.fuzzy.FuzzyChoice(choices=["in_moderation", "approved", "rejected", "on_delete"])
     is_deleted = factory.Faker("boolean")

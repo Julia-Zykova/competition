@@ -1,8 +1,8 @@
 from django import forms
 from django.db.models.query import QuerySet
-
 from service_objects.services import ServiceWithResult
-from models_app.models import Comment, Photo
+
+from models_app.models import Comment
 
 
 class ListCommentsService(ServiceWithResult):
@@ -15,4 +15,4 @@ class ListCommentsService(ServiceWithResult):
 
     @property
     def _get_queryset(self) -> QuerySet[Comment]:
-        return Comment.objects.filter(photo__id=self.cleaned_data['photo'])
+        return Comment.objects.filter(photo__id=self.cleaned_data["photo"])

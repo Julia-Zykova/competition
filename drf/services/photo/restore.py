@@ -1,12 +1,14 @@
 from django import forms
+from service_objects.services import ServiceWithResult
 
 from models_app.models import Photo
-from service_objects.services import ServiceWithResult
 
 
 class RestorePhotoService(ServiceWithResult):
     photo = forms.IntegerField()
-    custom_validations = ["is_on_delete", ]
+    custom_validations = [
+        "is_on_delete",
+    ]
 
     def process(self) -> ServiceWithResult:
         if self.is_valid():
@@ -16,7 +18,7 @@ class RestorePhotoService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data['photo'])
+        return Photo.objects.get(id=self.cleaned_data["photo"])
 
     @property
     def _restore_photo(self) -> Photo:
@@ -25,7 +27,7 @@ class RestorePhotoService(ServiceWithResult):
         return self._photo
 
     def is_on_delete(self) -> bool:
-        if self._photo.state == 'on_delete':
+        if self._photo.state == "on_delete":
             return True
         else:
             return False

@@ -3,8 +3,6 @@ from rest_framework import serializers
 from drf.serializers import UserSerializer
 from models_app.models.photo.models import Photo
 
-from drf_yasg.utils import swagger_serializer_method
-
 
 class PhotoBaseSerializer(serializers.ModelSerializer):
     voices = serializers.SerializerMethodField()
@@ -31,10 +29,18 @@ class PhotoBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = [
-            'id', 'title', 'image', 'photo_small', 'photo_big', 'description',
-            'comments', 'voices', 'pub_date', 'state'
+            "id",
+            "title",
+            "image",
+            "photo_small",
+            "photo_big",
+            "description",
+            "comments",
+            "voices",
+            "pub_date",
+            "state",
         ]
-        read_only_fields = ['pub_date', 'id', 'state']
+        read_only_fields = ["pub_date", "id", "state"]
 
 
 class PhotoSerializer(PhotoBaseSerializer):
@@ -43,7 +49,16 @@ class PhotoSerializer(PhotoBaseSerializer):
     class Meta:
         model = Photo
         fields = [
-            'id', 'title', 'author', 'image', 'photo_small', 'photo_big', 'description',
-            'comments', 'voices', 'pub_date', 'state'
+            "id",
+            "title",
+            "author",
+            "image",
+            "photo_small",
+            "photo_big",
+            "description",
+            "comments",
+            "voices",
+            "pub_date",
+            "state",
         ]
-        read_only_fields = ['author', 'pub_date', 'id', 'state']
+        read_only_fields = ["author", "pub_date", "id", "state"]

@@ -1,11 +1,12 @@
 from typing import Optional
 
 from asgiref.sync import async_to_sync
-from django import forms
-from models_app.models import Voice, Photo, CustomUser
-from service_objects.services import ServiceWithResult
-from service_objects.fields import ModelField
 from channels.layers import get_channel_layer
+from django import forms
+from service_objects.fields import ModelField
+from service_objects.services import ServiceWithResult
+
+from models_app.models import CustomUser, Photo, Voice
 
 
 class DestroyVoiceService(ServiceWithResult):
@@ -19,7 +20,7 @@ class DestroyVoiceService(ServiceWithResult):
 
     @property
     def _photo(self) -> Photo:
-        return Photo.objects.get(id=self.cleaned_data['photo'])
+        return Photo.objects.get(id=self.cleaned_data["photo"])
 
     @property
     def _get_voice(self) -> Optional[Voice]:
@@ -45,12 +46,9 @@ class DestroyVoiceService(ServiceWithResult):
         sum_voices = self._photo.voices.count() - 1
         message = (
             f'Пользователь {self.cleaned_data["user"]} убрал свой голос с вашего фото "{self._photo.title}". '
-            f'Всего голосов: {sum_voices}.')
+            f"Всего голосов: {sum_voices}."
+        )
 
         return async_to_sync(channel_layer.group_send)(
-            'user_' + str(author.id),
-            {
-                'type': 'user.message',
-                'message': message
-            }
+            "user_" + str(author.id), {"type": "user.message", "message": message}
         )

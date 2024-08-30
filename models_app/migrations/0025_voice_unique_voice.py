@@ -6,12 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0024_photo_slug'),
+        ("models_app", "0024_photo_slug"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='voice',
-            constraint=models.UniqueConstraint(fields=('photo', 'user'), name='unique_voice'),
+            model_name="voice",
+            constraint=models.UniqueConstraint(fields=("photo", "user"), name="unique_voice"),
         ),
     ]

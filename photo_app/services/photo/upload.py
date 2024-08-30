@@ -1,21 +1,28 @@
 from django import forms
-
-from models_app.models import Photo, CustomUser
-from service_objects.services import ServiceWithResult
 from service_objects.fields import ModelField
+from service_objects.services import ServiceWithResult
+
+from models_app.models import CustomUser, Photo
 
 
 class UploadPhotoService(ServiceWithResult):
     author = ModelField(CustomUser)
-    title = forms.CharField(max_length=50, error_messages={
-        'max_length': 'Слишком длинный заголовок.',
-        'required': 'Без заголовка - никак',
-    })
+    title = forms.CharField(
+        max_length=50,
+        error_messages={
+            "max_length": "Слишком длинный заголовок.",
+            "required": "Без заголовка - никак",
+        },
+    )
     image = forms.ImageField()
-    description = forms.CharField(max_length=220, widget=forms.Textarea, error_messages={
-        'max_length': 'Слишком длинное описание.',
-        'required': 'Без описания - никак',
-    })
+    description = forms.CharField(
+        max_length=220,
+        widget=forms.Textarea,
+        error_messages={
+            "max_length": "Слишком длинное описание.",
+            "required": "Без описания - никак",
+        },
+    )
 
     def process(self):
         if self.is_valid():
@@ -25,8 +32,8 @@ class UploadPhotoService(ServiceWithResult):
     @property
     def _create_photo(self):
         return Photo.objects.create(
-            author=self.cleaned_data['author'],
-            title=self.cleaned_data['title'],
-            description=self.cleaned_data['description'],
-            image=self.cleaned_data['image'],
+            author=self.cleaned_data["author"],
+            title=self.cleaned_data["title"],
+            description=self.cleaned_data["description"],
+            image=self.cleaned_data["image"],
         )

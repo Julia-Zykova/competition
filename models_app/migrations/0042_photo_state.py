@@ -7,13 +7,24 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('models_app', '0041_remove_comment_comment_id_and_more'),
+        ("models_app", "0041_remove_comment_comment_id_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='photo',
-            name='state',
-            field=django_fsm.FSMField(blank=True, choices=[('На модерации', 'На модерации'), ('Одобрено', 'Одобрено'), ('Отклонено', 'Отклонено'), ('На удалении', 'На удалении')], default=('На модерации', 'На модерации'), max_length=50, null=True),
+            model_name="photo",
+            name="state",
+            field=django_fsm.FSMField(
+                blank=True,
+                choices=[
+                    ("На модерации", "На модерации"),
+                    ("Одобрено", "Одобрено"),
+                    ("Отклонено", "Отклонено"),
+                    ("На удалении", "На удалении"),
+                ],
+                default=("На модерации", "На модерации"),
+                max_length=50,
+                null=True,
+            ),
         ),
     ]
